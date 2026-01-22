@@ -38,11 +38,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public void setIntakeSpeed(Voltage speed) {
     m_IO.setIntakerTarget(speed);
   }
-  /**
-   * Sets the speed for the Indexer
-   *
-   * @param speed
-   */
+  
   public Command intakeCommand() {
     return runOnce(
         () -> {
