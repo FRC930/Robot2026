@@ -91,8 +91,7 @@ public class RobotContainer {
         // TODO add TalonFX
         intake = new IntakeSubsystem(null);
 
-        // indexer = new IndexerSubsystem(new IndexerIOTalonFX(19, 11, canbus));
-        indexer = new IndexerSubsystem(new IndexerIOTalonFX());
+        indexer = new IndexerSubsystem(new IndexerIOTalonFX(0, canbus)); // TODO: find real motor ID
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -154,9 +153,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
 
-        // intake = new IntakeSubsystem(new IntakeIOTalonFX(19, 11, canbus));
-        intake = new IntakeSubsystem(null);
-        indexer = new IndexerSubsystem(new IndexerIOTalonFX());
+        indexer = new IndexerSubsystem(new IndexerIOTalonFX(0, canbus)); // TODO: find real motor ID
         break;
     }
 
