@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.EnumMap;
 import java.util.Map;
@@ -158,6 +159,28 @@ public class EnumState<E extends Enum<E>> {
       currentState = newState;
       log();
     }
+  }
+
+  /**
+   * Generate a command to change to a new state.
+   *
+   * <p>If logging is enabled, automatically logs the change to AdvantageKit.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * public Command intakeCommand() {
+   *     return startEnd(
+   *         state.setCommand(IntakeState.INTAKING),
+   *         state.setCommand(IntakeState.IDLE)
+   *     );
+   * }
+   * }</pre>
+   *
+   * @param newState The state to change to
+   */
+  public InstantCommand setCommand(E newState) {
+    return new InstantCommand(() -> set(newState));
   }
 
   /**
