@@ -44,6 +44,11 @@ public class IndexerSubsystem extends SubsystemBase
     m_IO.updateInputs(m_logged);
     Logger.processInputs("RobotState/Indexer", m_logged);
 
-    m_IO.setIndexerTarget(this.m_state.get().volts());
+    switch (this.m_state.get()) {
+      case IDLE:
+        m_IO.stop();
+      default:
+        m_IO.setIndexerTarget(this.m_state.get().volts());
+    }
   }
 }
