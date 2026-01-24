@@ -14,6 +14,7 @@ public class ShooterIOSim implements ShooterIO {
 
   public ShooterIOSim() {
     shooterSim =
+        //TODO shooter may not utilize flywheel, keep an eye on
         new FlywheelSim(
             LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.0005, 1),
             DCMotor.getKrakenX60Foc(1),

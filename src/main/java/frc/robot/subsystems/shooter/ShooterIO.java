@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ShooterIO {
   @AutoLog
   public static class ShooterInputs {
+    //inputs for shooter
     public MutAngularVelocity shooterAngularVelocity;
     public MutVoltage shooterVoltage;
     public MutVoltage shooterSetVoltage;
