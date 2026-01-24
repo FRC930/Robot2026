@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import frc.robot.goals.RobotGoalEvents;
 import frc.robot.state.MatchStateEvents;
+import frc.robot.subsystems.climber.ClimberEvents;
 import frc.robot.subsystems.intake.IntakeEvents;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +52,24 @@ public abstract class SubsystemBehavior extends Behavior<SubsystemBehavior> {
    * @param intake
    */
   public static void configureAll(
-      RobotGoalEvents goals, MatchStateEvents matchState, IntakeEvents intake) {
+      RobotGoalEvents goals,
+      MatchStateEvents matchState,
+      IntakeEvents intake,
+      ClimberEvents climber) {
     for (SubsystemBehavior behavior : subsystemBehaviors) {
-      behavior.configure(goals, matchState, intake);
+      behavior.configure(goals, matchState, intake, climber);
     }
   }
+
+  // /**
+  //  * Configure this subsystem behavior's trigger bindings.
+  //  *
+  //  * @param goals Robot goal events to react to
+  //  * @param matchState Match phase events (disabled, auto, teleop)
+  //  * @param intake
+  //  */
+  // public abstract void configure(
+  //     RobotGoalEvents goals, MatchStateEvents matchState, IntakeEvents intake);
 
   /**
    * Configure this subsystem behavior's trigger bindings.
@@ -65,5 +79,8 @@ public abstract class SubsystemBehavior extends Behavior<SubsystemBehavior> {
    * @param intake
    */
   public abstract void configure(
-      RobotGoalEvents goals, MatchStateEvents matchState, IntakeEvents intake);
+      RobotGoalEvents goals,
+      MatchStateEvents matchState,
+      IntakeEvents intake,
+      ClimberEvents climber);
 }

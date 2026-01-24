@@ -35,4 +35,19 @@ public class OperatorIntent implements OperatorIntentEvents {
   public Trigger wantsToOutake() {
     return driver.b();
   }
+
+  @Override
+  public Trigger wantsToClimbL1() {
+    return driver.povUp();
+  }
+
+  @Override
+  public Trigger wantsToClimbL2() {
+    return driver.povRight();
+  }
+
+  @Override
+  public Trigger wantsToClimbL3() {
+    return driver.povDown();
+  }
 }

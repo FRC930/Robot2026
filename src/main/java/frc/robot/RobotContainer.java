@@ -7,12 +7,22 @@
 
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Pounds;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -24,6 +34,8 @@ import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
 import frc.robot.state.MatchState;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -55,6 +67,7 @@ public class RobotContainer {
   private final double ANGULAR_SPEED = 0.55;
 
   private final IntakeSubsystem intake;
+  private final ClimberSubsystem climber;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -84,6 +97,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         // TODO add TalonFX
         intake = new IntakeSubsystem(null);
+        climber = new ClimberSubsystem(null);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -126,6 +140,20 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         intake = new IntakeSubsystem(new IntakeIOSim());
+        climber =
+            new ClimberSubsystem(
+                new ClimberIOSim(
+                    new ElevatorSim(
+                        LinearSystemId.createElevatorSystem(
+                            DCMotor.getKrakenX60Foc(2),
+                            Pounds.of(45).in(Kilograms),
+                            Inches.of(ClimberSubsystem.SPOOL_RADIUS).in(Meters),
+                            ClimberSubsystem.REDUCTION),
+                        DCMotor.getKrakenX60Foc(2),
+                        Inches.of(0).in(Meters),
+                        Inches.of(32).in(Meters),
+                        true,
+                        Inches.of(0).in(Meters))));
         break;
 
       default:
@@ -146,6 +174,7 @@ public class RobotContainer {
 
         // intake = new IntakeSubsystem(new IntakeIOTalonFX(19, 11, canbus));
         intake = new IntakeSubsystem(null);
+        climber = new ClimberSubsystem(null);
         break;
     }
 
@@ -166,7 +195,7 @@ public class RobotContainer {
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
-    SubsystemBehavior.configureAll(robotGoals, matchState, intake);
+    SubsystemBehavior.configureAll(robotGoals, matchState, intake, climber);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -200,6 +229,9 @@ public class RobotContainer {
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    operatorIntent.wantsToClimbL1().whileTrue(climber.goToL1Command());
+    operatorIntent.wantsToClimbL2().whileTrue(climber.goToL2Command());
+    operatorIntent.wantsToClimbL3().whileTrue(climber.goToL3Command());
 
     // Reset gyro to 0° when B button is pressed
     // controller

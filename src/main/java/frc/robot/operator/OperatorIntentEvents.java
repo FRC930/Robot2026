@@ -12,4 +12,10 @@ public interface OperatorIntentEvents {
   Trigger wantsToScoreTrigger();
 
   Trigger wantsToOutake();
+
+  Trigger wantsToClimbL1();
+
+  Trigger wantsToClimbL2();
+
+  Trigger wantsToClimbL3();
 }
