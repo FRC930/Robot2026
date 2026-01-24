@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +32,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.intakeVoltage = Volts.mutable(0);
     logged.intakeSetVoltage = Volts.mutable(0);
   }
+
   /**
    * Sets the speed for the intake
    *
@@ -37,6 +40,15 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
    */
   public void setIntakeSpeed(Voltage speed) {
     m_IO.setIntakerTarget(speed);
+  }
+
+  /**
+   * Sets the speed for the intake
+   *
+   * @param speed
+   */
+  public void setIntakeAngle(Angle angle) {
+    m_IO.setIntakerExtenderTarget(angle);
   }
 
   public Command intakeCommand() {
@@ -70,13 +82,19 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     Logger.processInputs("RobotState/Intake", logged);
     switch (currentGoal.get()) {
       case INTAKING:
+        // filler units rn
         setIntakeSpeed(Volts.of(11.0));
+        setIntakeAngle(Degrees.of(0.0));
         break;
       case OUTTAKING:
+        // filler units rn
         setIntakeSpeed(Volts.of(-11.0));
+        setIntakeAngle(Degrees.of(0.0));
         break;
       case IDLE:
         stop();
+        // filler values, may need to be negative
+        setIntakeAngle(Degrees.of(90.0));
         break;
     }
   }

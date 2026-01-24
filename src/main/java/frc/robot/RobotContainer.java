@@ -33,6 +33,8 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.IntakeBehavior;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -55,6 +57,7 @@ public class RobotContainer {
   private final double ANGULAR_SPEED = 0.55;
 
   private final IntakeSubsystem intake;
+  private final ShooterSubsystem shooter;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -84,6 +87,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         // TODO add TalonFX
         intake = new IntakeSubsystem(null);
+        shooter = new ShooterSubsystem(null);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -126,6 +130,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         intake = new IntakeSubsystem(new IntakeIOSim());
+        shooter = new ShooterSubsystem(new ShooterIOSim());
         break;
 
       default:
@@ -146,6 +151,7 @@ public class RobotContainer {
 
         // intake = new IntakeSubsystem(new IntakeIOTalonFX(19, 11, canbus));
         intake = new IntakeSubsystem(null);
+        shooter = new ShooterSubsystem(null);
         break;
     }
 
@@ -188,29 +194,20 @@ public class RobotContainer {
             () -> -controller.getLeftX() * DRIVE_SPEED,
             () -> -controller.getRightX() * ANGULAR_SPEED));
 
-    // // Lock to 0° when A button is held
-    // controller
-    //     .a()
-    //     .whileTrue(
-    //         DriveCommands.joystickDriveAtAngle(
-    //             drive,
-    //             () -> -controller.getLeftY(),
-    //             () -> -controller.getLeftX(),
-    //             () -> Rotation2d.kZero));
-
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when B button is pressed
-    // controller
-    //     .b()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //                 () ->
-    //                     drive.setPose(
-    //                         new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-    //                 drive)
-    //             .ignoringDisable(true));
+    // TODO move to behaviors
+    operatorIntent.wantsToIntake().whileTrue(intake.intakeCommand()).onFalse(intake.idleCommand());
+    operatorIntent
+        .wantsToOuttake()
+        .whileTrue(intake.outtakeCommand())
+        .onFalse(intake.idleCommand());
+
+    operatorIntent
+        .wantsToShoot()
+        .whileTrue(shooter.shooterCommand())
+        .onFalse(shooter.idleCommand());
   }
 
   public void configureCharacterizationButtonBindings() {
