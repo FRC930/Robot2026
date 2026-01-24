@@ -32,8 +32,7 @@ public class IntakeIOSim implements IntakeIO {
         // FILLER VALUES NOT ACCURATE
         new FlywheelSim(
             LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.28616, 1),
-            DCMotor.getKrakenX60Foc(1),
-            0.001);
+            DCMotor.getKrakenX60Foc(1), 0.001);
   }
 
   @Override

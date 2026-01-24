@@ -31,6 +31,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.intakeAngularVelocity = DegreesPerSecond.mutable(0);
     logged.intakeVoltage = Volts.mutable(0);
     logged.intakeSetVoltage = Volts.mutable(0);
+    logged.intakeExtenderAngle = Degrees.mutable(0);
   }
 
   /**
