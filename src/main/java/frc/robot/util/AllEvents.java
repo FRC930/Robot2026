@@ -1,10 +1,7 @@
 package frc.robot.util;
 
-import frc.robot.goals.RobotGoal;
-import frc.robot.state.MatchStates;
-import frc.robot.subsystems.indexer.IndexerState;
+import frc.robot.goals.RobotEvents;
+import frc.robot.state.MatchEvents;
+import frc.robot.subsystems.indexer.IndexerEvents;
 
-public record AllEvents(
-    StateSubsystem<RobotGoal> goals,
-    StateSubsystem<MatchStates> match,
-    StateSubsystem<IndexerState> indexer) {}
+public record AllEvents(RobotEvents goals, MatchEvents match, IndexerEvents indexer) {}

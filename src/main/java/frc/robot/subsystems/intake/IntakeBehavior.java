@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake;
 
-
+import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
 public class IntakeBehavior extends SubsystemBehavior {
@@ -12,9 +12,8 @@ public class IntakeBehavior extends SubsystemBehavior {
   }
 
   @Override
-  public void configure(
-      RobotGoalEvents goals, MatchStateEvents matchState, IntakeEvents intakeState) {
-    goals.isLaunchingTrigger().whileTrue(this.intake.intakeCommand());
-    goals.isIdleTrigger().whileTrue(this.intake.idleCommand());
+  public void configure(AllEvents events) {
+    events.goals().isShootingTrigger().whileTrue(this.intake.intakeCommand());
+    events.goals().isIdleTrigger().whileTrue(this.intake.idleCommand());
   }
 }

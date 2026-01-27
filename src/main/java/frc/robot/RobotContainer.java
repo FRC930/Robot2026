@@ -152,7 +152,7 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIO() {},
                 new VisionIO() {});
-
+        intake = new IntakeSubsystem(null);
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(0, canbus)); // TODO: find real motor ID
         break;
     }
@@ -175,7 +175,6 @@ public class RobotContainer {
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
-    SubsystemBehavior.configureAll(robotGoals, matchState, intake);
     SubsystemBehavior.configureAll(new AllEvents(robotGoals, matchState, indexer));
 
     // Configure the button bindings

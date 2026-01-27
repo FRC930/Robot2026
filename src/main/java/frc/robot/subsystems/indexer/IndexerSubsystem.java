@@ -7,12 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
-import frc.robot.util.MutStateSubsystem;
-import frc.robot.util.StateSubsystem;
 import org.littletonrobotics.junction.Logger;
 
-public class IndexerSubsystem extends SubsystemBase
-    implements StateSubsystem<IndexerState>, MutStateSubsystem<IndexerState> {
+public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   private final IndexerIO m_IO;
 
@@ -30,16 +27,6 @@ public class IndexerSubsystem extends SubsystemBase
   }
 
   @Override
-  public final Trigger isStateTrigger(IndexerState state) {
-    return this.m_state.is(state);
-  }
-
-  @Override
-  public Command setStateCommand(IndexerState state) {
-    return this.m_state.setCommand(state);
-  }
-
-  @Override
   public void periodic() {
     m_IO.updateInputs(m_logged);
     Logger.processInputs("RobotState/Indexer", m_logged);
@@ -50,5 +37,23 @@ public class IndexerSubsystem extends SubsystemBase
       default:
         m_IO.setIndexerTarget(this.m_state.get().volts());
     }
+  }
+
+  @Override
+  public Trigger isIdleTrigger() {
+    return m_state.is(IndexerState.IDLE);
+  }
+
+  @Override
+  public Trigger isIndexingTrigger() {
+    return m_state.is(IndexerState.FEEDING);
+  }
+
+  public Command idleCommand() {
+    return runOnce(() -> m_state.set(IndexerState.IDLE));
+  }
+
+  public Command indexingCommand() {
+    return runOnce(() -> m_state.set(IndexerState.FEEDING));
   }
 }
