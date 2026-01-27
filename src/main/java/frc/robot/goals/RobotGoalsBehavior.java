@@ -24,8 +24,16 @@ public class RobotGoalsBehavior extends GoalBehavior {
   @Override
   public void configure(OperatorIntentEvents intent) {
     intent
-        .wantsToScoreTrigger()
+        .wantsToIntakeTrigger()
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    intent
+        .wantsToScoreTrigger()
+        .onTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    intent
+        .wantsToOutakeTrigger()
+        .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

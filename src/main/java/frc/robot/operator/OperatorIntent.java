@@ -32,7 +32,12 @@ public class OperatorIntent implements OperatorIntentEvents {
   }
 
   @Override
-  public Trigger wantsToOutake() {
+  public Trigger wantsToOutakeTrigger() {
     return driver.b();
+  }
+
+  @Override
+  public Trigger wantsToIntakeTrigger() {
+    return driver.leftTrigger(0.5);
   }
 }
