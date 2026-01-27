@@ -24,7 +24,7 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
   private ClimberIO m_IO;
 
   private final EnumState<ClimberState> currentGoal =
-      new EnumState<>("Climber/States", ClimberState.L0);
+      new EnumState<>("Climber/States", ClimberState.IDLE);
 
   private ClimberInputsAutoLogged logged = new ClimberInputsAutoLogged();
 
@@ -52,7 +52,7 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Climber", logged);
     switch (currentGoal.get()) {
-      case L0:
+      case IDLE:
         setClimberHeight(Inches.of(0));
         break;
       case L1:
@@ -67,8 +67,8 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
     }
   }
 
-  public Command goToL0Command() {
-    return runOnce(() -> currentGoal.set(ClimberState.L0));
+  public Command goToIdleCommand() {
+    return runOnce(() -> currentGoal.set(ClimberState.IDLE));
   }
 
   public Command goToL1Command() {
@@ -84,8 +84,8 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
   }
 
   @Override
-  public Trigger goToL0Trigger() {
-    return currentGoal.is(ClimberState.L0);
+  public Trigger goToIdleTrigger() {
+    return currentGoal.is(ClimberState.IDLE);
   }
 
   @Override
@@ -94,12 +94,12 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
   }
 
   @Override
-  public Trigger GoToL2Trigger() {
+  public Trigger goToL2Trigger() {
     return currentGoal.is(ClimberState.L2);
   }
 
   @Override
-  public Trigger GoToL3Trigger() {
+  public Trigger goToL3Trigger() {
     return currentGoal.is(ClimberState.L3);
   }
 }

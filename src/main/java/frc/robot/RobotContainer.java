@@ -32,6 +32,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
+import frc.robot.goals.RobotSubsystemBehavior;
 import frc.robot.operator.OperatorIntent;
 import frc.robot.state.MatchState;
 import frc.robot.subsystems.climber.ClimberIOSim;
@@ -42,15 +43,15 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.intake.IntakeBehavior;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.GoalBehavior;
-import frc.robot.util.SubsystemBehavior;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,6 +69,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intake;
   private final ClimberSubsystem climber;
+  private final ShooterSubsystem shooter;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -98,6 +100,7 @@ public class RobotContainer {
         // TODO add TalonFX
         intake = new IntakeSubsystem(null);
         climber = new ClimberSubsystem(null);
+        shooter = new ShooterSubsystem(null);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -154,6 +157,7 @@ public class RobotContainer {
                         Inches.of(32).in(Meters),
                         true,
                         Inches.of(0).in(Meters))));
+        shooter = new ShooterSubsystem(new ShooterIOSim());
         break;
 
       default:
@@ -175,6 +179,7 @@ public class RobotContainer {
         // intake = new IntakeSubsystem(new IntakeIOTalonFX(19, 11, canbus));
         intake = new IntakeSubsystem(null);
         climber = new ClimberSubsystem(null);
+        shooter = new ShooterSubsystem(null);
         break;
     }
 
@@ -187,15 +192,10 @@ public class RobotContainer {
 
     // Create goal behaviors (wires operator intent → robot goals)
     new RobotGoalsBehavior(robotGoals);
-    new IntakeBehavior(intake);
-
-    // TODO (students): Create subsystem behaviors here, e.g.:
-    // new intakeBehavior(intake);
-    // new DriveBehavior(drive);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
-    SubsystemBehavior.configureAll(robotGoals, matchState, intake, climber);
+    RobotSubsystemBehavior.configureAll(robotGoals, matchState, intake, climber, shooter);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -229,9 +229,6 @@ public class RobotContainer {
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    operatorIntent.wantsToClimbL1().whileTrue(climber.goToL1Command());
-    operatorIntent.wantsToClimbL2().whileTrue(climber.goToL2Command());
-    operatorIntent.wantsToClimbL3().whileTrue(climber.goToL3Command());
 
     // Reset gyro to 0° when B button is pressed
     // controller

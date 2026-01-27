@@ -1,7 +1,7 @@
 package frc.robot.subsystems.climber;
 
 public enum ClimberState {
-  L0,
+  IDLE,
   L1,
   L2,
   L3

@@ -27,7 +27,7 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .wantsToScoreTrigger()
         .onTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-    
+
     intent
         .wantsToIntakeTrigger()
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
