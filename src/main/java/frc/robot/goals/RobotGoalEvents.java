@@ -12,4 +12,14 @@ public interface RobotGoalEvents {
   Trigger isIdleTrigger();
 
   Trigger isLaunchingTrigger();
+
+  Trigger isIntakingTrigger();
+
+  Trigger isOuttakingTrigger();
+
+  Trigger isL1ClimbingTrigger();
+
+  Trigger isL2ClimbingTrigger();
+
+  Trigger isL3ClimbingTrigger();
 }

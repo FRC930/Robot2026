@@ -50,4 +50,10 @@ public class OperatorIntent implements OperatorIntentEvents {
   public Trigger wantsToClimbL3() {
     return driver.povDown();
   }
+
+  @Override
+  public Trigger wantsToIntakeTrigger() {
+    // TODO Auto-generated method stub
+    return driver.x();
+  }
 }
