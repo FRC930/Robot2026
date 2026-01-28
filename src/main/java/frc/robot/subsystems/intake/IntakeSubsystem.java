@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
@@ -31,6 +29,11 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.intakeAngularVelocity = DegreesPerSecond.mutable(0);
     logged.intakeVoltage = Volts.mutable(0);
     logged.intakeSetVoltage = Volts.mutable(0);
+    logged.intakeExtenderVoltage = Volts.mutable(0);
+    logged.intakeExtenderSetVoltage = Volts.mutable(0);
+    logged.intakeExtenderSupplyCurrent = Amps.mutable(0);
+    logged.intakeExtenderTorqueCurrent = Amps.mutable(0);
+    logged.intakeExtenderSetPoint = Degrees.mutable(0);
     logged.intakeExtenderAngle = Degrees.mutable(0);
   }
 

@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
@@ -13,6 +14,12 @@ public interface IntakeIO {
     public MutAngularVelocity intakeAngularVelocity;
     public MutVoltage intakeVoltage;
     public MutVoltage intakeSetVoltage;
+
+    public MutVoltage intakeExtenderVoltage;
+    public MutVoltage intakeExtenderSetVoltage;
+    public MutCurrent intakeExtenderSupplyCurrent;
+    public MutCurrent intakeExtenderTorqueCurrent;
+    public MutAngle intakeExtenderSetPoint;
     public MutAngle intakeExtenderAngle;
   }
 
