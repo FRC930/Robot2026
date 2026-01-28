@@ -32,8 +32,27 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
     intent
-        .wantsToOutakeTrigger()
+        .wantsToOutake()
         .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
+        .wantsToClimbL0()
+        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    intent
+        .wantsToClimbL1()
+        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
+        .wantsToClimbL2()
+        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL2))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
+        .wantsToClimbL3()
+        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL3))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

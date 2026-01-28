@@ -51,4 +51,24 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   public Trigger isShootingTrigger() {
     return currentGoal.is(RobotGoal.SHOOTING);
   }
+
+  @Override
+  public Trigger isClimbingL0() {
+    return currentGoal.is(RobotGoal.CLIMBINGL0);
+  }
+
+  @Override
+  public Trigger isClimbingL1() {
+    return currentGoal.is(RobotGoal.CLIMBINGL1);
+  }
+
+  @Override
+  public Trigger isClimbingL2() {
+    return currentGoal.is(RobotGoal.CLIMBINGL2);
+  }
+
+  @Override
+  public Trigger isClimbingL3() {
+    return currentGoal.is(RobotGoal.CLIMBINGL3);
+  }
 }

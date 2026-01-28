@@ -1,8 +1,6 @@
 package frc.robot.subsystems.climber;
 
-import frc.robot.goals.RobotGoalEvents;
-import frc.robot.state.MatchStateEvents;
-import frc.robot.subsystems.intake.IntakeEvents;
+import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
 public class ClimberBehavior extends SubsystemBehavior {
@@ -14,14 +12,11 @@ public class ClimberBehavior extends SubsystemBehavior {
   }
 
   @Override
-  public void configure(
-      RobotGoalEvents goals,
-      MatchStateEvents matchState,
-      IntakeEvents intakeState,
-      ClimberEvents climberState) {
-    // goals.isClimbing().whileTrue(climber.goToL0Command());
-    // goals.isClimbing().whileTrue(climber.goToL1Command());
-    // goals.isClimbing().whileTrue(climber.goToL2Command());
-    // goals.isClimbing().whileTrue(climber.goToL3Command());
+  public void configure(AllEvents events) {
+    events.goals().isIdleTrigger().whileTrue(climber.idle());
+    events.goals().isClimbingL0().whileTrue(climber.goToL0Command());
+    events.goals().isClimbingL1().whileTrue(climber.goToL1Command());
+    events.goals().isClimbingL2().whileTrue(climber.goToL2Command());
+    events.goals().isClimbingL3().whileTrue(climber.goToL3Command());
   }
 }

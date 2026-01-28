@@ -1,9 +1,5 @@
 package frc.robot.util;
 
-import frc.robot.goals.RobotGoalEvents;
-import frc.robot.state.MatchStateEvents;
-import frc.robot.subsystems.climber.ClimberEvents;
-import frc.robot.subsystems.intake.IntakeEvents;
 import java.util.ArrayList;
 import java.util.List;
 

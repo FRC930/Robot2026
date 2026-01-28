@@ -32,13 +32,15 @@ public class OperatorIntent implements OperatorIntentEvents {
   }
 
   @Override
-  public Trigger wantsToOutakeTrigger() {
-    return driver.b();
+  public Trigger wantsToIntakeTrigger() {
+    return driver.leftTrigger(0.5);
   }
 
   @Override
-  public Trigger wantsToIntakeTrigger() {
-    return driver.leftTrigger(0.5);
+  public Trigger wantsToClimbL0() {
+    return driver.povLeft();
+  }
+
   public Trigger wantsToClimbL1() {
     return driver.povUp();
   }
@@ -51,5 +53,10 @@ public class OperatorIntent implements OperatorIntentEvents {
   @Override
   public Trigger wantsToClimbL3() {
     return driver.povDown();
+  }
+
+  @Override
+  public Trigger wantsToOutake() {
+    return driver.a();
   }
 }

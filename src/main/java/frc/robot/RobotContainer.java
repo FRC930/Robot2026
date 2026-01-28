@@ -34,6 +34,7 @@ import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
 import frc.robot.state.MatchState;
+import frc.robot.subsystems.climber.ClimberBehavior;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -49,6 +50,9 @@ import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeBehavior;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterBehavior;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -74,6 +78,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
   private final ClimberSubsystem climber;
+  private final ShooterSubsystem shooter;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -104,7 +109,7 @@ public class RobotContainer {
         // TODO add TalonFX
         intake = new IntakeSubsystem(null);
         climber = new ClimberSubsystem(null);
-
+        shooter = new ShooterSubsystem(null);
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(0, canbus)); // TODO: find real motor ID
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -163,6 +168,7 @@ public class RobotContainer {
                         Inches.of(32).in(Meters),
                         true,
                         Inches.of(0).in(Meters))));
+        shooter = new ShooterSubsystem(new ShooterIOSim());
         break;
 
       default:
@@ -183,6 +189,7 @@ public class RobotContainer {
         intake = new IntakeSubsystem(null);
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(0, canbus)); // TODO: find real motor ID
         climber = new ClimberSubsystem(null);
+        shooter = new ShooterSubsystem(null);
         break;
     }
 
@@ -197,6 +204,8 @@ public class RobotContainer {
     new RobotGoalsBehavior(robotGoals);
     new IndexerBehavior(indexer);
     new IntakeBehavior(intake);
+    new ShooterBehavior(shooter);
+    new ClimberBehavior(climber);
 
     // TODO (students): Create subsystem behaviors here, e.g.:
     // new intakeBehavior(intake);
@@ -204,7 +213,8 @@ public class RobotContainer {
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
-    SubsystemBehavior.configureAll(new AllEvents(robotGoals, matchState, indexer));
+    SubsystemBehavior.configureAll(
+        new AllEvents(robotGoals, matchState, indexer, shooter, intake, climber));
 
     // Configure the button bindings
     configureButtonBindings();
