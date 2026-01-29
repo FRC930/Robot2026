@@ -1,29 +1,35 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.RPM;
 
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
-
   private ShooterIO m_IO;
+  private LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 60.0);
 
   private final EnumState<ShooterState> currentGoal =
       new EnumState<>("Shooter/States", ShooterState.IDLE);
 
   private ShooterInputsAutoLogged logged = new ShooterInputsAutoLogged();
 
+  public LoggedTunableGainsBuilder tunableGains =
+      new LoggedTunableGainsBuilder(
+          "Gains/ShooterSubsystem/", 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
   public ShooterSubsystem(ShooterIO IO) {
     m_IO = IO;
     logged.shooterAngularVelocity = DegreesPerSecond.mutable(0);
-    logged.shooterVoltage = Volts.mutable(0);
-    logged.shooterSetVoltage = Volts.mutable(0);
+    logged.shooterSetpoint = RPM.mutable(0);
+    this.m_IO.setGains(tunableGains.build());
   }
 
   /**
@@ -31,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
    *
    * @param speed
    */
-  public void setShooterSpeed(Voltage speed) {
+  public void setShooterSpeed(AngularVelocity speed) {
     m_IO.setShooterTarget(speed);
   }
 
@@ -59,12 +65,13 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
     Logger.processInputs("RobotState/Shooter", logged);
     switch (currentGoal.get()) {
       case SHOOTING:
-        setShooterSpeed(Volts.of(11.0));
+        setShooterSpeed(RPM.of(setpoint.get()));
         break;
       case IDLE:
         stop();
         break;
     }
+    tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }
 
   @Override
