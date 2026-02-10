@@ -25,6 +25,7 @@ public class HoodIOTalonFX implements HoodIO {
   public HoodIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
     m_setAngle = Degrees.of(0.0);
+    request = new MotionMagicExpoTorqueCurrentFOC(0);
   }
 
   public void configureTalons() {

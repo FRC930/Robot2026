@@ -50,6 +50,7 @@ public class TurretIOTalonFX implements TurretIO {
     canCoder1 = new CANcoder(canCoder1ID, canbus);
     canCoder2 = new CANcoder(canCoder2ID, canbus);
     m_setAngle = Degrees.of(0.0);
+    request = new MotionMagicTorqueCurrentFOC(0);
 
     configureTalons();
   }
