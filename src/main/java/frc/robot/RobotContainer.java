@@ -97,7 +97,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = false;
+  private static final boolean ISTESTING = true;
 
   private final AprilTagVision vision;
 
@@ -132,18 +132,19 @@ public class RobotContainer {
   final LoggedTunableNumber setFeederVelocity =
       new LoggedTunableNumber("RobotState/Feeder/setVelocity", 500.0);
   final LoggedTunableNumber setTurretAngle =
-      new LoggedTunableNumber("RobotState/Turret/setAngle", 45);
+      new LoggedTunableNumber("RobotState/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =
       new LoggedTunableNumber("RobotState/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotState/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderVolts =
-      new LoggedTunableNumber("RobotState/IntakeExtender/setVolts", 2);
-  final LoggedTunableNumber setHoodAngle = new LoggedTunableNumber("RobotState/Hood/setAngle", 45);
+      new LoggedTunableNumber("RobotState/IntakeExtender/setVolts", 2.0);
+  final LoggedTunableNumber setHoodAngle =
+      new LoggedTunableNumber("RobotState/Hood/setAngle", 45.0);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     CANBus rioCanbus = new CANBus("rio");
-    CANBus upperCanbus = new CANBus("upperCAN");
+    CANBus upperCanbus = new CANBus("upperCanbus");
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -378,7 +379,7 @@ public class RobotContainer {
     testController
         .y()
         .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-        .whileFalse(intake.getNewSetIntakeVelocityCommand(() -> 0.0));
+        .whileFalse(intake.getNewSetIntakeVelocityCommand(new InstantCommand(() -> intake.stop())));
     testController
         .povUp()
         .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
