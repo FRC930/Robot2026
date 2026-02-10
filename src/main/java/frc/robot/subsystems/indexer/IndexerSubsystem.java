@@ -44,9 +44,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     switch (this.m_state.get()) {
       case IDLE:
         m_IO.stop();
+        break;
       case FEEDING:
         m_IO.setIndexerTarget(this.m_state.get().indexerVolts());
         m_IO.setFeederTarget(this.m_state.get().feederVolts());
+        break;
     }
   }
 

@@ -139,7 +139,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   public void aim() {
     Angle angle = getAiming(robotPoseSupplier.get(), goalPose);
-    System.out.println(angle);
+    // Printing the angle of the turret
+    // System.out.println(angle);
     m_IO.setTarget(angle.in(Degrees));
   }
 }

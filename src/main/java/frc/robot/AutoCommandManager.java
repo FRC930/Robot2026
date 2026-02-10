@@ -2,11 +2,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -59,35 +57,10 @@ public class AutoCommandManager {
         e.printStackTrace();
       }
     }
-
-    // // Set up SysId routines
-    // autoChooser.addOption(
-    //     "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    // autoChooser.addOption(
-    //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    // autoChooser.addOption(
-    //     "Drive SysId (Quasistatic Forward)",
-    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    //     "Drive SysId (Quasistatic Reverse)",
-    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addOption(
-    //     "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    //     "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   public Command getAutonomousCommand() {
-    // return autoChooser.get();
-
-    Command // command =
-        // new InstantCommand(() -> m_drive.setPose(m_drive.getAutoAlignPose()))
-        // .andThen(new WaitCommand(1.0))
-        // .andThen(autoChooser.get());
-
-        command = autoChooser.get();
-    command = getAutoWithCurrentPose();
-    return command;
+    return getAutoWithCurrentPose();
   }
 
   private void configureNamedCommands(Drive drive, RobotGoals goals) {
@@ -107,24 +80,21 @@ public class AutoCommandManager {
       AutoPathCommand ppAutoCommand = (AutoPathCommand) command;
       String autoName = ppAutoCommand.m_autoName;
       // TODO detemine if need to prepend (super class with attribute of auto name)
-      returnCommand = getToPath(autoName + ".0").andThen(command);
+      returnCommand = getToPath(autoName + ".0");
+      if (returnCommand != null) {
+        returnCommand = returnCommand.andThen(command);
+      }
     }
     return returnCommand;
   }
 
   public Command getToPath(String pathName) {
-    Command command;
+    Command command = null;
     try {
       PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
       Optional<Pose2d> optPath = path.getStartingHolonomicPose();
-      PathConstraints constraints =
-          new PathConstraints(
-              1.0, 1.0, Units.degreesToRadians(540.0 / 2.0), Units.degreesToRadians(720.0 / 2.0));
-      // DID NOT work with finally rotation of start of path
-      command = AutoBuilder.pathfindThenFollowPath(path, constraints);
       if (optPath.isPresent()) {
-        // TODO get constraints from path and starting speed
-        // Make sure .0 path and starting velocity is > 0.0
+        // NOTE: Make sure .0 path and starting velocity is > 0.0
         Pose2d pose;
         if (AutoBuilder.shouldFlip()) {
           pose = FlippingUtil.flipFieldPose(optPath.get());
@@ -135,12 +105,10 @@ public class AutoCommandManager {
             AutoBuilder.pathfindToPose(
                 pose, path.getGlobalConstraints(), path.getIdealStartingState().velocity());
       }
-      // spotless:on
-      // TODO how to do rest of the path
     } catch (Exception e) {
+      // If we get Exception assume we have no command
       command = null;
     }
     return command;
   }
 }
-// spotless:on
