@@ -127,8 +127,8 @@ public class RobotContainer {
   private boolean m_teleopInitialized = false;
   private AutoCommandManager autoCommandManager;
 
-  final LoggedTunableNumber setIndexerVolts =
-      new LoggedTunableNumber("RobotState/Indexer/setVolts", 2);
+  final LoggedTunableNumber setIndexerVelocity =
+      new LoggedTunableNumber("RobotState/Indexer/setVelocity", 2);
   final LoggedTunableNumber setTurretAngle =
       new LoggedTunableNumber("RobotState/Turret/setAngle", 45);
   final LoggedTunableNumber setShooterSpeed =
@@ -359,8 +359,8 @@ public class RobotContainer {
     hood.setTestingState();
     testController
         .a()
-        .whileTrue(indexer.getNewSetIndexerVoltsCommand(setIndexerVolts))
-        .whileFalse(indexer.getNewSetIndexerVoltsCommand(() -> 0.0));
+        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
+        .whileFalse(indexer.getNewSetIndexerVelocityCommand(() -> 0.0));
     testController
         .x()
         .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))

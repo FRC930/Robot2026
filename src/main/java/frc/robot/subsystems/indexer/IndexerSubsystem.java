@@ -1,8 +1,10 @@
 package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,8 +26,8 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_IO = IO;
 
     m_logged.indexerSupplyCurrent = Amps.mutable(0);
-    m_logged.indexerVoltage = Volts.mutable(0);
-    m_logged.indexerSetVoltage = Volts.mutable(0);
+    m_logged.indexerAngularVelocity = RPM.mutable(0);
+    m_logged.indexerSetpoint = RPM.mutable(0);
 
     m_logged.feederSupplyCurrent = Amps.mutable(0);
     m_logged.feederVoltage = Volts.mutable(0);
@@ -46,7 +48,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         m_IO.stop();
         break;
       case FEEDING:
-        m_IO.setIndexerTarget(this.m_state.get().indexerVolts());
+        m_IO.setIndexerTarget(this.m_state.get().indexerVelocity());
         m_IO.setFeederTarget(this.m_state.get().feederVolts());
         break;
     }
@@ -70,10 +72,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     return runOnce(() -> m_state.set(IndexerState.FEEDING));
   }
 
-  public Command getNewSetIndexerVoltsCommand(DoubleSupplier volts) {
+  public Command getNewSetIndexerVelocityCommand(DoubleSupplier velocity) {
     return new InstantCommand(
         () -> {
-          m_IO.setIndexerTarget(Volts.of(volts.getAsDouble()));
+          m_IO.setIndexerTarget(AngularVelocity.ofBaseUnits(velocity.getAsDouble(), RPM));
         },
         this);
   }

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -46,7 +46,7 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     logged.canCoderAngle1 = Degrees.mutable(0);
     logged.canCoderAngle2 = Degrees.mutable(0);
     logged.turretSetAngle = Degrees.mutable(0);
-    logged.turretAngularVelocity = DegreesPerSecond.mutable(0);
+    logged.turretAngularVelocity = RPM.mutable(0);
 
     this.robotPoseSupplier = robotPoseSupplier;
     this.goalPose = goalPose;

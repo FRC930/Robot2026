@@ -1,15 +1,17 @@
 package frc.robot.subsystems.indexer;
 
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerIOSim implements IndexerIO {
 
-  private Voltage indexerAppliedVoltage = Volts.mutable(0.0);
+  private AngularVelocity indexerAppliedVelocity = RPM.mutable(0.0);
   private Voltage feederAppliedVoltage = Volts.mutable(0.0);
 
   private final FlywheelSim indexerSim;
@@ -29,8 +31,8 @@ public class IndexerIOSim implements IndexerIO {
   }
 
   @Override
-  public void setIndexerTarget(Voltage volts) {
-    this.indexerAppliedVoltage = volts;
+  public void setIndexerTarget(AngularVelocity velocity) {
+    this.indexerAppliedVelocity = velocity;
   }
 
   @Override
@@ -40,21 +42,21 @@ public class IndexerIOSim implements IndexerIO {
 
   @Override
   public void stop() {
-    this.indexerAppliedVoltage = Volts.zero();
+    this.indexerAppliedVelocity = RPM.zero();
     this.feederAppliedVoltage = Volts.zero();
   }
 
   @Override
   public void updateInputs(IndexerInputs inputs) {
     // inputs.indexerAngularVelocity.mut_replace(indexerSim.getAngularVelocity());
-    inputs.indexerSetVoltage.mut_replace(indexerAppliedVoltage);
-    inputs.indexerVoltage.mut_replace(Volts.of(indexerSim.getInputVoltage()));
+    inputs.indexerSetpoint.mut_replace(this.indexerAppliedVelocity);
+    inputs.indexerAngularVelocity.mut_replace(indexerSim.getAngularVelocity());
 
     // inputs.feederAngularVelocity.mut_replace(feederSim.getAngularVelocity());
     inputs.feederSetVoltage.mut_replace(feederAppliedVoltage);
     inputs.feederVoltage.mut_replace(Volts.of(feederSim.getInputVoltage()));
 
-    indexerSim.setInputVoltage(indexerAppliedVoltage.in(Volts));
+    indexerSim.setAngularVelocity(indexerAppliedVelocity.in(RPM));
     indexerSim.update(0.02);
 
     feederSim.setInputVoltage(feederAppliedVoltage.in(Volts));
