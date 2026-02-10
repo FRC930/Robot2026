@@ -15,7 +15,8 @@ public class IndexerIOTalonFX implements IndexerIO {
   private TalonFX indexerMotor;
   private TalonFX feederMotor;
 
-  private VoltageOut request;
+  private VoltageOut requestIndexer;
+  private VoltageOut requestFeeder;
   private Voltage indexerSetPoint = Volts.of(0);
   private Voltage feederSetPoint = Volts.of(0);
 
@@ -24,7 +25,8 @@ public class IndexerIOTalonFX implements IndexerIO {
   public IndexerIOTalonFX(int indexerMotorCAN, int feederMotorCAN, CANBus canbus) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     feederMotor = new TalonFX(feederMotorCAN, canbus);
-    request = new VoltageOut(0.0);
+    requestIndexer = new VoltageOut(0.0); //TODO: Switch to Velocity Controller with PIDs
+    requestFeeder = new VoltageOut(0.0);
     configureTalons();
   }
 
@@ -44,7 +46,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   @Override
   public void setIndexerTarget(Voltage volts) {
     if (!(volts.in(Volts) == indexerSetPoint.in(Volts))) {
-      indexerMotor.setControl(request.withOutput(volts));
+      indexerMotor.setControl(requestIndexer.withOutput(volts));
       indexerSetPoint = volts;
     }
   }
@@ -52,7 +54,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   @Override
   public void setFeederTarget(Voltage volts) {
     if (volts.in(Volts) != feederSetPoint.in(Volts)) {
-      feederMotor.setControl(request.withOutput(volts));
+      feederMotor.setControl(requestFeeder.withOutput(volts));
       feederSetPoint = volts;
     }
   }
@@ -60,6 +62,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   @Override
   public void stop() {
     indexerMotor.setControl(m_neutralOut);
+    feederMotor.setControl(m_neutralOut);
     indexerSetPoint = Volts.zero();
     feederSetPoint = Volts.zero();
   }
