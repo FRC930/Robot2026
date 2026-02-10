@@ -14,5 +14,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Grant execute permission
         run: chmod +x gradlew
+      - name: find gradlew
+        run: find . -name "gradlew"
+      - name: Convert line endings
+        run: dos2unix gradlew
       - name: Build robot code
         run: ./gradlew build
