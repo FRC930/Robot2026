@@ -15,7 +15,7 @@ public class MatchState extends VirtualSubsystem implements MatchEvents {
     // No periodic updates needed - triggers poll DriverStation directly
   }
 
-  private void MatchState() {}
+  private MatchState() {}
 
   private static MatchState instance = null;
 
