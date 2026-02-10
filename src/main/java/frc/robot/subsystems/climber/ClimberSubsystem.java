@@ -56,6 +56,9 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Climber", logged);
     switch (m_state.get()) {
+      case IDLE:
+        setClimberHeight(Inches.of(0));
+        break;
       case L0:
         setClimberHeight(Inches.of(0));
         break;
@@ -69,6 +72,10 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
         setClimberHeight(Inches.of(6));
         break;
     }
+  }
+
+  public Command idleCommand() {
+    return runOnce(() -> m_state.set(ClimberState.IDLE));
   }
 
   public Command goToL0Command() {
@@ -105,5 +112,10 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
   @Override
   public Trigger GoToL3Trigger() {
     return m_state.is(ClimberState.L3);
+  }
+
+  @Override
+  public Trigger idleTrigger() {
+    return m_state.is(ClimberState.IDLE);
   }
 }

@@ -3,6 +3,8 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public interface ClimberEvents {
+  public Trigger idleTrigger();
+
   public Trigger goToL0Trigger();
 
   public Trigger goToL1Trigger();
