@@ -104,7 +104,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
   @Override
   public void setIntakeExtenderTarget(Voltage target) {
-    if (intakeExtenderSetPoint != target) {
+    if (intakeExtenderSetPoint.in(Volts) != target.in(Volts)) {
       intakeExtenderMotor.setControl(intakeExtenderRequest.withOutput(target));
       intakeExtenderSetPoint = target;
     }
