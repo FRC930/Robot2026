@@ -26,9 +26,10 @@ public class HoodIOTalonFX implements HoodIO {
     motor = new TalonFX(motorID, canbus);
     m_setAngle = Degrees.of(0.0);
     request = new MotionMagicExpoTorqueCurrentFOC(0);
+    configureTalons();
   }
 
-  public void configureTalons() {
+  private void configureTalons() {
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static;
