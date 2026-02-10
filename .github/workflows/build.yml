@@ -16,6 +16,8 @@ jobs:
         run: chmod +x gradlew
       - name: find gradlew
         run: find . -name "gradlew"
+      - name: Install dos2unix
+        run: sudo apt-get Install -y dos2unix
       - name: Convert line endings
         run: dos2unix gradlew
       - name: Build robot code
