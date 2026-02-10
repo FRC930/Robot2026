@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.ctre.phoenix6.CANBus;
@@ -102,7 +101,7 @@ public class ShooterIOTalonFX implements ShooterIO {
 
   @Override
   public void setShooterTarget(AngularVelocity target) {
-    if (target.in(DegreesPerSecond) != shooterSetPoint.in(DegreesPerSecond)) {
+    if (target.in(RPM) != shooterSetPoint.in(RPM)) {
       shooterMotor.setControl(shooterRequest.withVelocity(target));
       shooterSetPoint = target;
       // shooterMotor.set(target.in(Volts));

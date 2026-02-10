@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -29,7 +28,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
 
   public ShooterSubsystem(ShooterIO IO) {
     m_IO = IO;
-    logged.shooterAngularVelocity = DegreesPerSecond.mutable(0);
+    logged.shooterAngularVelocity = RPM.mutable(0);
     logged.shooterSetpoint = RPM.mutable(2700.0);
     this.m_IO.setGains(tunableGains.build());
   }
@@ -93,7 +92,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   public Command getNewSetShooterSpeedCommand(DoubleSupplier speed) {
     return new InstantCommand(
         () -> {
-          setShooterSpeed(AngularVelocity.ofBaseUnits(speed.getAsDouble(), DegreesPerSecond));
+          setShooterSpeed(AngularVelocity.ofBaseUnits(speed.getAsDouble(), RPM));
         },
         this);
   }
