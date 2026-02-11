@@ -2,6 +2,7 @@ package frc.robot.subsystems.hood;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
+import frc.robot.util.Gains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface HoodIO {
@@ -18,5 +19,8 @@ public interface HoodIO {
   ;
 
   public default void updateInputs(HoodInputs input) {}
+  ;
+
+  public default void setGains(Gains gains) {}
   ;
 }

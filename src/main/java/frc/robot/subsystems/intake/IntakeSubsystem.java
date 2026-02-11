@@ -4,14 +4,20 @@
 
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,19 +26,35 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   /** Creates a new ExampleSubsystem. */
   private IntakeIO m_IO;
 
+  private double rpm =
+      (11.0 / 12.0) * IntakeIOTalonFX.KRACKEN_X60_FOC_MAX_RPM.in(RPM) / IntakeIOTalonFX.GEAR_RATIO;
+
+  private LoggedTunableNumber intakeTargetRPM =
+      new LoggedTunableNumber("Intake/intakeTargetRPM", rpm);
+  private LoggedTunableNumber intakeExtenderTargetVolts =
+      new LoggedTunableNumber("Intake/intakeExtenderTargetVolts", 5);
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
+
+  public LoggedTunableGainsBuilder tunableGains =
+      new LoggedTunableGainsBuilder(
+          "Gains/IntakeSubsystem/", 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private IntakeInputsAutoLogged logged = new IntakeInputsAutoLogged();
 
   public IntakeSubsystem(IntakeIO IO) {
     m_IO = IO;
-    logged.intakeVoltage = Volts.mutable(0);
-    logged.intakeSetVoltage = Volts.mutable(0);
-    logged.intakeSupplyCurrent = Amps.mutable(0);
-    logged.intakeExtenderVoltage = Volts.mutable(0);
-    logged.intakeExtenderSetVoltage = Volts.mutable(0);
-    logged.intakeExtenderSupplyCurrent = Amps.mutable(0);
+    logged.rollerVelocity = RPM.mutable(0.0);
+    logged.rollerVelocitySetPoint = RPM.mutable(0.0);
+    logged.rollerSupplyCurrent = Amps.mutable(0.0);
+    logged.extenderVoltage = Volts.mutable(0.0);
+    logged.extenderVoltageSetPoint = Volts.mutable(0.0);
+    logged.extenderSupplyCurrent = Amps.mutable(0.0);
+    logged.extenderEmulatedAngle =
+        Radians.mutable(IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltage.in(Volts)));
+    logged.extenderEmulatedSetAngle =
+        Radians.mutable(
+            IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltageSetPoint.in(Volts)));
   }
 
   /**
@@ -40,8 +62,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
    *
    * @param speed
    */
-  public void setIntakeSpeed(Voltage speed) {
-    m_IO.setIntakeTarget(speed);
+  public void setIntakeSpeed(AngularVelocity speed) {
+    m_IO.setRollerTargetSpeed(speed);
   }
 
   /**
@@ -50,7 +72,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
    * @param speed
    */
   public void setIntakeVoltage(Voltage voltage) {
-    m_IO.setIntakeExtenderTarget(voltage);
+    m_IO.setExtenderTargetVolts(voltage);
   }
 
   public Command intakeCommand() {
@@ -89,18 +111,19 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     switch (currentGoal.get()) {
       case INTAKING:
         // TODO filler units rn
-        m_IO.setIntakeTarget(Volts.of(11.0));
-        m_IO.setIntakeExtenderTarget(Volts.of(5.0));
+        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case OUTTAKING:
         // TODO filler units rn
-        m_IO.setIntakeTarget(Volts.of(-11.0));
-        m_IO.setIntakeExtenderTarget(Volts.of(5.0));
+        m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
+        m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case IDLE:
         stop();
         break;
     }
+    tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }
 
   @Override
@@ -118,18 +141,19 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     return currentGoal.is(IntakeState.OUTTAKING);
   }
 
-  public Command getNewSetIntakeVoltsCommand(DoubleSupplier volts) {
+  public Command getNewSetIntakeVelocityCommand(DoubleSupplier rpm) {
     return new InstantCommand(
         () -> {
-          m_IO.setIntakeTarget(Volts.of(volts.getAsDouble()));
+          m_IO.setRollerTargetSpeed(RPM.of(rpm.getAsDouble()));
         },
         this);
   }
 
-  public Command getNewSetIntakeExtenderVoltsCommand(DoubleSupplier volts) {
+  public Command getNewSetIntakeExtenderVoltsCommand(DoubleSupplier volts, boolean negate) {
     return new InstantCommand(
         () -> {
-          m_IO.setIntakeExtenderTarget(Volts.of(volts.getAsDouble()));
+          m_IO.setExtenderTargetVolts(
+              Volts.of((negate) ? -1 * volts.getAsDouble() : volts.getAsDouble()));
         },
         this);
   }
