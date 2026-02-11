@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -44,11 +45,14 @@ public class IntakeIOSim implements IntakeIO {
   // intake Roller
   private final FlywheelSim intakeSim;
   private SimpleMotorFeedforward intakeFF;
-  private ProfiledPIDController intakePID =
-      new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
+  // NOTE: ProfilePID sorta worked if did not have any FF KV BUT did not reach goal
+  // private ProfiledPIDController intakePID =
+  //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
+
+  private PIDController intakePID = new PIDController(0.0031, 0.0, 0.0);
   // gains for intake (NOT ACCURATE)
   private static final double intakekS = 0.0;
-  private static final double intakekV = 0.0;
+  private static final double intakekV = 0.002;
   private static final double intakekA = 0.0;
 
   public IntakeIOSim() {
