@@ -97,6 +97,8 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
+  private RobotState robotState = RobotState.instance();
+
   private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;

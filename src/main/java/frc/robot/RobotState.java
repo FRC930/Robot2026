@@ -41,8 +41,8 @@ public class RobotState extends VirtualSubsystem {
   private final String key;
 
   private RobotState(String key) {
+    super();
     this.key = key;
-
     primaryMechanism2d = new Mechanism2d(500, 300);
     wristMechanismLigament =
         new MechanismLigament2d(
@@ -64,7 +64,7 @@ public class RobotState extends VirtualSubsystem {
 
   }
 
-  public Angle getWristTwist() {
+  public Angle getWristTwist() { // 67
     return wristTwist;
   }
 
@@ -95,6 +95,6 @@ public class RobotState extends VirtualSubsystem {
 
   private static final Pose3d TURRET_ATTACH_OFFSET =
       new Pose3d(
-          new Translation3d(Inches.of(2.125), Inches.of(-11.5), Inches.of(3.5)),
-          new Rotation3d(Degrees.of(180), Degrees.of(0), Degrees.of(90)));
+          new Translation3d(Inches.of(0), Inches.of(0.), Inches.of(0)),
+          new Rotation3d(Degrees.of(90.), Degrees.of(0), Degrees.of(0)));
 }
