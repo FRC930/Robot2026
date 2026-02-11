@@ -6,6 +6,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -49,6 +50,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.intakeExtenderVoltage = Volts.mutable(0);
     logged.intakeExtenderSetVoltage = Volts.mutable(0);
     logged.intakeExtenderSupplyCurrent = Amps.mutable(0);
+    logged.intakeExtenderAngle = Radians.mutable(IntakeIOSim.kMinvoltageRads);
   }
 
   /**
@@ -143,10 +145,11 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         this);
   }
 
-  public Command getNewSetIntakeExtenderVoltsCommand(DoubleSupplier volts) {
+  public Command getNewSetIntakeExtenderVoltsCommand(DoubleSupplier volts, boolean negate) {
     return new InstantCommand(
         () -> {
-          m_IO.setIntakeExtenderTarget(Volts.of(volts.getAsDouble()));
+          m_IO.setIntakeExtenderTarget(
+              Volts.of((negate) ? -1 * volts.getAsDouble() : volts.getAsDouble()));
         },
         this);
   }

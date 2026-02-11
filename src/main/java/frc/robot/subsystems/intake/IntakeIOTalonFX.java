@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
@@ -102,7 +103,12 @@ public class IntakeIOTalonFX implements IntakeIO {
     inputs.intakeExtenderSetVoltage.mut_replace(intakeExtenderSetPoint);
     inputs.intakeExtenderSupplyCurrent.mut_replace(
         intakeExtenderMotor.getSupplyCurrent().getValue());
-    // inputs.intakeExtenderAngle.(angle(0.0)); // TODO for replay
+    double angleRad =
+        (intakeExtenderMotor.getMotorVoltage().getValueAsDouble() > 0.0)
+            ? IntakeIOSim.kMaxVoltageRads
+            : IntakeIOSim.kMinvoltageRads;
+    inputs.intakeExtenderAngle.mut_replace(
+        Radians.of(angleRad)); // TODO for 3D simulation to use (need to determine)
   }
 
   @Override

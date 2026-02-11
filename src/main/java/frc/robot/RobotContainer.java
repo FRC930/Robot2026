@@ -375,10 +375,10 @@ public class RobotContainer {
         .whileFalse(intake.getNewSetIntakeVelocityCommand(() -> 0.0));
     testController
         .povUp()
-        .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts))
+        .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
         .whileFalse(
             intake.getNewSetIntakeExtenderVoltsCommand(
-                () -> -2.0)); // Default value for intake extender volts
+                setIntakeExtenderVolts, true)); // Default value for intake extender volts
     testController
         .povRight()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
