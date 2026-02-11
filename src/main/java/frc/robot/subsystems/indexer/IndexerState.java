@@ -9,8 +9,8 @@ public enum IndexerState {
   TESTING(RPM.zero(), RPM.zero()),
   IDLE(RPM.zero(), RPM.zero()),
   FEEDING(
-      RPM.of(new LoggedTunableNumber("Indexer/setpoint", 2500).get()),
-      RPM.of(new LoggedTunableNumber("Feeder/setpoint", 2500).get()));
+      RPM.of(new LoggedTunableNumber("Indexer/setIndexerPoint", 2500).get()),
+      RPM.of(new LoggedTunableNumber("Indexer/setFeederPoint", 2500).get()));
 
   private AngularVelocity m_indexerVelocity;
   private AngularVelocity m_feederVelocity;
