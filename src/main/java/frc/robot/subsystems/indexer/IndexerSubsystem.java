@@ -95,5 +95,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         this);
   }
 
-  // TODO INDEXER create getNewSetFeederVelocityCommand
+  public Command getNewSetFeederVelocityCommand(DoubleSupplier velocity) {
+    return new InstantCommand(
+        () -> {
+          m_IO.setFeederTarget(RPM.of(velocity.getAsDouble()));
+        },
+        this);
+  }
 }

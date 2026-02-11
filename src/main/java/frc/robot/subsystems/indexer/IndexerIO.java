@@ -13,14 +13,12 @@ public interface IndexerIO {
     public MutAngularVelocity indexerVelocity;
     public MutAngularVelocity indexerSetPoint;
     public MutVoltage indexerVoltage;
-    public MutVoltage indexerVoltageSetPoint; // TODO INDEXER REMOVE
     public MutCurrent indexerSupplyCurrent;
     public MutCurrent indexerTorqueCurrent;
 
     public MutAngularVelocity feederVelocity;
     public MutAngularVelocity feederSetPoint;
     public MutVoltage feederVoltage;
-    public MutVoltage feederVoltageSetPoint; // TODO INDEXER REMOVE
     public MutCurrent feederSupplyCurrent;
     public MutCurrent feederTorqueCurrent;
   }
