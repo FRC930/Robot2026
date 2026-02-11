@@ -133,8 +133,8 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotState/Turret/setAngle", 45);
   final LoggedTunableNumber setShooterSpeed =
       new LoggedTunableNumber("RobotState/Shooter/setSpeed", 87);
-  final LoggedTunableNumber setIntakeVolts =
-      new LoggedTunableNumber("RobotState/Intake/setVolts", 2);
+  final LoggedTunableNumber setIntakeRPM =
+      new LoggedTunableNumber("RobotState/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderVolts =
       new LoggedTunableNumber("RobotState/IntakeExtender/setVolts", 2);
   final LoggedTunableNumber setHoodAngle = new LoggedTunableNumber("RobotState/Hood/setAngle", 45);
@@ -371,8 +371,8 @@ public class RobotContainer {
         .whileFalse(shooter.getNewSetShooterSpeedCommand(() -> 0.0));
     testController
         .y()
-        .whileTrue(intake.getNewSetIntakeVoltsCommand(setIntakeVolts))
-        .whileFalse(intake.getNewSetIntakeVoltsCommand(() -> 0.0));
+        .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+        .whileFalse(intake.getNewSetIntakeVelocityCommand(() -> 0.0));
     testController
         .povUp()
         .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts))

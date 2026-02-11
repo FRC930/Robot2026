@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableGainsBuilder;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,6 +17,10 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   private HoodIO m_IO;
 
   private final EnumState<HoodState> currentGoal = new EnumState<>("Hood/States", HoodState.IDLE);
+
+  public LoggedTunableGainsBuilder tunableGains =
+      new LoggedTunableGainsBuilder(
+          "Gains/HoodSubsystem/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 
@@ -56,6 +61,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         m_IO.setHoodTarget(Degrees.mutable(45)); // Example target angle
         break;
     }
+    tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }
 
   @Override

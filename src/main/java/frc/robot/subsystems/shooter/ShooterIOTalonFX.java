@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -46,6 +47,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   private void configureTalons() {
     TalonFXConfiguration configshooter = new TalonFXConfiguration();
     configshooter.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configshooter.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     configshooter.CurrentLimits.StatorCurrentLimit = 80.0;
     configshooter.CurrentLimits.StatorCurrentLimitEnable = true;
     configshooter.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -57,12 +59,6 @@ public class ShooterIOTalonFX implements ShooterIO {
     configshooter.MotionMagic.MotionMagicExpo_kV = 1.0;
     configshooter.MotionMagic.MotionMagicAcceleration = 1.0;
     configshooter.MotionMagic.MotionMagicCruiseVelocity = 1.0;
-    configshooter.Slot0.kP = 1.0;
-    configshooter.Slot0.kI = 0.0;
-    configshooter.Slot0.kD = 0.0;
-    configshooter.Slot0.kS = 1.0;
-    configshooter.Slot0.kV = 1.0;
-    configshooter.Slot0.kA = 1.0;
     shooterMotor.getConfigurator().apply(configshooter);
 
     TalonFXConfiguration follower1Configuration = new TalonFXConfiguration();
