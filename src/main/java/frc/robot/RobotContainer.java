@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.aiming.AimingService;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.goals.RobotGoals;
@@ -120,6 +121,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooter;
   private final TurretSubsystem turret;
   private final HoodSubsystem hood;
+  private final AimingService aimingService;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -148,6 +150,7 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setVolts", 2.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     CANBus rioCanbus = new CANBus("rio");
@@ -165,16 +168,19 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight),
                 (robotPose) -> {});
+        aimingService =
+            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
-        shooter = new ShooterSubsystem(new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus));
+        shooter =
+            new ShooterSubsystem(
+                new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         turret =
             new TurretSubsystem(
-                new TurretIOTalonFX(7, 1, 2, upperCanbus),
-                drive::getAutoAlignPose,
-                new Pose2d(0.0, 0.0, new Rotation2d()));
-        hood = new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus));
+                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
+        hood =
+            new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -215,6 +221,7 @@ public class RobotContainer {
                 new ModuleIOSim(driveSimulation.getModules()[2]),
                 new ModuleIOSim(driveSimulation.getModules()[3]),
                 driveSimulation::setSimulationWorldPose);
+        drive.setPose(driveSimulation.getSimulatedDriveTrainPose());
         vision =
             new AprilTagVision(
                 drive::setPose,
@@ -223,6 +230,8 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera2Name, robotToCamera2, drive::getPose),
                 new VisionIOPhotonVisionSim(camera3Name, robotToCamera3, drive::getPose),
                 new VisionIOPhotonVisionSim(camera4Name, robotToCamera4, drive::getPose));
+        aimingService =
+            new AimingService(drive::getPose, drive::getChassisSpeeds, drive::getRotation);
         intake = new IntakeSubsystem(new IntakeIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
         climber =
@@ -239,11 +248,9 @@ public class RobotContainer {
                         Inches.of(32).in(Meters),
                         true,
                         Inches.of(0).in(Meters))));
-        shooter = new ShooterSubsystem(new ShooterIOSim());
-        turret =
-            new TurretSubsystem(
-                new TurretIOSim(), drive::getAutoAlignPose, new Pose2d(0.0, 0.0, new Rotation2d()));
-        hood = new HoodSubsystem(new HoodIOSim());
+        shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
+        turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
+        hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
         break;
 
       default:
@@ -262,14 +269,14 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIO() {},
                 new VisionIO() {});
+        aimingService =
+            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
-        shooter = new ShooterSubsystem(new ShooterIO() {});
-        turret =
-            new TurretSubsystem(
-                new TurretIO() {}, drive::getAutoAlignPose, new Pose2d(0.0, 0.0, new Rotation2d()));
-        hood = new HoodSubsystem(new HoodIO() {});
+        shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
+        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
+        hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
         break;
     }
 
@@ -320,13 +327,15 @@ public class RobotContainer {
             ? () -> drive.setPose(driveSimulation.getSimulatedDriveTrainPose())
             : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d()));
 
-    // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY() * DRIVE_SPEED,
-            () -> -controller.getLeftX() * DRIVE_SPEED,
-            () -> -controller.getRightX() * ANGULAR_SPEED));
+    // Default command - auto-test pattern (no controller needed)
+    // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
+    drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> -controller.getLeftY() * DRIVE_SPEED,
+    //         () -> -controller.getLeftX() * DRIVE_SPEED,
+    //         () -> -controller.getRightX() * ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

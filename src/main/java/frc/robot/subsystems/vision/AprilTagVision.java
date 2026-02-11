@@ -32,6 +32,7 @@ public class AprilTagVision extends Vision {
   private Trigger m_checkIfAllianceChangedTrigger = null;
 
   private boolean m_isFirstTime = true;
+
   // resets the aprilTag vision to nothing
   public AprilTagVision(Consumer<Pose2d> resetPose, VisionConsumer consumer, VisionIO... io) {
     super(consumer, io);
@@ -180,6 +181,7 @@ public class AprilTagVision extends Vision {
   private void setUpdateOdometryBasedOnApriltags(boolean enable) {
     m_updateOdometryBaseOnApriltags = enable;
   }
+
   /**
    * Disable next if april tag will be used for updating odometry
    *
@@ -188,6 +190,7 @@ public class AprilTagVision extends Vision {
   public void disableUpdateOdometryBasedOnApriltags() {
     setUpdateOdometryBasedOnApriltags(false);
   }
+
   /**
    * Disable next if april tag will be used for updating odometry
    *

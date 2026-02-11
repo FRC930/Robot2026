@@ -190,10 +190,12 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N1> visionMeasurementStdDevs,
         boolean isQuest);
   }
+
   // accepts the observation
   public boolean rejectPose(PoseObservation observation) {
     return false;
   }
+
   // accepts the vision measurements
   public void addVisionMeasurement(
       Pose2d pose, double timestamp, Vector<N3> fill, boolean isQuest) {

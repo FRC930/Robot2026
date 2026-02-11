@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
-// TODO Later
 public class ShooterBehavior extends SubsystemBehavior {
 
   private final ShooterSubsystem shooter;
@@ -14,6 +13,8 @@ public class ShooterBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
+    // Pre-spin shooter when AIMING so it's ready to fire instantly
+    events.goals().isAimingTrigger().whileTrue(shooter.prespinCommand());
     events
         .goals()
         .isShootingTrigger()

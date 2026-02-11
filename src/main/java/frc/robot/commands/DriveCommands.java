@@ -289,6 +289,27 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
+  /**
+   * Automated test drive pattern that drives back and forth in a straight line. Requires no
+   * controller input.
+   */
+  public static Command autoDriveTest(Drive drive) {
+    Timer timer = new Timer();
+    double halfPeriod = 3.0;
+
+    return Commands.run(
+            () -> {
+              double elapsed = timer.get();
+              double phase = (elapsed % (2 * halfPeriod)) / halfPeriod;
+              double direction = phase < 1.0 ? 1.0 : -1.0;
+              double speed = drive.getMaxLinearSpeedMetersPerSec() * 0.4 * direction;
+              drive.runVelocity(new ChassisSpeeds(0.0, speed, 0.0));
+            },
+            drive)
+        .beforeStarting(timer::restart)
+        .finallyDo(() -> drive.stop());
+  }
+
   public static Command brakeDrive(Drive drive) {
     return new InstantCommand(
         () -> {

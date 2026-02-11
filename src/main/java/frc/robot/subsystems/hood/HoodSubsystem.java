@@ -28,8 +28,11 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 
-  public HoodSubsystem(HoodIO IO) {
+  private final DoubleSupplier hoodAngleSupplier;
+
+  public HoodSubsystem(HoodIO IO, DoubleSupplier hoodAngleSupplier) {
     m_IO = IO;
+    this.hoodAngleSupplier = hoodAngleSupplier;
     logged.hoodAngle = Degrees.mutable(0);
     logged.hoodSetAngle = Degrees.mutable(0);
     logged.hoodVoltage = Volts.mutable(0);
@@ -75,7 +78,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         break;
       case AIMING:
         // TODO these are filler units
-        m_IO.setHoodTarget(Degrees.of(aimAngle.get())); // Example target angle
+        m_IO.setHoodTarget(Degrees.of(hoodAngleSupplier.getAsDouble()));
         break;
       case PASSING:
         m_IO.setHoodTarget(Degrees.of(passAngle.get())); // Example pass angle
