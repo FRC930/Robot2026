@@ -1,18 +1,18 @@
 package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerIOSim implements IndexerIO {
 
   private AngularVelocity indexerAppliedVelocity = RPM.mutable(0.0);
-  private Voltage feederAppliedVoltage = Volts.mutable(0.0);
+  private AngularVelocity feederAppliedVelocity = RPM.mutable(0.0);
 
   private final FlywheelSim indexerSim;
   private final FlywheelSim feederSim;
@@ -36,30 +36,32 @@ public class IndexerIOSim implements IndexerIO {
   }
 
   @Override
-  public void setFeederTarget(Voltage volts) {
-    this.feederAppliedVoltage = volts;
+  public void setFeederTarget(AngularVelocity velocity) {
+    this.feederAppliedVelocity = velocity;
   }
 
   @Override
   public void stop() {
     this.indexerAppliedVelocity = RPM.zero();
-    this.feederAppliedVoltage = Volts.zero();
+    this.feederAppliedVelocity = RPM.zero();
   }
 
   @Override
   public void updateInputs(IndexerInputs inputs) {
-    // inputs.indexerAngularVelocity.mut_replace(indexerSim.getAngularVelocity());
-    inputs.indexerSetpoint.mut_replace(this.indexerAppliedVelocity);
-    inputs.indexerAngularVelocity.mut_replace(indexerSim.getAngularVelocity());
+    inputs.indexerSetPoint.mut_replace(this.indexerAppliedVelocity);
+    inputs.indexerVelocity.mut_replace(indexerSim.getAngularVelocity());
+    inputs.indexerVoltage.mut_replace(Volts.of(indexerSim.getInputVoltage()));
 
-    // inputs.feederAngularVelocity.mut_replace(feederSim.getAngularVelocity());
-    inputs.feederSetVoltage.mut_replace(feederAppliedVoltage);
+    inputs.feederVelocity.mut_replace(feederSim.getAngularVelocity());
+    inputs.feederSetPoint.mut_replace(feederAppliedVelocity);
     inputs.feederVoltage.mut_replace(Volts.of(feederSim.getInputVoltage()));
 
-    indexerSim.setAngularVelocity(indexerAppliedVelocity.in(RPM));
+    // TODO INDEXER simulate using PIDS and volts (see intakeIOSim)
+    indexerSim.setAngularVelocity(indexerAppliedVelocity.in(RadiansPerSecond));
     indexerSim.update(0.02);
 
-    feederSim.setInputVoltage(feederAppliedVoltage.in(Volts));
+    // TODO INDEXER simulate using PIDS and volts (see intakeIOSim)
+    feederSim.setAngularVelocity(feederAppliedVelocity.in(RadiansPerSecond));
     feederSim.update(0.02);
   }
 }

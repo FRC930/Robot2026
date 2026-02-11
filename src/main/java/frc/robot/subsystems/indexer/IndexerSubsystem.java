@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,12 +37,14 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_logged.indexerVelocity = RPM.mutable(0);
     m_logged.indexerSetPoint = RPM.mutable(0);
     m_logged.indexerVoltage = Volts.mutable(0);
+    // TODO INDEXER do we need this in each subsystem that has gains
     m_IO.setIndexerGains(m_indexerTunableGains.build());
 
     m_logged.feederSupplyCurrent = Amps.mutable(0);
     m_logged.feederVelocity = RPM.mutable(0);
     m_logged.feederSetPoint = RPM.mutable(0);
     m_logged.feederVoltage = Volts.mutable(0);
+    // TODO INDEXER do we need this in each subsystem that has gains
     m_IO.setFeederGains(m_feederTunableGains.build());
   }
 
@@ -65,6 +66,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         m_IO.setFeederTarget(this.m_state.get().feederVelocity());
         break;
     }
+    // TODO INDEXER update gains based on tuneable numbers for feeder and indexer
   }
 
   @Override
@@ -88,8 +90,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
   public Command getNewSetIndexerVelocityCommand(DoubleSupplier velocity) {
     return new InstantCommand(
         () -> {
-          m_IO.setIndexerTarget(AngularVelocity.ofBaseUnits(velocity.getAsDouble(), RPM));
+          m_IO.setIndexerTarget(RPM.of(velocity.getAsDouble()));
         },
         this);
   }
+
+  // TODO INDEXER create getNewSetFeederVelocityCommand
 }

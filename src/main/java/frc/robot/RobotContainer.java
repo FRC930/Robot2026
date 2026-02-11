@@ -127,8 +127,9 @@ public class RobotContainer {
   private boolean m_teleopInitialized = false;
   private AutoCommandManager autoCommandManager;
 
+  // TODO INDEXER add tuneable number for indexer feeder
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotState/Indexer/setVelocity", 2);
+      new LoggedTunableNumber("RobotState/Indexer/setVelocity", 500.0);
   final LoggedTunableNumber setTurretAngle =
       new LoggedTunableNumber("RobotState/Turret/setAngle", 45);
   final LoggedTunableNumber setShooterSpeed =
@@ -357,6 +358,7 @@ public class RobotContainer {
     turret.setTestingState();
     climber.setTestingState();
     hood.setTestingState();
+    // TODO INDEXER FORGOT index's feeder test command
     testController
         .a()
         .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))

@@ -113,6 +113,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   public void setIndexerGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    // TODO INDEXER gravitytype
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
@@ -133,6 +134,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   public void setFeederGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    // TODO INDEXER gravitytype
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
