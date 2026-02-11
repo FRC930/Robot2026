@@ -44,13 +44,17 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
 
   public IntakeSubsystem(IntakeIO IO) {
     m_IO = IO;
-    logged.intakeAngularVelocity = RPM.mutable(0);
-    logged.intakeSetAngularVelocity = RPM.mutable(0);
-    logged.intakeSupplyCurrent = Amps.mutable(0);
-    logged.intakeExtenderVoltage = Volts.mutable(0);
-    logged.intakeExtenderSetVoltage = Volts.mutable(0);
-    logged.intakeExtenderSupplyCurrent = Amps.mutable(0);
-    logged.intakeExtenderAngle = Radians.mutable(IntakeIOSim.kMinvoltageRads);
+    logged.rollerVelocity = RPM.mutable(0.0);
+    logged.rollerVelocitySetPoint = RPM.mutable(0.0);
+    logged.rollerSupplyCurrent = Amps.mutable(0.0);
+    logged.extenderVoltage = Volts.mutable(0.0);
+    logged.extenderVoltageSetPoint = Volts.mutable(0.0);
+    logged.extenderSupplyCurrent = Amps.mutable(0.0);
+    logged.extenderEmulatedAngle =
+        Radians.mutable(IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltage.in(Volts)));
+    logged.extenderEmulatedSetAngle =
+        Radians.mutable(
+            IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltageSetPoint.in(Volts)));
   }
 
   /**
@@ -59,7 +63,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
    * @param speed
    */
   public void setIntakeSpeed(AngularVelocity speed) {
-    m_IO.setIntakeTarget(speed);
+    m_IO.setRollerTargetSpeed(speed);
   }
 
   /**
@@ -68,7 +72,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
    * @param speed
    */
   public void setIntakeVoltage(Voltage voltage) {
-    m_IO.setIntakeExtenderTarget(voltage);
+    m_IO.setExtenderTargetVolts(voltage);
   }
 
   public Command intakeCommand() {
@@ -107,13 +111,13 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     switch (currentGoal.get()) {
       case INTAKING:
         // TODO filler units rn
-        m_IO.setIntakeTarget(RPM.of(intakeTargetRPM.get()));
-        m_IO.setIntakeExtenderTarget(Volts.of(intakeExtenderTargetVolts.get()));
+        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case OUTTAKING:
         // TODO filler units rn
-        m_IO.setIntakeTarget(RPM.of(-intakeTargetRPM.get()));
-        m_IO.setIntakeExtenderTarget(Volts.of(intakeExtenderTargetVolts.get()));
+        m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
+        m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case IDLE:
         stop();
@@ -140,7 +144,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public Command getNewSetIntakeVelocityCommand(DoubleSupplier rpm) {
     return new InstantCommand(
         () -> {
-          m_IO.setIntakeTarget(RPM.of(rpm.getAsDouble()));
+          m_IO.setRollerTargetSpeed(RPM.of(rpm.getAsDouble()));
         },
         this);
   }
@@ -148,7 +152,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public Command getNewSetIntakeExtenderVoltsCommand(DoubleSupplier volts, boolean negate) {
     return new InstantCommand(
         () -> {
-          m_IO.setIntakeExtenderTarget(
+          m_IO.setExtenderTargetVolts(
               Volts.of((negate) ? -1 * volts.getAsDouble() : volts.getAsDouble()));
         },
         this);

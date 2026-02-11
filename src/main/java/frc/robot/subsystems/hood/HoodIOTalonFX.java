@@ -32,7 +32,6 @@ public class HoodIOTalonFX implements HoodIO {
   private void configureTalons() {
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfg.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
     cfg.CurrentLimits.SupplyCurrentLimit = 80.0;
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -63,6 +62,7 @@ public class HoodIOTalonFX implements HoodIO {
   @Override
   public void setGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;

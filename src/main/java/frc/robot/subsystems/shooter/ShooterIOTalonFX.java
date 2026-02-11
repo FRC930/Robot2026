@@ -47,7 +47,6 @@ public class ShooterIOTalonFX implements ShooterIO {
   private void configureTalons() {
     TalonFXConfiguration configshooter = new TalonFXConfiguration();
     configshooter.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configshooter.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     configshooter.CurrentLimits.StatorCurrentLimit = 80.0;
     configshooter.CurrentLimits.StatorCurrentLimitEnable = true;
     configshooter.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -119,6 +118,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   @Override
   public void setGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;

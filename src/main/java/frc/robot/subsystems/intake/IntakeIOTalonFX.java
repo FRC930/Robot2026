@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
@@ -51,7 +50,6 @@ public class IntakeIOTalonFX implements IntakeIO {
   public void configureTalons() {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     config.CurrentLimits.StatorCurrentLimit = 80.0;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimit = 10.0;
@@ -95,20 +93,18 @@ public class IntakeIOTalonFX implements IntakeIO {
 
   @Override
   public void updateInputs(IntakeInputs inputs) {
-    inputs.intakeAngularVelocity.mut_replace(leaderIntakeMotor.getVelocity().getValue());
-    inputs.intakeSetAngularVelocity.mut_replace(intakeSetPoint);
-    inputs.intakeSupplyCurrent.mut_replace(leaderIntakeMotor.getSupplyCurrent().getValue());
+    inputs.rollerVelocity.mut_replace(leaderIntakeMotor.getVelocity().getValue());
+    inputs.rollerVelocitySetPoint.mut_replace(intakeSetPoint);
+    inputs.rollerSupplyCurrent.mut_replace(leaderIntakeMotor.getSupplyCurrent().getValue());
 
-    inputs.intakeExtenderVoltage.mut_replace(intakeExtenderMotor.getMotorVoltage().getValue());
-    inputs.intakeExtenderSetVoltage.mut_replace(intakeExtenderSetPoint);
-    inputs.intakeExtenderSupplyCurrent.mut_replace(
-        intakeExtenderMotor.getSupplyCurrent().getValue());
-    double angleRad =
-        (intakeExtenderMotor.getMotorVoltage().getValueAsDouble() > 0.0)
-            ? IntakeIOSim.kMaxVoltageRads
-            : IntakeIOSim.kMinvoltageRads;
-    inputs.intakeExtenderAngle.mut_replace(
-        Radians.of(angleRad)); // TODO for 3D simulation to use (need to determine)
+    inputs.extenderVoltage.mut_replace(intakeExtenderMotor.getMotorVoltage().getValue());
+    inputs.extenderVoltageSetPoint.mut_replace(intakeExtenderSetPoint);
+    inputs.extenderSupplyCurrent.mut_replace(intakeExtenderMotor.getSupplyCurrent().getValue());
+    // Used for 3d model in advantage scope TODO MAY WANT PID extenderEmulatedAngle
+    inputs.extenderEmulatedAngle.mut_replace(
+        IntakeIOSim.emulateVoltsToRadians(intakeExtenderMotor.getMotorVoltage().getValue()));
+    inputs.extenderEmulatedSetAngle.mut_replace(
+        IntakeIOSim.emulateVoltsToRadians(intakeExtenderSetPoint));
   }
 
   @Override
@@ -119,7 +115,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   }
 
   @Override
-  public void setIntakeTarget(AngularVelocity target) {
+  public void setRollerTargetSpeed(AngularVelocity target) {
     if (target.in(RPM) != intakeSetPoint.in(RPM)) {
       leaderIntakeMotor.setControl(intakeRequest.withVelocity(target).withSlot(0));
       intakeSetPoint = target;
@@ -128,7 +124,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   }
 
   @Override
-  public void setIntakeExtenderTarget(Voltage target) {
+  public void setExtenderTargetVolts(Voltage target) {
     if (intakeExtenderSetPoint.in(Volts) != target.in(Volts)) {
       intakeExtenderMotor.setControl(intakeExtenderRequest.withOutput(target));
       intakeExtenderSetPoint = target;
@@ -138,6 +134,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   @Override
   public void setGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;

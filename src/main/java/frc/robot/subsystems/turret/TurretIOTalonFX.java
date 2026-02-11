@@ -81,7 +81,6 @@ public class TurretIOTalonFX implements TurretIO {
 
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static; // Not vertical angle
     cfg.CurrentLimits.SupplyCurrentLimit = 80.0;
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -123,6 +122,8 @@ public class TurretIOTalonFX implements TurretIO {
 
   public void setGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.GravityType =
+        GravityTypeValue.Elevator_Static; // NOTE: horizonatal so ARM not needed
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;

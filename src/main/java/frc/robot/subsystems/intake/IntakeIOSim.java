@@ -13,6 +13,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -20,21 +21,20 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeIOSim implements IntakeIO {
-  private AngularVelocity m_intakeVelocitySetPoint = RPM.mutable(0.0);
-  private Voltage m_ExtenderVoltageSetPoint = Volts.mutable(0.0);
+  // Extender simulation Volts since current limitting up/down in REAL robot (simulate angle
+  // movement)
+  private Voltage m_extenderVoltageSetPoint = Volts.mutable(0.0);
 
   // physical constants for intake extender (NOT ACCURATE)
-  private static final double kArmGearRatio = 100.0;
+  private static final double kArmGearRatio = 1.0;
   private static final double kArmLengthMeters = Units.inchesToMeters(12.0);
   private static final double kArmMassKg = Units.lbsToKilograms(3.0);
-  public static final double kMinvoltageRads = Units.degreesToRadians(0.0);
-  public static final double kMaxVoltageRads = Units.degreesToRadians(90.0);
-  private final double kArmMOI = 1.0 / 3.0 * kArmMassKg * Math.pow(kArmLengthMeters, 2);
+  public static final double kMinExtenderRads = Units.degreesToRadians(0.0);
+  public static final double kMaxExenderRads = Units.degreesToRadians(90.0);
 
-  private SingleJointedArmSim extenderSim;
+  private SingleJointedArmSim extenderArmSim;
   private ArmFeedforward extenderFF;
   private final ProfiledPIDController extenderPID =
-      // FILLER VALUES NOT ACCURATE
       new ProfiledPIDController(0.1, 0.0, 0.0, new Constraints(2.0 * Math.PI, Math.PI));
   // gains for intake (NOT ACCURATE)
   private static final double extenderkS = 0.0;
@@ -43,63 +43,60 @@ public class IntakeIOSim implements IntakeIO {
   private static final double extenderkA = 0.0;
 
   // intake Roller
-  private final FlywheelSim intakeSim;
-  private SimpleMotorFeedforward intakeFF;
-  // NOTE: ProfilePID sorta worked if did not have any FF KV BUT did not reach goal
-  // private ProfiledPIDController intakePID =
-  //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
+  private AngularVelocity m_rollerVelocitySetPoint = RPM.mutable(0.0);
 
-  private PIDController intakePID = new PIDController(0.0031, 0.0, 0.0);
+  private final FlywheelSim rollerFlyWheelSim;
+  private SimpleMotorFeedforward rollerFF;
+  // NOTE: ProfilePID sorta worked if did not have any FF KV BUT did not reach goal
+  // private ProfiledPIDController rollerPID =
+  //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
+  private PIDController rollerPID = new PIDController(0.0031, 0.0, 0.0);
   // gains for intake (NOT ACCURATE)
-  private static final double intakekS = 0.0;
-  private static final double intakekV = 0.002;
-  private static final double intakekA = 0.0;
+  private static final double rollerkS = 0.0;
+  private static final double rollerkV = 0.002;
+  private static final double rollerkA = 0.0;
 
   public IntakeIOSim() {
 
-    // Intake roller
-    intakeSim =
+    // Setup Intake roller
+    rollerFlyWheelSim =
         new FlywheelSim(
             LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.0005, 1),
             DCMotor.getKrakenX60Foc(1),
             0.01);
-    intakeFF = new SimpleMotorFeedforward(intakekS, intakekV, intakekA);
-    setIntakeTarget(RPM.zero());
+    rollerFF = new SimpleMotorFeedforward(rollerkS, rollerkV, rollerkA);
 
-    // TODO: Create Feed-Forward
-    extenderSim =
+    // Setup Intake extender is an ARM in simulator but it REAL using Voltage and current limits
+    extenderArmSim =
         new SingleJointedArmSim(
             DCMotor.getKrakenX60Foc(1),
-            1.0,
+            kArmGearRatio,
             SingleJointedArmSim.estimateMOI(kArmLengthMeters, kArmMassKg),
             kArmLengthMeters,
-            kMinvoltageRads,
-            kMaxVoltageRads,
+            kMinExtenderRads,
+            kMaxExenderRads,
             false, // TODO NOT using gravity may need to switch angles so 0 is down. and 90 is up
-            kMinvoltageRads,
+            kMinExtenderRads,
             0.001,
             0.001);
     extenderFF = new ArmFeedforward(extenderkS, extenderkG, extenderkV, extenderkA);
-    setIntakeExtenderTarget(Volts.of(0.0));
   }
 
   @Override
-  public void setIntakeTarget(AngularVelocity target) {
-    m_intakeVelocitySetPoint = target;
+  public void setRollerTargetSpeed(AngularVelocity rpm) {
+    m_rollerVelocitySetPoint = rpm;
   }
 
   @Override
-  public void setIntakeExtenderTarget(Voltage targetVoltage) {
-    m_ExtenderVoltageSetPoint = targetVoltage;
+  public void setExtenderTargetVolts(Voltage targetVoltage) {
+    m_extenderVoltageSetPoint = targetVoltage;
   }
 
   @Override
   public void stop() {
-    // TODO: need to be cleaned up
-    // Voltage currentVoltage = Radians.of(intakeExtenderSim.setVoltage(0));
-    // controller.reset(currentVoltage.in(Volts));
-    setIntakeTarget(RPM.of(0));
-    setIntakeExtenderTarget(Volts.of(0));
+    // If REAL robot use coast
+    setRollerTargetSpeed(RPM.of(0));
+    setExtenderTargetVolts(Volts.of(0));
   }
 
   @Override
@@ -107,30 +104,34 @@ public class IntakeIOSim implements IntakeIO {
     // update inputs
 
     //  - intake
-    updateIntake();
-    input.intakeAngularVelocity.mut_replace(intakeSim.getAngularVelocity());
-    input.intakeSetAngularVelocity.mut_replace(m_intakeVelocitySetPoint);
+    updateRollerPID();
+    input.rollerVelocity.mut_replace(rollerFlyWheelSim.getAngularVelocity());
+    input.rollerVelocitySetPoint.mut_replace(m_rollerVelocitySetPoint);
+    input.rollerSupplyCurrent.mut_replace(rollerFlyWheelSim.getCurrentDrawAmps(), Amps);
 
     //  - intake extender
-    double voltsToExtend = updateExtender();
-    input.intakeExtenderVoltage.mut_replace(
+    // NOTE: Special case given inputing volts to controller down(+)/up(-) intake extender can not
+    // find a way to get volts from simulated motor
+    double voltsToExtend = updateExtenderPID();
+    input.extenderVoltage.mut_replace(
         Volts.of(voltsToExtend)); // TODO: Not sure how to get actual voltage from the motor
-    input.intakeExtenderSetVoltage.mut_replace(m_ExtenderVoltageSetPoint);
-    input.intakeExtenderSupplyCurrent.mut_replace(extenderSim.getCurrentDrawAmps(), Amps);
+    input.extenderVoltageSetPoint.mut_replace(m_extenderVoltageSetPoint);
+    input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
 
-    input.intakeExtenderAngle.mut_replace(extenderSim.getAngleRads(), Radians);
+    input.extenderEmulatedAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
+    input.extenderEmulatedSetAngle.mut_replace(emulateVoltsToRadians(m_extenderVoltageSetPoint));
   }
 
-  private void updateIntake() {
+  private void updateRollerPID() {
     // Current velocity from simulation
-    double currentVelocity = intakeSim.getAngularVelocity().in(RPM);
-    double targetVelocity = m_intakeVelocitySetPoint.in(RPM);
+    double currentVelocity = rollerFlyWheelSim.getAngularVelocity().in(RPM);
+    double targetVelocity = m_rollerVelocitySetPoint.in(RPM);
 
     // PID output (in volts) based on velocity error
-    double pidOutput = intakePID.calculate(currentVelocity, targetVelocity);
+    double pidOutput = rollerPID.calculate(currentVelocity, targetVelocity);
 
     // Feedforward voltage for target velocity
-    double ffOutput = intakeFF.calculate(targetVelocity);
+    double ffOutput = rollerFF.calculate(targetVelocity);
     Logger.recordOutput("TOTALFF", ffOutput);
 
     // Total voltage command
@@ -141,18 +142,18 @@ public class IntakeIOSim implements IntakeIO {
     totalVoltage = Math.max(-12.0, Math.min(12.0, totalVoltage));
     Logger.recordOutput("TOTALVOLTSCLAMP", totalVoltage);
     // Apply voltage to simulation
-    intakeSim.setInputVoltage(totalVoltage);
+    rollerFlyWheelSim.setInputVoltage(totalVoltage);
 
     // Advance simulation
-    intakeSim.update(.02);
+    rollerFlyWheelSim.update(.02);
   }
 
-  private double updateExtender() {
+  private double updateExtenderPID() {
     // Current velocity from simulation
-    double currentAngleRads = extenderSim.getAngleRads();
+    double currentAngleRads = extenderArmSim.getAngleRads();
     // NOTE: Assuming if any voltage at maxRad
-    double targetAngleRads =
-        (m_ExtenderVoltageSetPoint.in(Volts) > 0.0 ? kMaxVoltageRads : kMinvoltageRads);
+    double targetAngleRads = emulateVoltsToRadians(m_extenderVoltageSetPoint.in(Volts));
+
     Logger.recordOutput(
         "EXTSETANGLE",
         targetAngleRads); // TODO may want in IO to autolog (need to set see for PIDing)
@@ -172,10 +173,32 @@ public class IntakeIOSim implements IntakeIO {
     totalVoltage = Math.max(-12.0, Math.min(12.0, totalVoltage));
     Logger.recordOutput("EXTTOTALVOLTSCLAMP", totalVoltage);
     // Apply voltage to simulation
-    extenderSim.setInputVoltage(totalVoltage);
+    extenderArmSim.setInputVoltage(totalVoltage);
 
     // Advance simulation
-    extenderSim.update(.02);
+    extenderArmSim.update(.02);
     return totalVoltage;
+  }
+
+  /**
+   * If volts > 0 assuming want to got to MaxAngle extend verses MinAngle retract Need to emulate an
+   * angle given using currentlimiting when extending intake
+   *
+   * @param volts
+   * @return
+   */
+  public static double emulateVoltsToRadians(double volts) {
+    return (volts > 0.0 ? kMaxExenderRads : kMinExtenderRads);
+  }
+
+  /**
+   * If volts > 0 assuming want to got to MaxAngle extend verses MinAngle retract Need to emulate an
+   * angle given using currentlimiting when extending intake
+   *
+   * @param volts
+   * @return
+   */
+  public static Angle emulateVoltsToRadians(Voltage volts) {
+    return Radians.of(emulateVoltsToRadians(volts.in(Volts)));
   }
 }

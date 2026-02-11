@@ -12,20 +12,22 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IntakeIO {
   @AutoLog
   public static class IntakeInputs {
-    public MutAngularVelocity intakeAngularVelocity;
-    public MutAngularVelocity intakeSetAngularVelocity;
-    public MutCurrent intakeSupplyCurrent;
+    public MutAngularVelocity rollerVelocity;
+    public MutAngularVelocity rollerVelocitySetPoint;
+    public MutCurrent rollerSupplyCurrent;
 
-    public MutVoltage intakeExtenderVoltage;
-    public MutVoltage intakeExtenderSetVoltage;
-    public MutCurrent intakeExtenderSupplyCurrent;
-    public MutAngle intakeExtenderAngle;
+    public MutVoltage extenderVoltage;
+    public MutVoltage extenderVoltageSetPoint;
+    public MutCurrent extenderSupplyCurrent;
+    // Emulated Angle/SetAngle (given extender using current limits)
+    public MutAngle extenderEmulatedAngle;
+    public MutAngle extenderEmulatedSetAngle;
   }
 
-  public default void setIntakeTarget(AngularVelocity target) {}
+  public default void setRollerTargetSpeed(AngularVelocity target) {}
   ;
 
-  public default void setIntakeExtenderTarget(Voltage voltage) {}
+  public default void setExtenderTargetVolts(Voltage voltage) {}
   ;
 
   public default void stop() {}
