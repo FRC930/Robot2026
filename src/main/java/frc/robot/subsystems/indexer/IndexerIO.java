@@ -3,10 +3,8 @@ package frc.robot.subsystems.indexer;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutCurrent;
-import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import frc.robot.util.Gains;
-
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
@@ -38,7 +36,7 @@ public interface IndexerIO {
 
   public default void updateInputs(IndexerInputs inputs) {}
   ;
-  
+
   public default void setIndexerGains(Gains gains) {}
   ;
 

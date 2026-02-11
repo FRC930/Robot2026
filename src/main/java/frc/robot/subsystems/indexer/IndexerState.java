@@ -3,11 +3,14 @@ package frc.robot.subsystems.indexer;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.util.LoggedTunableNumber;
 
 public enum IndexerState {
   TESTING(RPM.zero(), RPM.zero()),
   IDLE(RPM.zero(), RPM.zero()),
-  FEEDING(RPM.of(4.0), RPM.of(4.0));
+  FEEDING(
+      RPM.of(new LoggedTunableNumber("Indexer/setpoint", 2500).get()),
+      RPM.of(new LoggedTunableNumber("Feeder/setpoint", 2500).get()));
 
   private AngularVelocity m_indexerVelocity;
   private AngularVelocity m_feederVelocity;

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -10,7 +9,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -54,7 +52,7 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.Slot0.kA = 0.0;
     indexerMotor.getConfigurator().apply(configIndexer);
 
-     TalonFXConfiguration configFeeder = new TalonFXConfiguration();
+    TalonFXConfiguration configFeeder = new TalonFXConfiguration();
     configFeeder.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configFeeder.CurrentLimits.StatorCurrentLimit = 80.0;
     configFeeder.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -111,9 +109,8 @@ public class IndexerIOTalonFX implements IndexerIO {
     inputs.feederSupplyCurrent.mut_replace(feederMotor.getSupplyCurrent().getValue());
     inputs.feederSetPoint.mut_replace(feederSetPoint);
     inputs.feederVoltage.mut_replace(feederMotor.getMotorVoltage().getValue());
-  
   }
-  
+
   public void setIndexerGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kP = gains.kP;
@@ -133,7 +130,8 @@ public class IndexerIOTalonFX implements IndexerIO {
     motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(motionMagicConfigs));
   }
-public void setFeederGains(Gains gains) {
+
+  public void setFeederGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;

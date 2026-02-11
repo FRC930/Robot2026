@@ -12,11 +12,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
+
+  private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10);
+  private LoggedTunableNumber PassingAngle = new LoggedTunableNumber("Turret/PassingAngle", 0);
 
   private TurretIO m_IO;
 
@@ -105,10 +109,10 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
         aim();
         break;
       case PASSING:
-        setPosition(10);
+        setPosition(PassingAngle.get());
         break;
       case IDLE:
-        setPosition(0);
+        setPosition(IdleAngle.get());
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

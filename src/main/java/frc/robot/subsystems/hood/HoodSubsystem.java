@@ -8,11 +8,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   // Implementation goes here † ₀ ᴥ ₀ †
+
+  private LoggedTunableNumber Angle = new LoggedTunableNumber("Hood/Angle", 45);
 
   private HoodIO m_IO;
 
@@ -58,7 +61,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         break;
       case AIMING:
         // TODO these are flowkirkenuinely filler units
-        m_IO.setHoodTarget(Degrees.mutable(45)); // Example target angle
+        m_IO.setHoodTarget(Degrees.mutable(Angle.get())); // Example target angle
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

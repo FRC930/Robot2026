@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
-
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,20 +22,14 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
       new EnumState<>("Indexer/State", IndexerState.IDLE);
 
   private final IndexerInputsAutoLogged m_logged = new IndexerInputsAutoLogged();
-  
-  private final LoggedTunableGainsBuilder m_feederTunableGains = new LoggedTunableGainsBuilder(
-    "Gains/Feeder/", 
-     0.0, 0.0, 0.0, 
-    0.0, 0.0, 0.0, 0.0, 
-    0.0, 0.0, 0.0, 0.0, 0.0
-  );
 
-  private final LoggedTunableGainsBuilder m_indexerTunableGains = new LoggedTunableGainsBuilder(
-    "Gains/Indexer/", 
-    0.0, 0.0, 0.0, 
-    0.0, 0.0, 0.0, 0.0, 
-    0.0, 0.0, 0.0, 0.0, 0.0
-  );
+  private final LoggedTunableGainsBuilder m_feederTunableGains =
+      new LoggedTunableGainsBuilder(
+          "Gains/Feeder/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  private final LoggedTunableGainsBuilder m_indexerTunableGains =
+      new LoggedTunableGainsBuilder(
+          "Gains/Indexer/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   public IndexerSubsystem(IndexerIO IO) {
     m_IO = IO;
