@@ -1,29 +1,27 @@
 package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Voltage;
 
 public enum IndexerState {
-  TESTING(RPM.zero(), Volts.zero()),
-  IDLE(RPM.zero(), Volts.zero()),
-  FEEDING(RPM.of(4.0), Volts.of(9.0));
+  TESTING(RPM.zero(), RPM.zero()),
+  IDLE(RPM.zero(), RPM.zero()),
+  FEEDING(RPM.of(4.0), RPM.of(4.0));
 
   private AngularVelocity m_indexerVelocity;
-  private Voltage m_feederVolts;
+  private AngularVelocity m_feederVelocity;
 
-  private IndexerState(AngularVelocity indexerVelocity, Voltage feederVolts) {
+  private IndexerState(AngularVelocity indexerVelocity, AngularVelocity feederVelocity) {
     m_indexerVelocity = indexerVelocity;
-    m_feederVolts = feederVolts;
+    m_feederVelocity = feederVelocity;
   }
 
   public AngularVelocity indexerVelocity() {
     return m_indexerVelocity;
   }
 
-  public Voltage feederVolts() {
-    return m_feederVolts;
+  public AngularVelocity feederVelocity() {
+    return m_feederVelocity;
   }
 }
