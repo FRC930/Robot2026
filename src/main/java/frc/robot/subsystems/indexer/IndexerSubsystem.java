@@ -50,6 +50,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_state.set(IndexerState.TESTING);
   }
 
+  public void stop() {
+    m_IO.stop();
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(m_logged);

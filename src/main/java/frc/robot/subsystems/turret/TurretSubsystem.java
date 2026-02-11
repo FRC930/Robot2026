@@ -100,6 +100,10 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     m_state.set(TurretState.TESTING);
   }
 
+  public void stop() {
+    m_IO.stop();
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(logged);
