@@ -55,6 +55,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.extenderEmulatedSetAngle =
         Radians.mutable(
             IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltageSetPoint.in(Volts)));
+    m_IO.setGains(tunableGains.build());
   }
 
   /**
