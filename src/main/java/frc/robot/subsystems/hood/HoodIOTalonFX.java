@@ -57,6 +57,9 @@ public class HoodIOTalonFX implements HoodIO {
   public void updateInputs(HoodInputs input) {
     input.hoodAngle.mut_replace(motor.getPosition().getValue());
     input.hoodSetAngle.mut_replace(m_setAngle);
+    input.hoodVoltage.mut_replace(motor.getMotorVoltage().getValue());
+    input.hoodSupplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
+    input.hoodTorqueCurrent.mut_replace(motor.getTorqueCurrent().getValue());
   }
 
   @Override
