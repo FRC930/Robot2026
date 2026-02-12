@@ -24,8 +24,9 @@ public class RobotVisualization extends VirtualSubsystem {
 
   private MutAngle turretTwist = Degrees.mutable(0);
 
+  private MutAngle extenderTwist = Degrees.mutable(0);
+
   private final Mechanism2d primaryMechanism2d;
-  private final MechanismRoot2d primaryMechanismRoot;
 
   private final MechanismRoot2d robotBaseRoot;
   private final MechanismLigament2d baseLigament2d =
@@ -46,8 +47,6 @@ public class RobotVisualization extends VirtualSubsystem {
     robotBaseRoot = primaryMechanism2d.getRoot("2dBaseRoot", 225, 20);
     robotBaseRoot.append(baseLigament2d);
 
-    primaryMechanismRoot = primaryMechanism2d.getRoot("2dPrimary", 300, 20);
-
     // SmartDashboard.putData("Mech2d",primaryMechanism2d);
 
   }
@@ -62,6 +61,18 @@ public class RobotVisualization extends VirtualSubsystem {
 
   public void setTurretSource(MutAngle turretTwist) {
     this.turretTwist = turretTwist;
+  }
+
+  public Angle getExtenderTwist() {
+    return extenderTwist;
+  }
+
+  public void setExtenderTwist(Angle extenderTwist) {
+    this.extenderTwist.mut_replace(extenderTwist);
+  }
+
+  public void setExenderSource(MutAngle extenderTwist) {
+    this.extenderTwist = extenderTwist;
   }
 
   public static RobotVisualization instance() {
@@ -79,11 +90,25 @@ public class RobotVisualization extends VirtualSubsystem {
                     new Translation3d(0, 0, 0),
                     new Rotation3d(0, this.turretTwist.in(Radians), 0)));
 
-    Logger.recordOutput("RobotState/Wrist/" + key, turretPose);
+    Pose3d extenderPose =
+        new Pose3d(EXTENDER_ATTACH_OFFSET.getTranslation(), EXTENDER_ATTACH_OFFSET.getRotation())
+            .transformBy(
+                new Transform3d(
+                    new Translation3d(0, 0, 0),
+                    new Rotation3d(-this.extenderTwist.in(Radians), 0, 0)));
+
+    Logger.recordOutput("RobotState/Turret/" + key, turretPose);
+
+    Logger.recordOutput("RobotState/Extender/" + key, extenderPose);
   }
 
   private static final Pose3d TURRET_ATTACH_OFFSET =
       new Pose3d(
           new Translation3d(Meters.of(0.092506), Inches.of(0), Inches.of(0)),
+          new Rotation3d(Degrees.of(90), Degrees.of(0), Degrees.of(90)));
+
+  private static final Pose3d EXTENDER_ATTACH_OFFSET =
+      new Pose3d(
+          new Translation3d(Meters.of(0.025107), Meters.of(0.), Meters.of(0.147639)),
           new Rotation3d(Degrees.of(90), Degrees.of(0), Degrees.of(90)));
 }
