@@ -1,12 +1,18 @@
 package frc.robot.subsystems.turret;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.util.Gains;
 
@@ -14,6 +20,9 @@ public class TurretIOSim implements TurretIO {
   private Angle turretAppliedAngle = Degrees.mutable(0.0);
 
   private final SingleJointedArmSim turretSim;
+  private ArmFeedforward ff = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
+  private final ProfiledPIDController controller =
+      new ProfiledPIDController(0.1, 0.0, 0.0, new Constraints(360.0, 720.0));
 
   private static final DCMotor kArmMotor = DCMotor.getKrakenX60(1); // e.g., one NEO motor
   private static final double kGearing = 50.0; // e.g., 50:1 gear ratio
@@ -34,14 +43,30 @@ public class TurretIOSim implements TurretIO {
 
   @Override
   public void updateInputs(TurretInputs input) {
+    Voltage volts = updateTurretPID();
     input.turretAngularVelocity.mut_replace(RadiansPerSecond.of(turretSim.getVelocityRadPerSec()));
     input.turretAngle.mut_replace(turretSim.getAngleRads(), Radians);
     input.turretSetAngle.mut_replace(turretAppliedAngle);
-    // input.turretSetAngle.mut_replace(turretAppliedVoltage);
-    // TODO fix ^ to angle not volts
-    // Periodic
-    turretSim.setInput(turretAppliedAngle.in(Radians));
+    input.turretVoltage.mut_replace(volts);
+    input.turretSupplyCurrent.mut_replace(turretSim.getCurrentDrawAmps(), Amps);
+    // inputs.turretTorqueCurrent.mut_replace();
+
+  }
+
+  private Voltage updateTurretPID() {
+    Angle currentAngle = Radians.of(turretSim.getAngleRads());
+
+    Voltage controllerVoltage =
+        Volts.of(controller.calculate(currentAngle.in(Degrees), turretAppliedAngle.in(Radians)));
+    Voltage feedForwardVoltage =
+        Volts.of(
+            ff.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
+
+    Voltage effort = controllerVoltage.plus(feedForwardVoltage);
+
+    turretSim.setInputVoltage(effort.in(Volts));
     turretSim.update(0.02);
+    return effort;
   }
 
   @Override

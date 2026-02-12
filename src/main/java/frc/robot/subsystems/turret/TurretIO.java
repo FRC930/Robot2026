@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.Degrees;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutCurrent;
+import edu.wpi.first.units.measure.MutVoltage;
 import frc.robot.util.Gains;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -17,6 +19,9 @@ public interface TurretIO {
     public MutAngle turretSetAngle;
     public MutAngle canCoderAngle1;
     public MutAngle canCoderAngle2;
+    public MutVoltage turretVoltage;
+    public MutCurrent turretSupplyCurrent;
+    public MutCurrent turretTorqueCurrent;
   }
 
   public default void setTarget(double angle) {}
