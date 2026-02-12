@@ -33,28 +33,19 @@ public class IntakeIOSim implements IntakeIO {
   public static final double kMaxExenderRads = Units.degreesToRadians(90.0);
 
   private SingleJointedArmSim extenderArmSim;
-  private ArmFeedforward extenderFF;
+  private ArmFeedforward extenderFF = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
   private final ProfiledPIDController extenderPID =
       new ProfiledPIDController(0.1, 0.0, 0.0, new Constraints(2.0 * Math.PI, Math.PI));
-  // gains for intake (NOT ACCURATE)
-  private static final double extenderkS = 0.0;
-  private static final double extenderkG = 0.0;
-  private static final double extenderkV = 0.0;
-  private static final double extenderkA = 0.0;
 
   // intake Roller
   private AngularVelocity m_rollerVelocitySetPoint = RPM.mutable(0.0);
 
   private final FlywheelSim rollerFlyWheelSim;
-  private SimpleMotorFeedforward rollerFF;
+  private SimpleMotorFeedforward rollerFF = new SimpleMotorFeedforward(0.0, 0.002, 0.0);
   // NOTE: ProfilePID sorta worked if did not have any FF KV BUT did not reach goal
   // private ProfiledPIDController rollerPID =
   //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
   private PIDController rollerPID = new PIDController(0.0031, 0.0, 0.0);
-  // gains for intake (NOT ACCURATE)
-  private static final double rollerkS = 0.0;
-  private static final double rollerkV = 0.002;
-  private static final double rollerkA = 0.0;
 
   public IntakeIOSim() {
 
@@ -64,7 +55,6 @@ public class IntakeIOSim implements IntakeIO {
             LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.0005, 1),
             DCMotor.getKrakenX60Foc(1),
             0.01);
-    rollerFF = new SimpleMotorFeedforward(rollerkS, rollerkV, rollerkA);
 
     // Setup Intake extender is an ARM in simulator but it REAL using Voltage and current limits
     extenderArmSim =
@@ -79,7 +69,6 @@ public class IntakeIOSim implements IntakeIO {
             kMinExtenderRads,
             0.001,
             0.001);
-    extenderFF = new ArmFeedforward(extenderkS, extenderkG, extenderkV, extenderkA);
   }
 
   @Override
@@ -132,15 +121,15 @@ public class IntakeIOSim implements IntakeIO {
 
     // Feedforward voltage for target velocity
     double ffOutput = rollerFF.calculate(targetVelocity);
-    Logger.recordOutput("TOTALFF", ffOutput);
+    // Logger.recordOutput("TOTALFF", ffOutput);
 
     // Total voltage command
     double totalVoltage = pidOutput + ffOutput;
 
-    Logger.recordOutput("TOTALVOLTS", totalVoltage);
+    // Logger.recordOutput("TOTALVOLTS", totalVoltage);
     // Clamp voltage to [-12V, 12V] to simulate real battery limits
     totalVoltage = Math.max(-12.0, Math.min(12.0, totalVoltage));
-    Logger.recordOutput("TOTALVOLTSCLAMP", totalVoltage);
+    // Logger.recordOutput("TOTALVOLTSCLAMP", totalVoltage);
     // Apply voltage to simulation
     rollerFlyWheelSim.setInputVoltage(totalVoltage);
 
@@ -163,15 +152,15 @@ public class IntakeIOSim implements IntakeIO {
 
     // Feedforward voltage for target velocity
     double ffOutput = extenderFF.calculate(targetAngleRads, 0.0); // TODO velocity
-    Logger.recordOutput("EXTTOTALFF", ffOutput);
+    // Logger.recordOutput("EXTTOTALFF", ffOutput);
 
     // Total voltage command
     double totalVoltage = pidOutput + ffOutput;
 
-    Logger.recordOutput("EXTTOTALVOLTS", totalVoltage);
+    // Logger.recordOutput("EXTTOTALVOLTS", totalVoltage);
     // Clamp voltage to [-12V, 12V] to simulate real battery limits
     totalVoltage = Math.max(-12.0, Math.min(12.0, totalVoltage));
-    Logger.recordOutput("EXTTOTALVOLTSCLAMP", totalVoltage);
+    // Logger.recordOutput("EXTTOTALVOLTSCLAMP", totalVoltage);
     // Apply voltage to simulation
     extenderArmSim.setInputVoltage(totalVoltage);
 
