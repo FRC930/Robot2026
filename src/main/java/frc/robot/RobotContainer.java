@@ -128,22 +128,23 @@ public class RobotContainer {
   private AutoCommandManager autoCommandManager;
 
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotState/Indexer/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 500.0);
   final LoggedTunableNumber setFeederVelocity =
-      new LoggedTunableNumber("RobotState/Feeder/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 500.0);
   final LoggedTunableNumber setTurretAngle =
-      new LoggedTunableNumber("RobotState/Turret/setAngle", 45);
+      new LoggedTunableNumber("RobotTesting/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =
-      new LoggedTunableNumber("RobotState/Shooter/setSpeed", 87);
+      new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
-      new LoggedTunableNumber("RobotState/Intake/setRPM", 1000);
+      new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderVolts =
-      new LoggedTunableNumber("RobotState/IntakeExtender/setVolts", 2);
-  final LoggedTunableNumber setHoodAngle = new LoggedTunableNumber("RobotState/Hood/setAngle", 45);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setVolts", 2.0);
+  final LoggedTunableNumber setHoodAngle =
+      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     CANBus rioCanbus = new CANBus("rio");
-    CANBus upperCanbus = new CANBus("upperCAN");
+    CANBus upperCanbus = new CANBus("upperCanbus");
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -362,23 +363,23 @@ public class RobotContainer {
     testController
         .a()
         .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-        .whileFalse(indexer.getNewSetIndexerVelocityCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .povDown()
         .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
-        .whileFalse(indexer.getNewSetFeederVelocityCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .x()
         .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-        .whileFalse(turret.getNewSetTurretAngleCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> turret.stop()));
     testController
         .b()
         .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-        .whileFalse(shooter.getNewSetShooterSpeedCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> shooter.stop()));
     testController
         .y()
         .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-        .whileFalse(intake.getNewSetIntakeVelocityCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> intake.stop()));
     testController
         .povUp()
         .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
@@ -388,7 +389,7 @@ public class RobotContainer {
     testController
         .povRight()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> hood.stop()));
   }
 
   public void configureCharacterizationButtonBindings() {
