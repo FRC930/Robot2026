@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotVisualization;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -51,6 +52,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     logged.canCoderAngle2 = Degrees.mutable(0);
     logged.turretSetAngle = Degrees.mutable(0);
     logged.turretAngularVelocity = RPM.mutable(0);
+
+    RobotVisualization.instance().setTurretSource(logged.turretAngle);
 
     this.robotPoseSupplier = robotPoseSupplier;
     this.goalPose = goalPose;
