@@ -19,7 +19,7 @@ public class TurretIOSim implements TurretIO {
   private static final double kGearing = 50.0; // e.g., 50:1 gear ratio
   private static final double kMoI = 1.5; // Moment of inertia in kg/m^2 (from CAD)
   private static final double kArmLength = Units.inchesToMeters(30.0); // e.g., 30 inches long
-  private static final double kMinAngle = Units.degreesToRadians(-360.); // e.g., -90 degrees
+  private static final double kMinAngle = Units.degreesToRadians(-360); // e.g., -90 degrees
   private static final double kMaxAngle = Units.degreesToRadians(360.0); // e.g., 90 degrees
   private static final boolean kSimulateGravity = true;
 

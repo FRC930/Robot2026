@@ -52,7 +52,7 @@ public class RobotVisualization extends VirtualSubsystem {
 
   }
 
-  public Angle getTurretTwist() { // 67
+  public Angle getTurretTwist() {
     return turretTwist;
   }
 
