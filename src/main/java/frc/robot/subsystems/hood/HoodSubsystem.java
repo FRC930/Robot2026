@@ -52,6 +52,10 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     currentGoal.set(HoodState.TESTING);
   }
 
+  public void stop() {
+    m_IO.stop();
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(logged);

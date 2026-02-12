@@ -97,7 +97,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = true;
+  private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;
 
@@ -139,8 +139,6 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderVolts =
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setVolts", 2.0);
-  final LoggedTunableNumber setNegativeIntakeExtenderVolts =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setVolts2", -2.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -373,7 +371,7 @@ public class RobotContainer {
     testController
         .x()
         .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-        .whileFalse(turret.getNewSetTurretAngleCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> turret.stop()));
     testController
         .b()
         .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
@@ -381,7 +379,7 @@ public class RobotContainer {
     testController
         .y()
         .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-        .whileFalse(intake.getNewSetIntakeVelocityCommand(new InstantCommand(() -> intake.stop())));
+        .whileFalse(new InstantCommand(() -> intake.stop()));
     testController
         .povUp()
         .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
@@ -391,7 +389,7 @@ public class RobotContainer {
     testController
         .povRight()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 0.0));
+        .whileFalse(new InstantCommand(() -> hood.stop()));
   }
 
   public void configureCharacterizationButtonBindings() {
