@@ -31,6 +31,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     m_IO = IO;
     logged.hoodAngle = Degrees.mutable(0);
     logged.hoodSetAngle = Degrees.mutable(0);
+    m_IO.setGains(tunableGains.build());
   }
 
   public Command idleCommand() {

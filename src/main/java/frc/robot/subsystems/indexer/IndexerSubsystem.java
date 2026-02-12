@@ -37,14 +37,12 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_logged.indexerVelocity = RPM.mutable(0);
     m_logged.indexerSetPoint = RPM.mutable(0);
     m_logged.indexerVoltage = Volts.mutable(0);
-    // TODO INDEXER do we need this in each subsystem that has gains
     m_IO.setIndexerGains(m_indexerTunableGains.build());
 
     m_logged.feederSupplyCurrent = Amps.mutable(0);
     m_logged.feederVelocity = RPM.mutable(0);
     m_logged.feederSetPoint = RPM.mutable(0);
     m_logged.feederVoltage = Volts.mutable(0);
-    // TODO INDEXER do we need this in each subsystem that has gains
     m_IO.setFeederGains(m_feederTunableGains.build());
   }
 
@@ -66,7 +64,8 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         m_IO.setFeederTarget(this.m_state.get().feederVelocity());
         break;
     }
-    // TODO INDEXER update gains based on tuneable numbers for feeder and indexer
+    m_feederTunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setFeederGains(gains));
+    m_indexerTunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setIndexerGains(gains));
   }
 
   @Override

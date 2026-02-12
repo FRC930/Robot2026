@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -113,7 +114,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   public void setIndexerGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
-    // TODO INDEXER gravitytype
+    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
@@ -134,7 +135,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   public void setFeederGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
-    // TODO INDEXER gravitytype
+    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
