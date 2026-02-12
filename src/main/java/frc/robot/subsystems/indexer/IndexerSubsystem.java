@@ -49,7 +49,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
   public void setTestingState() {
     m_state.set(IndexerState.TESTING);
   }
-
+  // TODO should we make a seperate stop for feeder
   public void stop() {
     m_IO.stop();
   }
