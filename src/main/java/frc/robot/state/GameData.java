@@ -208,7 +208,8 @@ public class GameData extends VirtualSubsystem {
       // WARNING: FMS MAY NOT EVER GIVEN US GAMEDATA SEE MANUAL see TEAM UPDATES
       // 10.2.c "It is not an ARENA FAULT if FMS Game Data is not sent, not received, or if
       // delayed. Incorrect Game Data being sent would be considered an ARENA FAULT."
-      // TODO Create  autochoice and put on smartDashboard  to have codriver provide gamedata if NEVER a getGameSpecificMessage() in SHIFT1 
+      // TODO Create  autochoice and put on smartDashboard  to have codriver provide gamedata if
+      // NEVER a getGameSpecificMessage() in SHIFT1
       String gameMessage = DriverStation.getGameSpecificMessage();
       boolean msgHasLength = (gameMessage.length() > 0);
       if (msgHasLength && gameMessage.charAt(0) == 'B') {
