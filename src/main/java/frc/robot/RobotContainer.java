@@ -37,6 +37,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
+import frc.robot.state.GameData;
 import frc.robot.state.MatchState;
 import frc.robot.subsystems.climber.ClimberBehavior;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -123,6 +124,7 @@ public class RobotContainer {
   private final OperatorIntent operatorIntent;
   private final MatchState matchState;
   private final RobotGoals robotGoals;
+  private final GameData gameData;
 
   private boolean m_teleopInitialized = false;
   private AutoCommandManager autoCommandManager;
@@ -267,6 +269,7 @@ public class RobotContainer {
     operatorIntent = OperatorIntent.getInstance(0);
     matchState = MatchState.getInstance();
     robotGoals = RobotGoals.getInstance();
+    gameData = GameData.getInstance();
 
     // Create goal behaviors (wires operator intent → robot goals)
     new RobotGoalsBehavior(robotGoals);
@@ -287,6 +290,18 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings(ISTESTING);
     configureCharacterizationButtonBindings();
+
+    // TODO Examples of use of GameData in Behaviors (REMOVE Once find a use or merged into master
+    // and used in Behaviors)
+    gameData
+        .isActiveShootingTrigger()
+        .onTrue(new InstantCommand(() -> Logger.recordOutput("ACTIVESHOOTING", true)))
+        .onFalse(new InstantCommand(() -> Logger.recordOutput("ACTIVESHOOTING", false)));
+    gameData
+        .m_state
+        .is(GameData.GameDataStates.SHIFT1)
+        .onTrue(new InstantCommand(() -> Logger.recordOutput("S1", true)))
+        .onFalse(new InstantCommand(() -> Logger.recordOutput("S1", false)));
   }
 
   /**
@@ -300,7 +315,8 @@ public class RobotContainer {
       configureTestButtonBindings();
     } else {
       SubsystemBehavior.configureAll(
-          new AllEvents(robotGoals, matchState, indexer, shooter, intake, climber, hood));
+          new AllEvents(robotGoals, matchState, gameData, indexer, shooter, intake, climber, hood));
+      gameData.isActiveShootingTrigger();
     }
     // Reset gyro / odometry
     final Runnable resetOdometry =
