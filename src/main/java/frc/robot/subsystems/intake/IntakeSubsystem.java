@@ -48,9 +48,12 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.rollerVelocity = RPM.mutable(0.0);
     logged.rollerVelocitySetPoint = RPM.mutable(0.0);
     logged.rollerSupplyCurrent = Amps.mutable(0.0);
+    logged.rollerTorqueCurrent = Amps.mutable(0);
+    logged.rollerVoltage = Volts.mutable(0);
     logged.extenderVoltage = Volts.mutable(0.0);
     logged.extenderVoltageSetPoint = Volts.mutable(0.0);
     logged.extenderSupplyCurrent = Amps.mutable(0.0);
+    logged.extenderTorqueCurrent = Amps.mutable(0);
     logged.extenderEmulatedAngle =
         Radians.mutable(IntakeIOSim.emulateVoltsToRadians(logged.extenderVoltage.in(Volts)));
     logged.extenderEmulatedSetAngle =

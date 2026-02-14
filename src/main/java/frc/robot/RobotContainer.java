@@ -103,7 +103,7 @@ public class RobotContainer {
   // This should stay false otherwise
   private RobotVisualization robotState = RobotVisualization.instance();
 
-  private static final boolean ISTESTING = false;
+  private static final boolean ISTESTING = true;
 
   private final AprilTagVision vision;
 
@@ -134,9 +134,9 @@ public class RobotContainer {
   private AutoCommandManager autoCommandManager;
 
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
   final LoggedTunableNumber setFeederVelocity =
-      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
   final LoggedTunableNumber setTurretAngle =
       new LoggedTunableNumber("RobotTesting/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =

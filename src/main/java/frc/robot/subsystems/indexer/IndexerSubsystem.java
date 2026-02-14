@@ -44,6 +44,8 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_logged.feederVelocity = RPM.mutable(0);
     m_logged.feederSetPoint = RPM.mutable(0);
     m_logged.feederVoltage = Volts.mutable(0);
+    m_logged.feederSupplyCurrent = Amps.mutable(0);
+    m_logged.feederTorqueCurrent = Amps.mutable(0);
     m_IO.setFeederGains(m_feederTunableGains.build());
   }
 
