@@ -18,7 +18,7 @@ public class HoodIOSim implements HoodIO {
   private final SingleJointedArmSim hoodSim;
   private ArmFeedforward ff = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(0.1, 0.0, 0.0, new Constraints(360.0, 720.0));
+      new ProfiledPIDController(0.3, 0.0, 0.0, new Constraints(360.0, 720.0));
 
   // physical constants for hood (NOT ACCURATE)
   private static final DCMotor kArmMotor = DCMotor.getKrakenX60(1); // e.g., one NEO motor

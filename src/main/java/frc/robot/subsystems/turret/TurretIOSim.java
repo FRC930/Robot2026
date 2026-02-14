@@ -22,7 +22,7 @@ public class TurretIOSim implements TurretIO {
   private final SingleJointedArmSim turretSim;
   private ArmFeedforward ff = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(0.1, 0.0, 0.0, new Constraints(360.0, 720.0));
+      new ProfiledPIDController(0.3, 0.0, 0.0, new Constraints(360.0, 720.0));
 
   private static final DCMotor kArmMotor = DCMotor.getKrakenX60(1); // e.g., one NEO motor
   private static final double kGearing = 50.0; // e.g., 50:1 gear ratio
@@ -30,7 +30,7 @@ public class TurretIOSim implements TurretIO {
   private static final double kArmLength = Units.inchesToMeters(30.0); // e.g., 30 inches long
   private static final double kMinAngle = Units.degreesToRadians(-360); // e.g., -90 degrees
   private static final double kMaxAngle = Units.degreesToRadians(360.0); // e.g., 90 degrees
-  private static final boolean kSimulateGravity = true;
+  private static final boolean kSimulateGravity = false;
 
   public TurretIOSim() {
     turretSim =
@@ -39,7 +39,9 @@ public class TurretIOSim implements TurretIO {
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    this.turretAppliedAngle = Radians.mutable(0);
+  }
 
   @Override
   public void updateInputs(TurretInputs input) {
@@ -57,7 +59,7 @@ public class TurretIOSim implements TurretIO {
     Angle currentAngle = Radians.of(turretSim.getAngleRads());
 
     Voltage controllerVoltage =
-        Volts.of(controller.calculate(currentAngle.in(Degrees), turretAppliedAngle.in(Radians)));
+        Volts.of(controller.calculate(currentAngle.in(Degrees), turretAppliedAngle.in(Degrees)));
     Voltage feedForwardVoltage =
         Volts.of(
             ff.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
@@ -71,7 +73,6 @@ public class TurretIOSim implements TurretIO {
 
   @Override
   public void setTarget(double position) {
-    // TODO implement set angle on the sim
     turretAppliedAngle = Degrees.of(position);
   }
 
