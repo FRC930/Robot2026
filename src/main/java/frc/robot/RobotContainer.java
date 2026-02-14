@@ -103,7 +103,7 @@ public class RobotContainer {
   // This should stay false otherwise
   private RobotVisualization robotState = RobotVisualization.instance();
 
-  private static final boolean ISTESTING = true;
+  private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;
 
