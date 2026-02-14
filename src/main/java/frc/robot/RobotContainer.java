@@ -264,7 +264,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getPose);
-        intake = new IntakeSubsystem(new IntakeIOSim());
+        intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
         indexer = new IndexerSubsystem(new IndexerIOSim());
         climber =
             new ClimberSubsystem(
@@ -614,27 +614,28 @@ public class RobotContainer {
   }
 
   public void resetSimulation() {
-    if (Constants.currentMode != Constants.Mode.SIM) return;
-
-    // drive.setPose(new Pose2d(3, 3, new Rotation2d()));
-    SimulatedArena.getInstance().resetFieldForAuto();
-    if (DriverStation.isDisabled()) {
-      // Disable AprilTags when disabled
-      vision.disableUpdateOdometryBasedOnApriltags();
+    if (Constants.currentMode == Constants.Mode.SIM) {
+      // drive.setPose(new Pose2d(3, 3, new Rotation2d()));
+      SimulatedArena.getInstance().resetFieldForAuto();
+      if (DriverStation.isDisabled()) {
+        // Disable AprilTags when disabled
+        vision.disableUpdateOdometryBasedOnApriltags();
+      }
     }
   }
 
   public void updateSimulation() {
-    if (Constants.currentMode != Constants.Mode.SIM) return;
-
-    SimulatedArena.getInstance().simulationPeriodic();
+    if (Constants.currentMode == Constants.Mode.SIM) {
+      SimulatedArena.getInstance().simulationPeriodic();
+    }
   }
 
   public void loggingPeriodic() {
-    if (Constants.currentMode != Constants.Mode.SIM) return;
-    Logger.recordOutput(
-        "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
-    Logger.recordOutput(
-        "FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
+    if (Constants.currentMode == Constants.Mode.SIM) {
+      Logger.recordOutput(
+          "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
+      Logger.recordOutput(
+          "FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
+    }
   }
 }

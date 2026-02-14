@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
@@ -17,8 +18,13 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import org.ironmaple.simulation.IntakeSimulation;
+import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
 
 public class IntakeIOSim implements IntakeIO {
+  private final IntakeSimulation intakeSim;
 
   // physical constants for intake extender (NOT ACCURATE)
   private static final double kArmGearRatio = 1.0;
@@ -46,7 +52,7 @@ public class IntakeIOSim implements IntakeIO {
   //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
   private PIDController rollerPID = new PIDController(0.0031, 0.0, 0.0);
 
-  public IntakeIOSim() {
+  public IntakeIOSim(AbstractDriveTrainSimulation driveTrain) {
 
     // Setup Intake roller
     rollerFlyWheelSim =
@@ -68,6 +74,37 @@ public class IntakeIOSim implements IntakeIO {
             kMaxExtenderRads, // make sure to set m_extenderAngleSetPoint to this angle
             0.001,
             0.001);
+
+    // Here, create the intake simulation with respect to the intake on your real robot
+    this.intakeSim =
+        IntakeSimulation.OverTheBumperIntake(
+            // Specify the type of game pieces that the intake can collect
+            "Fuel",
+            // Specify the drivetrain to which this intake is attached
+            driveTrain,
+            // Width of the intake
+            Meters.of(0.6),
+            // The extension length of the intake beyond the robot's frame (when activated)
+            Meters.of(0.2),
+            // The intake is mounted on the back side of the chassis
+            IntakeSimulation.IntakeSide.FRONT,
+            // The intake can hold up to 67 gamepiece
+            67);
+  }
+
+  public void setRunning(boolean runIntake) {
+    if (runIntake)
+      intakeSim.startIntake(); // Extends the intake out from the chassis frame and starts detecting
+    // contacts with game pieces
+    else intakeSim.stopIntake(); // Retracts the intake into the chassis frame, disabling game piece
+    // collection
+  }
+
+  public Command setRunnningCommand(boolean runIntake) {
+    return new InstantCommand(
+        () -> {
+          setRunning(runIntake);
+        });
   }
 
   @Override
@@ -86,6 +123,10 @@ public class IntakeIOSim implements IntakeIO {
     setRollerTargetSpeed(RPM.of(0));
     // Doing nothing with extender motor
     // setExtenderTargetAngle(Degrees.of(0));
+  }
+
+  public int getGamePiecesAmount() {
+    return intakeSim.getGamePiecesAmount();
   }
 
   @Override
@@ -107,6 +148,7 @@ public class IntakeIOSim implements IntakeIO {
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
+    input.numberFuelHave = getGamePiecesAmount();
   }
 
   private void updateRollerPID() {

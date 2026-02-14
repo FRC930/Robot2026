@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.RobotVisualization;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
@@ -69,6 +70,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.extenderSupplyCurrent = Amps.mutable(0.0);
     logged.extenderTorqueCurrent = Amps.mutable(0);
     m_IO.setRollerGains(rollerGains.build());
+    logged.numberFuelHave = 0;
     m_IO.setExtenderGains(extenderGains.build());
     RobotVisualization.instance().setExenderSource(logged.extenderAngle);
   }
@@ -128,6 +130,12 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       case INTAKING:
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(true);
+          }
+        }
         break;
       case OUTTAKING:
         m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
