@@ -59,6 +59,9 @@ public class GameData extends VirtualSubsystem {
   private Alliance m_allianceScoredTheMost = null;
   private Timer m_timer = null;
   private boolean m_lastActive = true;
+  private double m_timeLeftForNextStage = 0.0;
+  private int m_counter = 0;
+  private double m_teleopTimeLeft = 0.0;
 
   private GameData() {
     logGameData(m_gameMessage);
@@ -86,6 +89,8 @@ public class GameData extends VirtualSubsystem {
     m_timer = null;
     resetGameData();
     m_state.set(GameDataStates.INVALID);
+    m_counter = 0;
+    m_teleopTimeLeft = -1.0;
   }
 
   private void resetGameData() {
@@ -123,42 +128,50 @@ public class GameData extends VirtualSubsystem {
         // Is always active shooting during auto
         return true;
       } else if (DriverStation.isTeleopEnabled()) {
-        double timeLeft = getTimeLeft();
+        m_teleopTimeLeft = getTeleopTimeLeft();
         // NOTE: We get GAMEDATA as soon as possible IN teleop)
         checkGameData();
-        if (timeLeft <= 0.0) {
+        if (m_teleopTimeLeft <= 0.0) {
           m_state.set(GameDataStates.INVALID);
+          m_timeLeftForNextStage = 0.0;
           // If no time left not active shooting
           return false;
         }
-        if (timeLeft < TIMELEFT_ENDGAME) {
+        if (m_teleopTimeLeft < TIMELEFT_ENDGAME) {
           m_state.set(GameDataStates.ENDGAME);
+          m_timeLeftForNextStage = 0.0;
           // Is always active shooting during end game
           return true;
         }
-        if (timeLeft < TIMELEFT_SHIFT4) {
+        if (m_teleopTimeLeft < TIMELEFT_SHIFT4) {
           m_state.set(GameDataStates.SHIFT4);
+          m_timeLeftForNextStage = TIMELEFT_ENDGAME;
           return checkGameDataForShift(false);
         }
-        if (timeLeft < TIMELEFT_SHIFT3) {
+        if (m_teleopTimeLeft < TIMELEFT_SHIFT3) {
           m_state.set(GameDataStates.SHIFT3);
+          m_timeLeftForNextStage = TIMELEFT_SHIFT4;
           return checkGameDataForShift(true);
         }
-        if (timeLeft < TIMELEFT_SHIFT2) {
+        if (m_teleopTimeLeft < TIMELEFT_SHIFT2) {
           m_state.set(GameDataStates.SHIFT2);
+          m_timeLeftForNextStage = TIMELEFT_SHIFT3;
           return checkGameDataForShift(false);
         }
-        if (timeLeft < TIMELEFT_SHIFT1) {
+        if (m_teleopTimeLeft < TIMELEFT_SHIFT1) {
           m_state.set(GameDataStates.SHIFT1);
+          m_timeLeftForNextStage = TIMELEFT_SHIFT2;
           return checkGameDataForShift(true);
         }
-        if (timeLeft <= TIMELEFT_TRANSITION) {
+        if (m_teleopTimeLeft <= TIMELEFT_TRANSITION) {
           m_state.set(GameDataStates.TRANSITION);
+          m_timeLeftForNextStage = TIMELEFT_SHIFT1;
           // Is always active shooting during transition
           return true;
         } else {
           // If Time is greater that what should have for teleop
           m_state.set(GameDataStates.EXTRA);
+          m_timeLeftForNextStage = TIMELEFT_TRANSITION;
           return true;
         }
       } else {
@@ -181,7 +194,11 @@ public class GameData extends VirtualSubsystem {
     m_state.set(gameState);
   }
 
-  private double getTimeLeft() {
+  private double getTeleopTimeLeft() {
+    /* When connected to the real field, this number only changes in full integer increments, and always counts down.
+      When the DS is in practice mode, this number is a floating point number, and counts down.
+      When the DS is in teleop or autonomous mode, this number is a floating point number, and counts up.
+    */
     double timeLeft = DriverStation.getMatchTime();
     if (timeLeft < 0.0) {
       if (DriverStation.isFMSAttached()) {
@@ -195,8 +212,13 @@ public class GameData extends VirtualSubsystem {
         timeLeft = TIMELEFT_TRANSITION - m_timer.get();
       }
     }
-    // TODO many be performance issue (logging each time)
-    Logger.recordOutput(LOGGER_PARENT + "/TimeLeft", timeLeft);
+
+    if ((m_counter++ % 50) == 0) {
+      // TODO many be performance issue (logging each time)
+      Logger.recordOutput(LOGGER_PARENT + "/TeleopTimeLeft", timeLeft);
+      Logger.recordOutput(
+          LOGGER_PARENT + "/TeleopTimeLeftInStage", timeLeft - m_timeLeftForNextStage);
+    }
     return timeLeft;
   }
 
@@ -250,6 +272,13 @@ public class GameData extends VirtualSubsystem {
 
   public Trigger isActiveShootingTrigger() {
     return new Trigger(() -> m_lastActive);
+  }
+
+  public Trigger isCountDownToNextStage(double seconds) {
+    return new Trigger(
+        () -> {
+          return m_teleopTimeLeft > 0.0 && (m_teleopTimeLeft - m_timeLeftForNextStage) <= seconds;
+        });
   }
 
   // TODO  need trigger for each state?  since has EnumState triggers() allows to do the following

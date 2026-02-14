@@ -302,6 +302,10 @@ public class RobotContainer {
         .is(GameData.GameDataStates.SHIFT1)
         .onTrue(new InstantCommand(() -> Logger.recordOutput("S1", true)))
         .onFalse(new InstantCommand(() -> Logger.recordOutput("S1", false)));
+    gameData
+        .isCountDownToNextStage(5.0)
+        .onTrue(new InstantCommand(() -> Logger.recordOutput("COUNTDOWN", true)))
+        .onFalse(new InstantCommand(() -> Logger.recordOutput("COUNTDOWN", false)));
   }
 
   /**
