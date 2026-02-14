@@ -25,8 +25,8 @@ public class RobotGoalsBehavior extends GoalBehavior {
   public void configure(OperatorIntentEvents intent) {
     intent
         .wantsToScoreTrigger()
-        .onTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
-        .onFalse(goals.setGoalCommand(RobotGoal.INTAKING));
+        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
+        .whileFalse(goals.setGoalCommand(RobotGoal.INTAKING));
     intent
         .wantsToOuttake()
         .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
