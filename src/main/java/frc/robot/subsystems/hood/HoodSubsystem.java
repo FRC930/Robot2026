@@ -15,7 +15,8 @@ import org.littletonrobotics.junction.Logger;
 public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   // Implementation goes here † ₀ ᴥ ₀ †
 
-  private LoggedTunableNumber Angle = new LoggedTunableNumber("Hood/Angle", 45);
+  private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
+  private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);
 
   private HoodIO m_IO;
 
@@ -52,6 +53,10 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         });
   }
 
+  public Command passCommand() {
+    return new InstantCommand(() -> currentGoal.set(HoodState.PASSING), this);
+  }
+
   public void setTestingState() {
     currentGoal.set(HoodState.TESTING);
   }
@@ -69,8 +74,11 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         m_IO.stop();
         break;
       case AIMING:
-        // TODO these are flowkirkenuinely filler units
-        m_IO.setHoodTarget(Degrees.of(Angle.get())); // Example target angle
+        // TODO these are filler units
+        m_IO.setHoodTarget(Degrees.of(aimAngle.get())); // Example target angle
+        break;
+      case PASSING:
+        m_IO.setHoodTarget(Degrees.of(passAngle.get())); // Example pass angle
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

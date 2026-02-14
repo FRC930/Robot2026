@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public interface RobotEvents {
 
   public Trigger isIdleTrigger();
-
-  public Trigger isAimingTrigger();
-
+  
   public Trigger isIntakingTrigger();
 
   public Trigger isOuttakingTrigger();
@@ -23,6 +21,4 @@ public interface RobotEvents {
   public Trigger isClimbingL2();
 
   public Trigger isClimbingL3();
-
-  public Trigger isAiming();
 }

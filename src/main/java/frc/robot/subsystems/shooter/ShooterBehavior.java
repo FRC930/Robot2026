@@ -14,7 +14,11 @@ public class ShooterBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
-    events.goals().isShootingTrigger().whileTrue(shooter.shooterCommand());
-    events.goals().isIdleTrigger().whileTrue(shooter.idleCommand());
+    events
+        .goals()
+        .isShootingTrigger()
+        .or(events.goals().isPassingTrigger())
+        .whileTrue(shooter.shooterCommand())
+        .whileFalse(shooter.idleCommand());
   }
 }

@@ -13,10 +13,9 @@ public class ClimberBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
-    events.goals().isIdleTrigger().whileTrue(climber.idleCommand());
-    events.goals().isClimbingL0().whileTrue(climber.goToL0Command());
-    events.goals().isClimbingL1().whileTrue(climber.goToL1Command());
-    events.goals().isClimbingL2().whileTrue(climber.goToL2Command());
-    events.goals().isClimbingL3().whileTrue(climber.goToL3Command());
+    events.goals().isClimbingL0().whileTrue(climber.goToL0Command()).onFalse(climber.idleCommand());
+    events.goals().isClimbingL1().whileTrue(climber.goToL1Command()).onFalse(climber.idleCommand());
+    events.goals().isClimbingL2().whileTrue(climber.goToL2Command()).onFalse(climber.idleCommand());
+    events.goals().isClimbingL3().whileTrue(climber.goToL3Command()).onFalse(climber.idleCommand());
   }
 }
