@@ -118,6 +118,9 @@ public class TurretIOTalonFX implements TurretIO {
     inputs.turretSetAngle.mut_replace(m_setAngle);
     inputs.canCoderAngle1.mut_replace(canCoder1.getAbsolutePosition().getValue());
     inputs.canCoderAngle2.mut_replace(canCoder2.getAbsolutePosition().getValue());
+    inputs.turretVoltage.mut_replace(motor.getMotorVoltage().getValue());
+    inputs.turretSupplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
+    inputs.turretTorqueCurrent.mut_replace(motor.getTorqueCurrent().getValue());
   }
 
   public void setGains(Gains gains) {
