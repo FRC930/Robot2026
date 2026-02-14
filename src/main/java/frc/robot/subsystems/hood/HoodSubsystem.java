@@ -74,7 +74,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         m_IO.stop();
         break;
       case AIMING:
-        // TODO these are flowkirkenuinely filler units
+        // TODO these are filler units
         m_IO.setHoodTarget(Degrees.of(aimAngle.get())); // Example target angle
         break;
       case PASSING:
