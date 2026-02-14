@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4956348074179737,
-        "y": 3.950898716119829
+        "x": 3.5467141162514837,
+        "y": 4.051138790035587
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6718710403215056,
-        "y": 3.0664053506614097
+        "x": 2.722950349155016,
+        "y": 3.1666454245771676
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.6903566333808839
+        "x": 0.6955278766310802,
+        "y": 0.6512336892052202
       },
       "prevControl": {
-        "x": 1.3052927935328387,
-        "y": 1.5752790014769513
+        "x": 1.51989342337362,
+        "y": 1.5361560573012876
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "outpostShootCenter.0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.07245657568239064,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

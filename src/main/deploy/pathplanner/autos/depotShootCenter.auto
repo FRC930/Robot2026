@@ -15,12 +15,6 @@
           "data": {
             "pathName": "depotShootCenter.1"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
         }
       ]
     }

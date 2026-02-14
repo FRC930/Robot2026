@@ -8,30 +8,42 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1004913923241846,
-        "y": 1.0490512963026146
+        "x": 2.1900515692649423,
+        "y": 1.1032176287064324
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.5585592011412266,
-        "y": 0.7032952924393738
+        "x": 0.6955278766310802,
+        "y": 0.6512336892052202
       },
       "prevControl": {
-        "x": 1.108488208615169,
-        "y": 0.851668586308854
+        "x": 1.306730141826117,
+        "y": 0.794584768721589
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "outpostShootRight.0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.18957816377171155,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

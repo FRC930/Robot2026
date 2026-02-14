@@ -16,22 +16,34 @@
     },
     {
       "anchor": {
-        "x": 0.4679885877318113,
-        "y": 0.6774179743223976
+        "x": 0.6955278766310802,
+        "y": 0.6297153024911029
       },
       "prevControl": {
-        "x": 0.9882139837012898,
-        "y": 1.6511080928855524
+        "x": 1.2157532726005602,
+        "y": 1.6034054210542594
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "outpostShootLeft.0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

@@ -15,12 +15,6 @@
           "data": {
             "pathName": "depotShootRight.1"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
         }
       ]
     }
