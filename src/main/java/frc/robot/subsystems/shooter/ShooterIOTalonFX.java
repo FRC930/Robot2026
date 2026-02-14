@@ -58,7 +58,9 @@ public class ShooterIOTalonFX implements ShooterIO {
     configshooter.MotionMagic.MotionMagicExpo_kV = 1.0;
     configshooter.MotionMagic.MotionMagicAcceleration = 1.0;
     configshooter.MotionMagic.MotionMagicCruiseVelocity = 1.0;
-    shooterMotor.getConfigurator().apply(configshooter);
+    PhoenixUtil.tryUntilOk(
+        5, () -> shooterMotor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> shooterMotor.getConfigurator().apply(configshooter));
 
     TalonFXConfiguration follower1Configuration = new TalonFXConfiguration();
     follower1Configuration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -68,8 +70,13 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     follower1Configuration.Voltage.PeakForwardVoltage = 16.0;
     follower1Configuration.Voltage.PeakReverseVoltage = 16.0;
-    follower1.getConfigurator().apply(follower1Configuration);
-    follower1.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Aligned));
+    PhoenixUtil.tryUntilOk(5, () -> follower1.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> follower1.getConfigurator().apply(follower1Configuration));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            follower1.setControl(
+                new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Aligned)));
 
     TalonFXConfiguration follower2Configuration = new TalonFXConfiguration();
     follower2Configuration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -79,8 +86,13 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower2Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     follower2Configuration.Voltage.PeakForwardVoltage = 16.0;
     follower2Configuration.Voltage.PeakReverseVoltage = 16.0;
-    follower2.getConfigurator().apply(follower2Configuration);
-    follower2.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    PhoenixUtil.tryUntilOk(5, () -> follower2.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> follower2.getConfigurator().apply(follower2Configuration));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            follower2.setControl(
+                new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed)));
 
     TalonFXConfiguration follower3Configuration = new TalonFXConfiguration();
     follower3Configuration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -90,8 +102,13 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower3Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     follower3Configuration.Voltage.PeakForwardVoltage = 16.0;
     follower3Configuration.Voltage.PeakReverseVoltage = 16.0;
-    follower3.getConfigurator().apply(follower3Configuration);
-    follower3.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    PhoenixUtil.tryUntilOk(5, () -> follower3.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> follower3.getConfigurator().apply(follower3Configuration));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            follower3.setControl(
+                new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed)));
   }
 
   @Override
