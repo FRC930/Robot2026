@@ -18,20 +18,31 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "limelight-front";
-  public static String camera1Name = "camera_1";
+  public static String camera1Name = "limelight-one";
+  public static String camera2Name = "limelight-two";
+  public static String camera3Name = "limelight-three";
+  public static String camera4Name = "limelight-four";
   public static String questCamName = "Quest";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
   // front cam values on robot,
   // LL Forward 0.391, LL Right 0.0, LL up 0.198, LL Roll 0.0, LL Pitch 0.0, LL Yaw 0.0.
-  public static Transform3d robotToCamera0 =
-      new Transform3d(
-          .0, -0.391, 0.198, new Rotation3d(0.0, Math.toRadians(0.0), Math.toRadians(0.0)));
-
+  //left 90
   public static Transform3d robotToCamera1 =
-      new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+      new Transform3d(
+        -15.96 ,9.29,23.34, new Rotation3d(0.0, Math.toRadians(0.0), Math.toDegrees(-90.0)));
+
+        //right 90
+  public static Transform3d robotToCamera2 =
+      new Transform3d(15.96, 9.29, 23.34, new Rotation3d(0.0, -0.4, Math.toDegrees(90)));
+
+      // front0
+    public static Transform3d robotToCamera3 =
+      new Transform3d(13.0, 12.52, 23.34, new Rotation3d(0.0, -0.4, Math.toDegrees(0)));
+//back 180
+    public static Transform3d robotToCamera4 =
+      new Transform3d(-8.5, -12.89, 23.34, new Rotation3d(0.0, -0.4, Math.toDegrees(180)));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
@@ -47,7 +58,9 @@ public class VisionConstants {
   public static double[] cameraStdDevFactors =
       new double[] {
         1.0, // Camera 0
-        1.0 // Camera 1
+        1.0, // Camera 1
+        1.0,
+        1.0
       };
 
   // Multipliers to apply for MegaTag 2 observations
