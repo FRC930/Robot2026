@@ -32,9 +32,9 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   private TurretIO m_IO;
 
   private static final Pose2d RED_GOAL =
-      new Pose2d(Meters.of(12.), Meters.of(4.), new Rotation2d());
+      new Pose2d(Meters.of(12.0), Meters.of(4.0), new Rotation2d());
   private static final Pose2d BLUE_GOAL =
-      new Pose2d(Meters.of(4.6), Meters.of(4.), new Rotation2d());
+      new Pose2d(Meters.of(4.6), Meters.of(4.0), new Rotation2d());
 
   private static final Pose2d LOW_RED_PASS =
       new Pose2d(Meters.of(15.5), Meters.of(0.9), new Rotation2d());
