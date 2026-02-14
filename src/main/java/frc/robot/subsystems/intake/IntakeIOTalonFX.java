@@ -96,10 +96,13 @@ public class IntakeIOTalonFX implements IntakeIO {
     inputs.rollerVelocity.mut_replace(leaderIntakeMotor.getVelocity().getValue());
     inputs.rollerVelocitySetPoint.mut_replace(intakeSetPoint);
     inputs.rollerSupplyCurrent.mut_replace(leaderIntakeMotor.getSupplyCurrent().getValue());
+    inputs.rollerTorqueCurrent.mut_replace(leaderIntakeMotor.getTorqueCurrent().getValue());
+    inputs.rollerVoltage.mut_replace(leaderIntakeMotor.getMotorVoltage().getValue());
 
     inputs.extenderVoltage.mut_replace(intakeExtenderMotor.getMotorVoltage().getValue());
     inputs.extenderVoltageSetPoint.mut_replace(intakeExtenderSetPoint);
     inputs.extenderSupplyCurrent.mut_replace(intakeExtenderMotor.getSupplyCurrent().getValue());
+    inputs.extenderTorqueCurrent.mut_replace(intakeExtenderMotor.getTorqueCurrent().getValue());
     // Used for 3d model in advantage scope TODO MAY WANT PID extenderEmulatedAngle
     inputs.extenderEmulatedAngle.mut_replace(
         IntakeIOSim.emulateVoltsToRadians(intakeExtenderMotor.getMotorVoltage().getValue()));

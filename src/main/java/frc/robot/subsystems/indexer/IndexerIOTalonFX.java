@@ -17,6 +17,9 @@ import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
 
 public class IndexerIOTalonFX implements IndexerIO {
+
+  private VelocityVoltage indexerRequest;
+  private VelocityVoltage feederRequest;
   private TalonFX indexerMotor;
   private TalonFX feederMotor;
 
@@ -28,6 +31,8 @@ public class IndexerIOTalonFX implements IndexerIO {
   public IndexerIOTalonFX(int indexerMotorCAN, int feederMotorCAN, CANBus canbus) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     feederMotor = new TalonFX(feederMotorCAN, canbus);
+    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true);
+    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true);
     configureTalons();
   }
 
@@ -78,7 +83,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   @Override
   public void setIndexerTarget(AngularVelocity velocity) {
     if (!(velocity.in(RPM) == indexerSetPoint.in(RPM))) {
-      indexerMotor.setControl(new VelocityVoltage(velocity));
+      indexerMotor.setControl(indexerRequest.withVelocity(velocity).withSlot(0));
       indexerSetPoint = velocity;
     }
   }
@@ -86,7 +91,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   @Override
   public void setFeederTarget(AngularVelocity velocity) {
     if (!(velocity.in(RPM) == indexerSetPoint.in(RPM))) {
-      feederMotor.setControl(new VelocityVoltage(indexerSetPoint));
+      feederMotor.setControl(indexerRequest.withVelocity(velocity).withSlot(0));
       feederSetPoint = velocity;
     }
   }
@@ -105,11 +110,13 @@ public class IndexerIOTalonFX implements IndexerIO {
     inputs.indexerSupplyCurrent.mut_replace(indexerMotor.getSupplyCurrent().getValue());
     inputs.indexerSetPoint.mut_replace(indexerSetPoint);
     inputs.indexerVoltage.mut_replace(indexerMotor.getMotorVoltage().getValue());
+    inputs.indexerTorqueCurrent.mut_replace(indexerMotor.getTorqueCurrent().getValue());
 
     inputs.feederVelocity.mut_replace(feederMotor.getVelocity().getValue());
     inputs.feederSupplyCurrent.mut_replace(feederMotor.getSupplyCurrent().getValue());
     inputs.feederSetPoint.mut_replace(feederSetPoint);
     inputs.feederVoltage.mut_replace(feederMotor.getMotorVoltage().getValue());
+    inputs.feederTorqueCurrent.mut_replace(feederMotor.getTorqueCurrent().getValue());
   }
 
   public void setIndexerGains(Gains gains) {
