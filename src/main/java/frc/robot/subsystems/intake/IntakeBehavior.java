@@ -23,6 +23,5 @@ public class IntakeBehavior extends SubsystemBehavior {
         .isOuttakingTrigger()
         .whileTrue(this.intake.outtakeCommand())
         .onFalse(this.intake.intakeCommand());
-    events.goals().isIdleTrigger().whileTrue(this.intake.idleCommand());
   }
 }

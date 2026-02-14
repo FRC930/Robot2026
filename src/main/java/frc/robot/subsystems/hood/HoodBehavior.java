@@ -13,6 +13,7 @@ public class HoodBehavior extends SubsystemBehavior {
   @Override
   public void configure(AllEvents events) {
     events.goals().isAimingTrigger().whileTrue(hood.aimCommand());
+    events.goals().isPassingTrigger().whileTrue(hood.passCommand());
     events.goals().isIdleTrigger().whileTrue(hood.idleCommand());
   }
 }
