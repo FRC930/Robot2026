@@ -56,7 +56,9 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.Slot0.kS = 0.0;
     configIndexer.Slot0.kV = 0.0;
     configIndexer.Slot0.kA = 0.0;
-    indexerMotor.getConfigurator().apply(configIndexer);
+    PhoenixUtil.tryUntilOk(
+        5, () -> indexerMotor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(configIndexer));
 
     TalonFXConfiguration configFeeder = new TalonFXConfiguration();
     configFeeder.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -77,7 +79,9 @@ public class IndexerIOTalonFX implements IndexerIO {
     configFeeder.Slot0.kS = 0.0;
     configFeeder.Slot0.kV = 0.0;
     configFeeder.Slot0.kA = 0.0;
-    feederMotor.getConfigurator().apply(configFeeder);
+    PhoenixUtil.tryUntilOk(
+        5, () -> feederMotor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(configFeeder));
   }
 
   @Override

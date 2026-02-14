@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.util.Gains;
+import frc.robot.util.PhoenixUtil;
 import org.littletonrobotics.junction.Logger;
 
 public class TurretIOTalonFX implements TurretIO {
@@ -87,6 +88,8 @@ public class TurretIOTalonFX implements TurretIO {
     // TODO find actual gear ratios & set encoder ratios (math)
     cfg.Feedback.SensorToMechanismRatio = 1.0;
     cfg.Feedback.RotorToSensorRatio = 1.0;
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
 
     double startAngle =
         calculateTurretAngleFromCANCoderDegrees(
@@ -134,7 +137,7 @@ public class TurretIOTalonFX implements TurretIO {
     slot0Configs.kG = gains.kG;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
-    motor.getConfigurator().apply(slot0Configs);
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
     motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
@@ -142,7 +145,7 @@ public class TurretIOTalonFX implements TurretIO {
     motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
     motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
     motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    motor.getConfigurator().apply(motionMagicConfigs);
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
   }
 
   @Override

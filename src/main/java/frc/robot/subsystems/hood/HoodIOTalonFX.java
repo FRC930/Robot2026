@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.util.Gains;
+import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX implements HoodIO {
 
@@ -39,6 +40,8 @@ public class HoodIOTalonFX implements HoodIO {
         46.2; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
     // Hood
     cfg.Feedback.RotorToSensorRatio = 1.0;
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
   }
 
   @Override
@@ -73,7 +76,7 @@ public class HoodIOTalonFX implements HoodIO {
     slot0Configs.kG = gains.kG;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
-    motor.getConfigurator().apply(slot0Configs);
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
     motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
@@ -81,6 +84,6 @@ public class HoodIOTalonFX implements HoodIO {
     motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
     motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
     motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    motor.getConfigurator().apply(motionMagicConfigs);
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
   }
 }
