@@ -2,12 +2,16 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +30,20 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   private LoggedTunableNumber PassingAngle = new LoggedTunableNumber("Turret/PassingAngle", 0);
 
   private TurretIO m_IO;
+
+  private static final Pose2d RED_GOAL =
+      new Pose2d(Meters.of(12.), Meters.of(4.), new Rotation2d());
+  private static final Pose2d BLUE_GOAL =
+      new Pose2d(Meters.of(4.6), Meters.of(4.), new Rotation2d());
+
+  private static final Pose2d LOW_RED_PASS =
+      new Pose2d(Meters.of(15.5), Meters.of(0.9), new Rotation2d());
+  private static final Pose2d HIGH_RED_PASS =
+      new Pose2d(Meters.of(15.5), Meters.of(7.1), new Rotation2d());
+  private static final Pose2d LOW_BLUE_PASS =
+      new Pose2d(Meters.of(1.1), Meters.of(0.9), new Rotation2d());
+  private static final Pose2d HIGH_BLUE_PASS =
+      new Pose2d(Meters.of(1.1), Meters.of(7.1), new Rotation2d());
 
   private Supplier<Pose2d> m_poseSupplier;
 
@@ -118,10 +136,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     Logger.processInputs("RobotState/Turret", logged);
     switch (m_state.get()) {
       case AIMING:
-        aim();
-        break;
       case PASSING:
-        setPosition(PassingAngle.get());
+        aim();
         break;
       case IDLE:
         setPosition(IdleAngle.get());
@@ -154,9 +170,38 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   }
 
   public void aim() {
-    Angle angle = getAiming(robotPoseSupplier.get(), goalPose);
+    Pose2d drivePose2d = robotPoseSupplier.get();
+    Alliance usAlliance = DriverStation.getAlliance().get();
+    Pose2d aimTarget;
+    switch (m_state.get()) {
+      case AIMING:
+        aimTarget = getHub(usAlliance);
+        break;
+      case PASSING:
+        aimTarget = getClosestPass(drivePose2d, usAlliance);
+        break;
+      default:
+        aimTarget = null;
+        break;
+    }
+    Logger.recordOutput("Turret/aimPose", aimTarget);
+    Angle angle = getAiming(drivePose2d, aimTarget);
     // Printing the angle of the turret
     // System.out.println(angle);
     m_IO.setTarget(angle.in(Degrees));
   }
-}
+
+  private Pose2d getClosestPass(Pose2d drivePose2d, Alliance usAlliance) {
+    Pose2d lowerPass = usAlliance == Alliance.Blue ? LOW_BLUE_PASS : LOW_RED_PASS;
+    Pose2d upperPass = usAlliance == Alliance.Blue ? HIGH_BLUE_PASS : HIGH_RED_PASS;
+
+    double distanceLower = drivePose2d.getTranslation().getDistance(lowerPass.getTranslation());
+    double distanceUpper = drivePose2d.getTranslation().getDistance(upperPass.getTranslation());
+
+    return distanceLower < distanceUpper ? lowerPass : upperPass;
+  }
+
+  private Pose2d getHub(Alliance usAlliance) {
+    return usAlliance == Alliance.Blue ? BLUE_GOAL : RED_GOAL;
+  }
+} // f​l​o​w​k​i​r​k​e​​n​u​​​​​​​​i​​n​​​​​​e​​​l​​y​​​​​
