@@ -36,7 +36,12 @@
       "name": "Shooting",
       "waypointRelativePos": 0.5601799775028112,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooting"
+        }
+      }
     }
   ],
   "globalConstraints": {
