@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5467141162514837,
-        "y": 4.051138790035587
+        "x": 0.6955278766310802,
+        "y": 0.6297153024911029
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.722950349155016,
-        "y": 3.1666454245771676
+        "x": 1.6955278766310802,
+        "y": 0.6297153024911026
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "outpostShootLeft.0"
     },
     {
       "anchor": {
-        "x": 0.6955278766310802,
-        "y": 0.6512336892052202
+        "x": 3.3960854092526698,
+        "y": 3.943546856465006
       },
       "prevControl": {
-        "x": 1.51989342337362,
-        "y": 1.5361560573012876
+        "x": 2.3960854092526698,
+        "y": 3.943546856465006
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "outpostShootCenter.0"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,13 +34,7 @@
   "eventMarkers": [
     {
       "name": "Shooting",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Intaking",
-      "waypointRelativePos": 0.84814398200224,
+      "waypointRelativePos": 0.5601799775028112,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -58,7 +52,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "OutpostShootCenter",
+  "folder": "OutpostShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

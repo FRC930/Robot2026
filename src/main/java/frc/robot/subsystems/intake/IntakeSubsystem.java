@@ -117,17 +117,17 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     Logger.processInputs("RobotState/Intake", logged);
     switch (currentGoal.get()) {
       case INTAKING:
-        // TODO filler units rn
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case OUTTAKING:
-        // TODO filler units rn
         m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
         m_IO.setExtenderTargetVolts(Volts.of(intakeExtenderTargetVolts.get()));
         break;
       case IDLE:
-        stop();
+        // stop();
+        m_IO.setRollerTargetSpeed(RPM.of(0.0));
+        m_IO.setExtenderTargetVolts(Volts.of(-intakeExtenderTargetVolts.get()));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

@@ -18,7 +18,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import org.littletonrobotics.junction.Logger;
 
 public class IntakeIOSim implements IntakeIO {
   // Extender simulation Volts since current limitting up/down in REAL robot (simulate angle
@@ -30,7 +29,7 @@ public class IntakeIOSim implements IntakeIO {
   private static final double kArmLengthMeters = Units.inchesToMeters(12.0);
   private static final double kArmMassKg = Units.lbsToKilograms(3.0);
   public static final double kMinExtenderRads = Units.degreesToRadians(0.0);
-  public static final double kMaxExenderRads = Units.degreesToRadians(90.0);
+  public static final double kMaxExtenderRads = Units.degreesToRadians(90.0);
 
   private SingleJointedArmSim extenderArmSim;
   private ArmFeedforward extenderFF = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
@@ -64,7 +63,7 @@ public class IntakeIOSim implements IntakeIO {
             SingleJointedArmSim.estimateMOI(kArmLengthMeters, kArmMassKg),
             kArmLengthMeters,
             kMinExtenderRads,
-            kMaxExenderRads,
+            kMaxExtenderRads,
             false, // TODO NOT using gravity may need to switch angles so 0 is down. and 90 is up
             kMinExtenderRads,
             0.001,
@@ -143,9 +142,9 @@ public class IntakeIOSim implements IntakeIO {
     // NOTE: Assuming if any voltage at maxRad
     double targetAngleRads = emulateVoltsToRadians(m_extenderVoltageSetPoint.in(Volts));
 
-    Logger.recordOutput(
-        "EXTSETANGLE",
-        targetAngleRads); // TODO may want in IO to autolog (need to set see for PIDing)
+    // Logger.recordOutput(
+    //     "EXTSETANGLE",
+    //     targetAngleRads);
 
     // PID output (in volts) based on velocity error
     double pidOutput = extenderPID.calculate(currentAngleRads, targetAngleRads);
@@ -177,7 +176,7 @@ public class IntakeIOSim implements IntakeIO {
    * @return
    */
   public static double emulateVoltsToRadians(double volts) {
-    return (volts > 0.0 ? kMaxExenderRads : kMinExtenderRads);
+    return (volts > 0.0 ? kMinExtenderRads : kMaxExtenderRads);
   }
 
   /**

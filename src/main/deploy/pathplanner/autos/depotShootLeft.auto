@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "depotShootLeft.0"
