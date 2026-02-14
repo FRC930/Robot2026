@@ -113,6 +113,9 @@ public class ShooterIOTalonFX implements ShooterIO {
   public void updateInputs(ShooterInputs inputs) {
     inputs.shooterAngularVelocity.mut_replace(shooterMotor.getVelocity().getValue());
     inputs.shooterSetpoint.mut_replace(shooterSetPoint);
+    inputs.shooterTorqueCurrent.mut_replace(shooterMotor.getTorqueCurrent().getValue());
+    inputs.shooterVoltage.mut_replace(shooterMotor.getMotorVoltage().getValue());
+    inputs.shooterSupplyCurrent.mut_replace(shooterMotor.getSupplyCurrent().getValue());
   }
 
   @Override

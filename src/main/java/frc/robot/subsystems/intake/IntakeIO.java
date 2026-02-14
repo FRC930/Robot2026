@@ -15,10 +15,13 @@ public interface IntakeIO {
     public MutAngularVelocity rollerVelocity;
     public MutAngularVelocity rollerVelocitySetPoint;
     public MutCurrent rollerSupplyCurrent;
+    public MutCurrent rollerTorqueCurrent;
+    public MutVoltage rollerVoltage;
 
     public MutVoltage extenderVoltage;
     public MutVoltage extenderVoltageSetPoint;
     public MutCurrent extenderSupplyCurrent;
+    public MutCurrent extenderTorqueCurrent;
     // Emulated Angle/SetAngle (given extender using current limits)
     public MutAngle extenderEmulatedAngle;
     public MutAngle extenderEmulatedSetAngle;

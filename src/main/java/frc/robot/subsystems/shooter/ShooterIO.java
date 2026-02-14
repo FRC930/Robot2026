@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutCurrent;
+import edu.wpi.first.units.measure.MutVoltage;
 import frc.robot.util.Gains;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -11,6 +13,9 @@ public interface ShooterIO {
     // inputs for shooter
     public MutAngularVelocity shooterAngularVelocity;
     public MutAngularVelocity shooterSetpoint;
+    public MutCurrent shooterTorqueCurrent;
+    public MutVoltage shooterVoltage;
+    public MutCurrent shooterSupplyCurrent;
   }
 
   public default void setShooterTarget(AngularVelocity target) {}
