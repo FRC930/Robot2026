@@ -99,10 +99,11 @@ import org.littletonrobotics.junction.Logger;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // Set to true when Testing Individual subsystems
-  // This should stay false otherwise
+  // 3D simulated visualization of 3d model
   private RobotVisualization robotState = RobotVisualization.instance();
 
+  // Set to true when Testing Individual subsystems
+  // This should stay false otherwise
   private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;
@@ -134,9 +135,9 @@ public class RobotContainer {
   private AutoCommandManager autoCommandManager;
 
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
   final LoggedTunableNumber setFeederVelocity =
-      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 500.0);
+      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
   final LoggedTunableNumber setTurretAngle =
       new LoggedTunableNumber("RobotTesting/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =
