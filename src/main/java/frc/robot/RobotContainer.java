@@ -497,11 +497,11 @@ public class RobotContainer {
                       if (new Vector2(testController.getRightX(), testController.getRightY())
                               .getMagnitudeSquared()
                           >= 0.25) {
-                        double ROT_CONST = 0.1;
+                        double ROT_CONST = 1.0;
                         turret.setPosition(
                             Math.toDegrees(
                                     Math.atan2(
-                                        testController.getRightX(), -testController.getRightY()))
+                                        -testController.getRightX(), -testController.getRightY()))
                                 * ROT_CONST);
                       }
                     })));
