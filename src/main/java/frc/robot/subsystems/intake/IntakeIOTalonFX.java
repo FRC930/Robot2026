@@ -54,8 +54,8 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leaderConfig.CurrentLimits.SupplyCurrentLimit = 10.0;
     leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    leaderConfig.Voltage.PeakForwardVoltage = 16.0;
-    leaderConfig.Voltage.PeakReverseVoltage = 16.0;
+    leaderConfig.Voltage.PeakForwardVoltage = 12.0;
+    leaderConfig.Voltage.PeakReverseVoltage = -12.0;
     leaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     leaderConfig.MotionMagic.MotionMagicExpo_kA = 1.0;
     leaderConfig.MotionMagic.MotionMagicExpo_kV = 1.0;
@@ -71,8 +71,8 @@ public class IntakeIOTalonFX implements IntakeIO {
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     followConfig.CurrentLimits.SupplyCurrentLimit = 10.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    followConfig.Voltage.PeakForwardVoltage = 16.0;
-    followConfig.Voltage.PeakReverseVoltage = 16.0;
+    followConfig.Voltage.PeakForwardVoltage = 12.0;
+    followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO; // TODO: Value
     followConfig.Feedback.RotorToSensorRatio = 1.0;
@@ -92,8 +92,8 @@ public class IntakeIOTalonFX implements IntakeIO {
     configIntakeExtender.CurrentLimits.StatorCurrentLimitEnable = true;
     configIntakeExtender.CurrentLimits.SupplyCurrentLimit = 10.0;
     configIntakeExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
-    configIntakeExtender.Voltage.PeakForwardVoltage = 16.0;
-    configIntakeExtender.Voltage.PeakReverseVoltage = 16.0;
+    configIntakeExtender.Voltage.PeakForwardVoltage = 12.0;
+    configIntakeExtender.Voltage.PeakReverseVoltage = -12.0;
     configIntakeExtender.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     PhoenixUtil.tryUntilOk(
         5, () -> intakeExtenderMotor.getConfigurator().apply(new TalonFXConfiguration()));

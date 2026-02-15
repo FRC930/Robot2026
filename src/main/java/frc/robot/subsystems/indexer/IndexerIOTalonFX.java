@@ -43,19 +43,9 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
     configIndexer.CurrentLimits.SupplyCurrentLimit = 40.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
-    configIndexer.Voltage.PeakForwardVoltage = 16.0;
-    configIndexer.Voltage.PeakReverseVoltage = 16.0;
+    configIndexer.Voltage.PeakForwardVoltage = 12.0;
+    configIndexer.Voltage.PeakReverseVoltage = -12.0;
     configIndexer.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    configIndexer.MotionMagic.MotionMagicExpo_kA = 0.0;
-    configIndexer.MotionMagic.MotionMagicExpo_kV = 0.0;
-    configIndexer.MotionMagic.MotionMagicAcceleration = 0.0;
-    configIndexer.MotionMagic.MotionMagicCruiseVelocity = 0.0;
-    configIndexer.Slot0.kP = 0.0;
-    configIndexer.Slot0.kI = 0.0;
-    configIndexer.Slot0.kD = 0.0;
-    configIndexer.Slot0.kS = 0.0;
-    configIndexer.Slot0.kV = 0.0;
-    configIndexer.Slot0.kA = 0.0;
     PhoenixUtil.tryUntilOk(
         5, () -> indexerMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(configIndexer));
@@ -66,19 +56,9 @@ public class IndexerIOTalonFX implements IndexerIO {
     configFeeder.CurrentLimits.StatorCurrentLimitEnable = true;
     configFeeder.CurrentLimits.SupplyCurrentLimit = 40.0;
     configFeeder.CurrentLimits.SupplyCurrentLimitEnable = true;
-    configFeeder.Voltage.PeakForwardVoltage = 16.0;
-    configFeeder.Voltage.PeakReverseVoltage = 16.0;
+    configFeeder.Voltage.PeakForwardVoltage = 12.0;
+    configFeeder.Voltage.PeakReverseVoltage = -12.0;
     configFeeder.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    configFeeder.MotionMagic.MotionMagicExpo_kA = 0.0;
-    configFeeder.MotionMagic.MotionMagicExpo_kV = 0.0;
-    configFeeder.MotionMagic.MotionMagicAcceleration = 0.0;
-    configFeeder.MotionMagic.MotionMagicCruiseVelocity = 0.0;
-    configFeeder.Slot0.kP = 0.0;
-    configFeeder.Slot0.kI = 0.0;
-    configFeeder.Slot0.kD = 0.0;
-    configFeeder.Slot0.kS = 0.0;
-    configFeeder.Slot0.kV = 0.0;
-    configFeeder.Slot0.kA = 0.0;
     PhoenixUtil.tryUntilOk(
         5, () -> feederMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(configFeeder));
