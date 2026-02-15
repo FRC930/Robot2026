@@ -6,6 +6,10 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
+import org.ironmaple.simulation.IntakeSimulation;
+import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -75,6 +79,7 @@ public class IntakeIOSim implements IntakeIO {
             0.001,
             0.001);
 
+    // TODO: FINAL INTAKE SPACE CONFIGURATION FOR MAPLE-SIM
     // Here, create the intake simulation with respect to the intake on your real robot
     this.intakeSim =
         IntakeSimulation.OverTheBumperIntake(
