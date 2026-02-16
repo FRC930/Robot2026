@@ -112,7 +112,7 @@ public class TurretIOTalonFX implements TurretIO {
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     // TODO find actual gear ratios & set encoder ratios (math)
-    cfg.Feedback.SensorToMechanismRatio = 1.0;
+    cfg.Feedback.SensorToMechanismRatio = 10.0 / 195.0;
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
