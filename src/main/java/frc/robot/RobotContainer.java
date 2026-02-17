@@ -11,12 +11,12 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
-import static frc.robot.subsystems.vision.VisionConstants.backRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.backLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftForwardCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontRightCamera;
 import static frc.robot.subsystems.vision.VisionConstants.questCamName;
-import static frc.robot.subsystems.vision.VisionConstants.robotToBackRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToBackLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftForwardCamera;
 import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamera;
@@ -212,7 +212,7 @@ public class RobotContainer {
                 new VisionIOLimelight(frontLeftCamera, drive::getRotation),
                 new VisionIOLimelight(frontRightCamera, drive::getRotation),
                 new VisionIOLimelight(frontLeftForwardCamera, drive::getRotation),
-                new VisionIOLimelight(backRightCamera, drive::getRotation),
+                new VisionIOLimelight(backLeftCamera, drive::getRotation),
                 new VisionIOQuest(drive::getAutoAlignPose, questCamName));
         break;
 
@@ -240,7 +240,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(
                     frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
                 new VisionIOPhotonVisionSim(
-                    backRightCamera, robotToBackRightCamera, drive::getPose));
+                    backLeftCamera, robotToBackLeftCamera, drive::getPose));
         aimingService =
             new AimingService(
                 drive::getPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
