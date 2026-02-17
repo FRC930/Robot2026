@@ -20,6 +20,7 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
   public static final double INCHES_PER_ROT = (2.0 * Math.PI * SPOOL_RADIUS);
 
   public static final double REDUCTION = (4.0 / 1.0);
+
   /** Creates a new ExampleSubsystem. */
   private ClimberIO m_IO;
 
@@ -38,6 +39,7 @@ public class ClimberSubsystem extends SubsystemBase implements ClimberEvents {
     logged.voltageSetPoint = Volts.mutable(0);
     logged.voltage = Volts.mutable(0);
   }
+
   /**
    * Sets the speed for the climber
    *

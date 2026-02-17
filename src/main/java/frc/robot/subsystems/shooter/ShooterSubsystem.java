@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.aiming.AimingConstants;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -20,16 +21,19 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
 
   private final EnumState<ShooterState> m_state =
-      new EnumState<>("Shooter/States", ShooterState.IDLE);
+      new EnumState<>("Shooter/States", ShooterState.PRESPIN);
 
   private ShooterInputsAutoLogged logged = new ShooterInputsAutoLogged();
+
+  private final DoubleSupplier shooterRPMSupplier;
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
           "Gains/ShooterSubsystem/", 10.0, 0, 0.3, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0);
 
-  public ShooterSubsystem(ShooterIO IO) {
+  public ShooterSubsystem(ShooterIO IO, DoubleSupplier shooterRPMSupplier) {
     m_IO = IO;
+    this.shooterRPMSupplier = shooterRPMSupplier;
     logged.shooterAngularVelocity = RPM.mutable(0);
     logged.shooterSetpoint = RPM.mutable(2700.0);
     logged.shooterSupplyCurrent = Amps.mutable(0);
@@ -39,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   }
 
   /**
-   * Sets the speed for the shooter
+   * Sets the speed for the shooter.
    *
    * @param speed
    */
@@ -51,6 +55,13 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
     return runOnce(
         () -> {
           m_state.set(ShooterState.SHOOTING);
+        });
+  }
+
+  public Command prespinCommand() {
+    return runOnce(
+        () -> {
+          m_state.set(ShooterState.PRESPIN);
         });
   }
 
@@ -75,7 +86,12 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
     Logger.processInputs("RobotState/Shooter", logged);
     switch (m_state.get()) {
       case SHOOTING:
-        setShooterSpeed(RPM.of(setpoint.get()));
+      case PRESPIN:
+        double rpm = shooterRPMSupplier.getAsDouble();
+        if (rpm < AimingConstants.SHOOTER_MIN_RPM) {
+          rpm = setpoint.get();
+        }
+        setShooterSpeed(RPM.of(rpm));
         break;
       case IDLE:
         stop();

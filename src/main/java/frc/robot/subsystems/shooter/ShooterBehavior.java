@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
-// TODO Later
 public class ShooterBehavior extends SubsystemBehavior {
 
   private final ShooterSubsystem shooter;
@@ -19,6 +18,6 @@ public class ShooterBehavior extends SubsystemBehavior {
         .isShootingTrigger()
         .or(events.goals().isPassingTrigger())
         .whileTrue(shooter.shooterCommand())
-        .whileFalse(shooter.idleCommand());
+        .whileFalse(shooter.prespinCommand());
   }
 }
