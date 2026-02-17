@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
 
   private final EnumState<ShooterState> m_state =
-      new EnumState<>("Shooter/States", ShooterState.IDLE);
+      new EnumState<>("Shooter/States", ShooterState.PRESPIN);
 
   private ShooterInputsAutoLogged logged = new ShooterInputsAutoLogged();
 

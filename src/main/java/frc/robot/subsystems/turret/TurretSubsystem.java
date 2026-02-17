@@ -2,13 +2,10 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,33 +15,16 @@ import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10);
-  private LoggedTunableNumber PassingAngle = new LoggedTunableNumber("Turret/PassingAngle", 0);
 
   private TurretIO m_IO;
 
-  private static final Pose2d RED_GOAL =
-      new Pose2d(Meters.of(12.0), Meters.of(4.0), new Rotation2d());
-  private static final Pose2d BLUE_GOAL =
-      new Pose2d(Meters.of(4.6), Meters.of(4.0), new Rotation2d());
-
-  private static final Pose2d LOW_RED_PASS =
-      new Pose2d(Meters.of(15.5), Meters.of(0.9), new Rotation2d());
-  private static final Pose2d HIGH_RED_PASS =
-      new Pose2d(Meters.of(15.5), Meters.of(7.1), new Rotation2d());
-  private static final Pose2d LOW_BLUE_PASS =
-      new Pose2d(Meters.of(1.1), Meters.of(0.9), new Rotation2d());
-  private static final Pose2d HIGH_BLUE_PASS =
-      new Pose2d(Meters.of(1.1), Meters.of(7.1), new Rotation2d());
-
-  private Supplier<Pose2d> m_poseSupplier;
-
-  private final EnumState<TurretState> m_state = new EnumState<>("Turret/States", TurretState.IDLE);
+  private final EnumState<TurretState> m_state =
+      new EnumState<>("Turret/States", TurretState.AIMING);
 
   private static final double VIEW_CHANGE = 0.0;
   private static final double TURRET_MIN_POS = -180.0;

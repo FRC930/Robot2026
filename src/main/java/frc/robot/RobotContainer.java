@@ -101,7 +101,7 @@ import org.littletonrobotics.junction.Logger;
  */
 public class RobotContainer {
   // 3D simulated visualization of 3d model
-  private RobotVisualization robotState = RobotVisualization.instance();
+  private RobotVisualization robotVisualization = RobotVisualization.instance();
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
@@ -153,6 +153,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Initialize reactive architecture
+    operatorIntent = OperatorIntent.getInstance(0);
+    matchState = MatchState.getInstance();
+    robotGoals = RobotGoals.getInstance();
+
     CANBus rioCanbus = new CANBus("rio");
     CANBus upperCanbus = new CANBus("upperCanbus");
     switch (Constants.currentMode) {
@@ -169,7 +174,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight),
                 (robotPose) -> {});
         aimingService =
-            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+            new AimingService(
+                drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
         shooter =
@@ -221,7 +227,6 @@ public class RobotContainer {
                 new ModuleIOSim(driveSimulation.getModules()[2]),
                 new ModuleIOSim(driveSimulation.getModules()[3]),
                 driveSimulation::setSimulationWorldPose);
-        drive.setPose(driveSimulation.getSimulatedDriveTrainPose());
         vision =
             new AprilTagVision(
                 drive::setPose,
@@ -231,7 +236,8 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera3Name, robotToCamera3, drive::getPose),
                 new VisionIOPhotonVisionSim(camera4Name, robotToCamera4, drive::getPose));
         aimingService =
-            new AimingService(drive::getPose, drive::getChassisSpeeds, drive::getRotation);
+            new AimingService(
+                drive::getPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
         intake = new IntakeSubsystem(new IntakeIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
         climber =
@@ -270,7 +276,8 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         aimingService =
-            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+            new AimingService(
+                drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
@@ -281,11 +288,6 @@ public class RobotContainer {
     }
 
     autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());
-
-    // Initialize reactive architecture
-    operatorIntent = OperatorIntent.getInstance(0);
-    matchState = MatchState.getInstance();
-    robotGoals = RobotGoals.getInstance();
 
     // Create goal behaviors (wires operator intent → robot goals)
     new RobotGoalsBehavior(robotGoals);
@@ -327,15 +329,13 @@ public class RobotContainer {
             ? () -> drive.setPose(driveSimulation.getSimulatedDriveTrainPose())
             : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d()));
 
-    // Default command - auto-test pattern (no controller needed)
-    // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
-    drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
-    // drive.setDefaultCommand(
-    //     DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> -controller.getLeftY() * DRIVE_SPEED,
-    //         () -> -controller.getLeftX() * DRIVE_SPEED,
-    //         () -> -controller.getRightX() * ANGULAR_SPEED));
+    // Default command, normal field-relative drive
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -controller.getLeftY() * DRIVE_SPEED,
+            () -> -controller.getLeftX() * DRIVE_SPEED,
+            () -> -controller.getRightX() * ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

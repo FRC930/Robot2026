@@ -13,13 +13,11 @@ public class ShooterBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
-    // Pre-spin shooter when AIMING so it's ready to fire instantly
-    events.goals().isAimingTrigger().whileTrue(shooter.prespinCommand());
     events
         .goals()
         .isShootingTrigger()
         .or(events.goals().isPassingTrigger())
         .whileTrue(shooter.shooterCommand())
-        .whileFalse(shooter.idleCommand());
+        .whileFalse(shooter.prespinCommand());
   }
 }

@@ -1,5 +1,7 @@
 package frc.robot.aiming;
 
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
+import frc.robot.goals.RobotGoals;
 import frc.robot.util.VirtualSubsystem;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -22,6 +25,16 @@ public class AimingService extends VirtualSubsystem {
   private final Supplier<Pose2d> robotPoseSupplier;
   private final Supplier<ChassisSpeeds> chassisSpeedsSupplier;
   private final Supplier<Rotation2d> robotHeadingSupplier;
+  private final RobotGoals robotGoals;
+
+  private static final Pose2d LOW_RED_PASS =
+      new Pose2d(Meters.of(15.5), Meters.of(0.9), new Rotation2d());
+  private static final Pose2d HIGH_RED_PASS =
+      new Pose2d(Meters.of(15.5), Meters.of(7.1), new Rotation2d());
+  private static final Pose2d LOW_BLUE_PASS =
+      new Pose2d(Meters.of(1.1), Meters.of(0.9), new Rotation2d());
+  private static final Pose2d HIGH_BLUE_PASS =
+      new Pose2d(Meters.of(1.1), Meters.of(7.1), new Rotation2d());
 
   // Computed outputs
   private double turretAngleDeg = 0.0;
@@ -35,10 +48,12 @@ public class AimingService extends VirtualSubsystem {
   public AimingService(
       Supplier<Pose2d> robotPoseSupplier,
       Supplier<ChassisSpeeds> chassisSpeedsSupplier,
-      Supplier<Rotation2d> robotHeadingSupplier) {
+      Supplier<Rotation2d> robotHeadingSupplier,
+      RobotGoals goal) {
     this.robotPoseSupplier = robotPoseSupplier;
     this.chassisSpeedsSupplier = chassisSpeedsSupplier;
     this.robotHeadingSupplier = robotHeadingSupplier;
+    robotGoals = goal;
   }
 
   @Override
@@ -167,6 +182,20 @@ public class AimingService extends VirtualSubsystem {
    */
   private Translation3d getTargetPosition() {
     boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+
+    if (robotGoals.isPassingTrigger().getAsBoolean()) {
+      Pose2d lowerPass = isRed ? LOW_RED_PASS : LOW_BLUE_PASS;
+      Pose2d upperPass = isRed ? HIGH_RED_PASS : HIGH_BLUE_PASS;
+
+      double distanceLower =
+          robotPoseSupplier.get().getTranslation().getDistance(lowerPass.getTranslation());
+      double distanceUpper =
+          robotPoseSupplier.get().getTranslation().getDistance(upperPass.getTranslation());
+
+      return new Translation3d(
+          (distanceLower < distanceUpper ? lowerPass : upperPass).getTranslation());
+    }
+
     return isRed ? FieldConstants.Hub.oppTopCenterPoint : FieldConstants.Hub.topCenterPoint;
   }
 
