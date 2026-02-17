@@ -11,15 +11,15 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera2Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera3Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera4Name;
+import static frc.robot.subsystems.vision.VisionConstants.backRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
+import static frc.robot.subsystems.vision.VisionConstants.frontLeftForwardCamera;
+import static frc.robot.subsystems.vision.VisionConstants.frontRightCamera;
 import static frc.robot.subsystems.vision.VisionConstants.questCamName;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera2;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera3;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera4;
+import static frc.robot.subsystems.vision.VisionConstants.robotToBackRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftForwardCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamera;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
@@ -209,8 +209,10 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOLimelight(camera1Name, drive::getRotation),
-                new VisionIOLimelight(camera2Name, drive::getRotation),
+                new VisionIOLimelight(frontLeftCamera, drive::getRotation),
+                new VisionIOLimelight(frontRightCamera, drive::getRotation),
+                new VisionIOLimelight(frontLeftForwardCamera, drive::getRotation),
+                new VisionIOLimelight(backRightCamera, drive::getRotation),
                 new VisionIOQuest(drive::getAutoAlignPose, questCamName));
         break;
 
@@ -231,10 +233,14 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose),
-                new VisionIOPhotonVisionSim(camera2Name, robotToCamera2, drive::getPose),
-                new VisionIOPhotonVisionSim(camera3Name, robotToCamera3, drive::getPose),
-                new VisionIOPhotonVisionSim(camera4Name, robotToCamera4, drive::getPose));
+                new VisionIOPhotonVisionSim(
+                    frontLeftCamera, robotToFrontLeftCamera, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    frontRightCamera, robotToFrontRightCamera, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    backRightCamera, robotToBackRightCamera, drive::getPose));
         aimingService =
             new AimingService(
                 drive::getPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
