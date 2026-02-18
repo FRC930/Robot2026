@@ -38,13 +38,18 @@ public class TurretIOTalonFX implements TurretIO {
   private CANcoder canCoder2;
 
   private final double KCANTIMEOUT = 0.010;
-  private static final double GEAR_0_TOOTH_COUNT = 70.0;
-  private static final double GEAR_1_TOOTH_COUNT = 36.0;
-  private static final double GEAR_2_TOOTH_COUNT = 34.0;
 
-  private static final double SLOPE =
-      (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
-          / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
+  // Gear tooth counts: main turret gear and two encoder gears (must be co-prime)
+  private static final int MAIN_TEETH = 195;
+  private static final int ENC1_TEETH = 17;
+  private static final int ENC2_TEETH = 15;
+
+  // CRT constants (precomputed)
+  // inv(15, 17) = 8  because 15 * 8 = 120 ≡ 1 (mod 17)
+  // inv(17, 15) = 8  because 17 * 8 = 136 ≡ 1 (mod 15)
+  private static final int CRT_COEFF1 = ENC2_TEETH * 8; // 120
+  private static final int CRT_COEFF2 = ENC1_TEETH * 8; // 136
+  private static final int CRT_MODULUS = ENC1_TEETH * ENC2_TEETH; // 255
 
   public TurretIOTalonFX(int motorID, int canCoder1ID, int canCoder2ID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
@@ -56,24 +61,44 @@ public class TurretIOTalonFX implements TurretIO {
     configureTalons();
   }
 
-  public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
-    double difference = e2 - e1;
-    if (difference > 250) {
-      difference -= 360;
-    }
-    if (difference < -250) {
-      difference += 360;
-    }
-    difference *= SLOPE;
+  /**
+   * Computes absolute turret angle from two CANcoder readings using the Chinese Remainder Theorem.
+   *
+   * <p>Each encoder's gear is co-prime with the other (17 and 15), so CRT uniquely determines the
+   * main gear position across all 195 teeth (17 * 15 = 255 > 195).
+   *
+   * <p>Steps: (1) convert each encoder reading to a tooth index on its gear, (2) CRT to find the
+   * unique tooth position on the 195-tooth main gear, (3) add sub-tooth precision from encoder 1.
+   *
+   * @param e1Deg encoder 1 reading in degrees (0 to 360, on the 17-tooth gear)
+   * @param e2Deg encoder 2 reading in degrees (0 to 360, on the 15-tooth gear)
+   * @return turret angle in degrees, normalized to [-180, 180]
+   */
+  public static double calculateTurretAngleFromCANCoderDegrees(double e1Deg, double e2Deg) {
+    // Convert encoder degrees to fractional tooth positions on each gear
+    double r1 = e1Deg / 360.0 * ENC1_TEETH;
+    double r2 = e2Deg / 360.0 * ENC2_TEETH;
 
-    double e1Rotations = (difference * GEAR_0_TOOTH_COUNT / GEAR_1_TOOTH_COUNT) / 360.0;
-    double e1RotationsFloored = Math.floor(e1Rotations);
-    double turretAngle =
-        (e1RotationsFloored * 360.0 + e1) * (GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT);
-    if (turretAngle - difference < -100) {
-      turretAngle += GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
-    } else if (turretAngle - difference > 100) {
-      turretAngle -= GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
+    // Round to nearest integer tooth for CRT input
+    long i1 = Math.round(r1);
+    long i2 = Math.round(r2);
+
+    // Sub-tooth fractional precision (from encoder 1)
+    double fraction = r1 - i1;
+
+    // Wrap to valid range [0, n)
+    i1 = Math.floorMod(i1, ENC1_TEETH);
+    i2 = Math.floorMod(i2, ENC2_TEETH);
+
+    // CRT: unique tooth position on main gear (mod 255)
+    int toothPosition = Math.floorMod((int) (i1 * CRT_COEFF1 + i2 * CRT_COEFF2), CRT_MODULUS);
+
+    // Convert to continuous turret angle with sub-tooth precision
+    double turretAngle = (toothPosition + fraction) * 360.0 / MAIN_TEETH;
+
+    // Normalize to [-180, 180]
+    if (turretAngle > 180.0) {
+      turretAngle -= 360.0;
     }
     return turretAngle;
   }
