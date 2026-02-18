@@ -7,10 +7,12 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.vision.VisionConstants.backLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftForwardCamera;
@@ -23,6 +25,7 @@ import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamer
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -37,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.aiming.AimingBehavior;
+import frc.robot.aiming.AimingConstants;
 import frc.robot.aiming.AimingService;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
@@ -88,6 +92,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.subsystems.vision.VisionIOQuest;
 import frc.robot.util.AllEvents;
 import frc.robot.util.GoalBehavior;
+import frc.robot.util.HighFrequencyLoop;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.SubsystemBehavior;
 import org.ironmaple.simulation.SimulatedArena;
@@ -176,8 +181,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight),
                 (robotPose) -> {});
-        aimingService =
-            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+        aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
@@ -243,8 +247,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(
                     frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
                 new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
-        aimingService =
-            new AimingService(drive::getPose, drive::getChassisSpeeds, drive::getRotation);
+        aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getPose);
         intake = new IntakeSubsystem(new IntakeIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
@@ -283,8 +286,7 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIO() {},
                 new VisionIO() {});
-        aimingService =
-            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+        aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
@@ -293,6 +295,48 @@ public class RobotContainer {
         turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
         break;
+    }
+
+    // Start 250Hz control threads for REAL and SIM (not REPLAY)
+    if (Constants.currentMode != Constants.Mode.REPLAY) {
+      double freq = AimingConstants.AIMING_FREQUENCY;
+
+      new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
+
+      new HighFrequencyLoop(
+              "TurretThread",
+              freq,
+              () -> {
+                if (turret.shouldThreadCommand()) {
+                  double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0, 180.0);
+                  turret.getIO().setTarget(angle);
+                }
+              })
+          .start();
+
+      new HighFrequencyLoop(
+              "ShooterThread",
+              freq,
+              () -> {
+                if (shooter.shouldThreadCommand()) {
+                  double rpm = aimingService.getShooterRPM();
+                  if (rpm < AimingConstants.SHOOTER_MIN_RPM) {
+                    rpm = shooter.getPrespinSetpoint();
+                  }
+                  shooter.getIO().setShooterTarget(RPM.of(rpm));
+                }
+              })
+          .start();
+
+      new HighFrequencyLoop(
+              "HoodThread",
+              freq,
+              () -> {
+                if (hood.shouldThreadCommand()) {
+                  hood.getIO().setHoodTarget(Degrees.of(aimingService.getHoodAngleDeg()));
+                }
+              })
+          .start();
     }
 
     autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());

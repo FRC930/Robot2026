@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.aiming.AimingConstants;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -17,8 +16,9 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
-  private ShooterIO m_IO;
-  private LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
+  private final ShooterIO m_IO;
+  private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
+  private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<ShooterState> m_state =
       new EnumState<>("Shooter/States", ShooterState.PRESPIN);
@@ -84,20 +84,29 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   public void periodic() {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Shooter", logged);
-    switch (m_state.get()) {
+    ShooterState state = m_state.get();
+    shouldThreadCommand = (state == ShooterState.SHOOTING || state == ShooterState.PRESPIN);
+    switch (state) {
       case SHOOTING:
       case PRESPIN:
-        double rpm = shooterRPMSupplier.getAsDouble();
-        if (rpm < AimingConstants.SHOOTER_MIN_RPM) {
-          rpm = setpoint.get();
-        }
-        setShooterSpeed(RPM.of(rpm));
-        break;
+        break; // 250Hz thread handles motor commands
       case IDLE:
         stop();
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+  }
+
+  public boolean shouldThreadCommand() {
+    return shouldThreadCommand;
+  }
+
+  public ShooterIO getIO() {
+    return m_IO;
+  }
+
+  public double getPrespinSetpoint() {
+    return setpoint.get();
   }
 
   @Override

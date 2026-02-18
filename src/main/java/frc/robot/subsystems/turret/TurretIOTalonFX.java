@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
+import frc.robot.aiming.AimingConstants;
 import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
 import org.littletonrobotics.junction.Logger;
@@ -95,6 +96,11 @@ public class TurretIOTalonFX implements TurretIO {
         calculateTurretAngleFromCANCoderDegrees(
             getCanCoderAngle1().in(Degrees), getCanCoderAngle2().in(Degrees));
     motor.setPosition(startAngle, KCANTIMEOUT);
+
+    // High-frequency signal updates for 250Hz turret thread
+    motor.getPosition().setUpdateFrequency(AimingConstants.AIMING_FREQUENCY);
+    motor.getVelocity().setUpdateFrequency(AimingConstants.AIMING_FREQUENCY);
+    motor.optimizeBusUtilization();
   }
 
   @Override

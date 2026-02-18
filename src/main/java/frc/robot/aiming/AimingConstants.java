@@ -73,4 +73,8 @@ public final class AimingConstants {
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)
   public static final double MIN_BALL_RADIAL_SPEED = 0.5;
+
+  // ===== HIGH-FREQUENCY LOOP =====
+  // Frequency for aiming computation and motor command threads (Hz)
+  public static final double AIMING_FREQUENCY = 250.0;
 }
