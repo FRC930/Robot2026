@@ -1,8 +1,10 @@
 package frc.robot.util;
 
+import frc.robot.aiming.AimingEvents;
 import frc.robot.goals.RobotEvents;
 import frc.robot.state.MatchEvents;
 import frc.robot.subsystems.climber.ClimberEvents;
+import frc.robot.subsystems.drive.DriveEvents;
 import frc.robot.subsystems.hood.HoodEvents;
 import frc.robot.subsystems.indexer.IndexerEvents;
 import frc.robot.subsystems.intake.IntakeEvents;
@@ -16,5 +18,6 @@ public record AllEvents(
     ShooterEvents shooter,
     IntakeEvents intake,
     ClimberEvents climber,
-    HoodEvents hood) {}
-// (:
+    HoodEvents hood,
+    DriveEvents drive,
+    AimingEvents aiming) {}

@@ -1,5 +1,7 @@
 package frc.robot.aiming;
 
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.LoggedTunableNumber;
@@ -34,15 +36,17 @@ public final class AimingConstants {
 
   // ===== SHOOTER PARAMETERS (tunable) =====
   public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
-      new LoggedTunableNumber("Aiming/flywheelRadiusM", 0.0508);
+      new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
       new LoggedTunableNumber("Aiming/speedTransferRatio", 0.8);
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 6000.0;
 
   // ===== HOOD PARAMETERS =====
-  public static final double HOOD_MIN_DEG = 15.0;
-  public static final double HOOD_MAX_DEG = 65.0;
+  // Hood measures from vertical (0° = straight up), but the aiming algorithm uses
+  // 0° = horizontal. Converted: 10° off vertical = 80°, 43° off vertical = 47°.
+  public static final double HOOD_MIN_DEG = 47.0;
+  public static final double HOOD_MAX_DEG = 80.0;
 
   // ===== SIMULATION PARAMETERS =====
   public static final double SIM_DT = 0.005;
@@ -55,6 +59,16 @@ public final class AimingConstants {
   // targets).
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 55.0);
+
+  // ===== PASS TARGET POSITIONS =====
+  public static final Translation2d LOW_RED_PASS =
+      new Translation2d(Meters.of(15.5), Meters.of(0.9));
+  public static final Translation2d HIGH_RED_PASS =
+      new Translation2d(Meters.of(15.5), Meters.of(7.1));
+  public static final Translation2d LOW_BLUE_PASS =
+      new Translation2d(Meters.of(1.1), Meters.of(0.9));
+  public static final Translation2d HIGH_BLUE_PASS =
+      new Translation2d(Meters.of(1.1), Meters.of(7.1));
 
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)

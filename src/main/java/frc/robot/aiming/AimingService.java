@@ -1,7 +1,5 @@
 package frc.robot.aiming;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,8 +8,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.FieldConstants;
-import frc.robot.goals.RobotGoals;
+import frc.robot.util.EnumState;
 import frc.robot.util.VirtualSubsystem;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -20,23 +19,15 @@ import org.littletonrobotics.junction.Logger;
  * Central aiming service that computes turret angle, hood angle, and shooter RPM every cycle.
  * Performs velocity-space compensation to account for robot motion while shooting.
  */
-public class AimingService extends VirtualSubsystem {
+public class AimingService extends VirtualSubsystem implements AimingEvents {
 
   private final Supplier<Pose2d> robotPoseSupplier;
   private final Supplier<ChassisSpeeds> chassisSpeedsSupplier;
   private final Supplier<Rotation2d> robotHeadingSupplier;
-  private final RobotGoals robotGoals;
 
-  private static final Pose2d LOW_RED_PASS =
-      new Pose2d(Meters.of(15.5), Meters.of(0.9), new Rotation2d());
-  private static final Pose2d HIGH_RED_PASS =
-      new Pose2d(Meters.of(15.5), Meters.of(7.1), new Rotation2d());
-  private static final Pose2d LOW_BLUE_PASS =
-      new Pose2d(Meters.of(1.1), Meters.of(0.9), new Rotation2d());
-  private static final Pose2d HIGH_BLUE_PASS =
-      new Pose2d(Meters.of(1.1), Meters.of(7.1), new Rotation2d());
+  private final EnumState<AimingTarget> targetState =
+      new EnumState<>("Aiming/Target", AimingTarget.HUB);
 
-  // Computed outputs
   private double turretAngleDeg = 0.0;
   private double hoodAngleDeg = 45.0;
   private double shooterRPM = 0.0;
@@ -48,28 +39,41 @@ public class AimingService extends VirtualSubsystem {
   public AimingService(
       Supplier<Pose2d> robotPoseSupplier,
       Supplier<ChassisSpeeds> chassisSpeedsSupplier,
-      Supplier<Rotation2d> robotHeadingSupplier,
-      RobotGoals goal) {
+      Supplier<Rotation2d> robotHeadingSupplier) {
     this.robotPoseSupplier = robotPoseSupplier;
     this.chassisSpeedsSupplier = chassisSpeedsSupplier;
     this.robotHeadingSupplier = robotHeadingSupplier;
-    robotGoals = goal;
+  }
+
+  public void setTarget(AimingTarget target) {
+    targetState.set(target);
+  }
+
+  @Override
+  public Trigger isAimingAtHub() {
+    return targetState.is(AimingTarget.HUB);
+  }
+
+  @Override
+  public Trigger isAimingAtPassLow() {
+    return targetState.is(AimingTarget.PASS_LOW);
+  }
+
+  @Override
+  public Trigger isAimingAtPassHigh() {
+    return targetState.is(AimingTarget.PASS_HIGH);
   }
 
   @Override
   public void periodic() {
-    // 1. Get current state
     Pose2d robotPose = robotPoseSupplier.get();
     ChassisSpeeds speeds = chassisSpeedsSupplier.get();
     Rotation2d heading = robotHeadingSupplier.get();
 
-    // 2. Select target based on alliance
     Translation3d target = getTargetPosition();
-
-    // 3. Compute turret pivot position in field frame
     Translation2d turretFieldPos = computeTurretFieldPosition(robotPose, heading);
 
-    // 4. Compute distances to target
+    // Compute distances to target
     double dx = target.getX() - turretFieldPos.getX();
     double dy = target.getY() - turretFieldPos.getY();
     double horizontalDistance = Math.hypot(dx, dy);
@@ -77,25 +81,21 @@ public class AimingService extends VirtualSubsystem {
 
     distanceToTargetM = horizontalDistance;
 
-    // 5. Field-frame angle to target
+    // Field-frame angle to target, converted to turret-frame (relative to robot heading)
     double fieldAngleToTargetRad = Math.atan2(dy, dx);
-
-    // 6. Convert to turret-frame angle (relative to robot heading)
     double turretAngleRad = MathUtil.angleModulus(fieldAngleToTargetRad - heading.getRadians());
     double rawTurretAngleDeg = Math.toDegrees(turretAngleRad);
 
-    // 7. Velocity compensation
+    // Velocity compensation: project turret velocity onto radial and tangential axes
     Translation2d turretVelocity = computeTurretVelocity(speeds, heading);
-
-    // Project turret velocity onto radial (toward target) and tangential axes
     double ux = Math.cos(fieldAngleToTargetRad);
     double uy = Math.sin(fieldAngleToTargetRad);
     double vRadial = turretVelocity.getX() * ux + turretVelocity.getY() * uy;
     double vTangential = -turretVelocity.getX() * uy + turretVelocity.getY() * ux;
 
-    // 8. Compute field-frame trajectory: pick a desired launch angle, compute the exact speed
-    // needed to hit the target at that angle. Ball arrives descending for angles above ~45°.
-    // Formula: v = (x / cos(θ)) * sqrt(g / (2 * (x*tan(θ) - y)))
+    // Compute field-frame trajectory: pick a desired launch angle, compute the exact speed
+    // needed to hit the target at that angle. Ball arrives descending for angles above ~45 deg.
+    // Formula: v = (x / cos(theta)) * sqrt(g / (2 * (x*tan(theta) - y)))
     double fieldLaunchAngle = Math.toRadians(AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get());
     double tanTheta = Math.tan(fieldLaunchAngle);
     double cosTheta = Math.cos(fieldLaunchAngle);
@@ -112,8 +112,7 @@ public class AimingService extends VirtualSubsystem {
     double fieldTotalSpeed =
         (horizontalDistance / cosTheta) * Math.sqrt(AimingConstants.GRAVITY / (2.0 * denominator));
 
-    // 10. Compute launcher exit velocity (compensate for both radial and tangential turret
-    // velocity)
+    // Compute launcher exit velocity (compensate for both radial and tangential turret velocity).
     // The launcher must provide a horizontal velocity that, combined with the turret's velocity,
     // gives exactly fieldHorizontal toward the target and zero tangential drift.
     double fieldHorizontal = fieldTotalSpeed * Math.cos(fieldLaunchAngle);
@@ -140,12 +139,12 @@ public class AimingService extends VirtualSubsystem {
     double yawCorrectionRad = Math.atan2(-vTangential, launcherRadial);
     double compensatedTurretDeg = rawTurretAngleDeg + Math.toDegrees(yawCorrectionRad);
 
-    // 11. Convert launcher speed to RPM
+    // Convert launcher speed to RPM
     double shooterSurfaceSpeedMps = launcherSpeed / AimingConstants.SPEED_TRANSFER_RATIO.get();
     double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M.get();
     double rpm = (shooterSurfaceSpeedMps / flywheelCircumference) * 60.0;
 
-    // 12. Clamp and validate
+    // Clamp and validate
     boolean turretInRange =
         compensatedTurretDeg >= AimingConstants.TURRET_MIN_DEG
             && compensatedTurretDeg <= AimingConstants.TURRET_MAX_DEG;
@@ -167,36 +166,34 @@ public class AimingService extends VirtualSubsystem {
     shooterRPM =
         MathUtil.clamp(rpm, AimingConstants.SHOOTER_MIN_RPM, AimingConstants.SHOOTER_MAX_RPM);
 
-    // 13. Trajectory visualization (launcher exit speed + turret velocity = field trajectory)
+    // Trajectory visualization (launcher exit speed + turret velocity = field trajectory)
     double fieldTurretYaw = heading.getRadians() + Math.toRadians(turretAngleDeg);
     trajectorySim.simulate(
         turretFieldPos, fieldTurretYaw, launcherAngleRad, launcherSpeed, turretVelocity);
 
-    // 14. Log everything
     logOutputs();
   }
 
   /**
-   * Get the correct target position based on alliance color. Targets the top rim so the ball arcs
-   * over and drops in.
+   * Get the correct target position based on aiming target state and alliance color. For HUB,
+   * targets the top rim so the ball arcs over and drops in. Pass targets are at ground level.
    */
   private Translation3d getTargetPosition() {
     boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
 
-    if (robotGoals.isPassingTrigger().getAsBoolean()) {
-      Pose2d lowerPass = isRed ? LOW_RED_PASS : LOW_BLUE_PASS;
-      Pose2d upperPass = isRed ? HIGH_RED_PASS : HIGH_BLUE_PASS;
-
-      double distanceLower =
-          robotPoseSupplier.get().getTranslation().getDistance(lowerPass.getTranslation());
-      double distanceUpper =
-          robotPoseSupplier.get().getTranslation().getDistance(upperPass.getTranslation());
-
-      return new Translation3d(
-          (distanceLower < distanceUpper ? lowerPass : upperPass).getTranslation());
+    switch (targetState.get()) {
+      case PASS_LOW:
+        Translation2d lowPass =
+            isRed ? AimingConstants.LOW_RED_PASS : AimingConstants.LOW_BLUE_PASS;
+        return new Translation3d(lowPass);
+      case PASS_HIGH:
+        Translation2d highPass =
+            isRed ? AimingConstants.HIGH_RED_PASS : AimingConstants.HIGH_BLUE_PASS;
+        return new Translation3d(highPass);
+      case HUB:
+      default:
+        return isRed ? FieldConstants.Hub.oppTopCenterPoint : FieldConstants.Hub.topCenterPoint;
     }
-
-    return isRed ? FieldConstants.Hub.oppTopCenterPoint : FieldConstants.Hub.topCenterPoint;
   }
 
   /** Compute the turret pivot position in field coordinates. */
@@ -234,8 +231,6 @@ public class AimingService extends VirtualSubsystem {
     Logger.recordOutput("Aiming/RobotPose", robotPoseSupplier.get());
     Logger.recordOutput("Aiming/TargetPosition", getTargetPosition());
   }
-
-  // ===== Public getters for subsystems =====
 
   public double getTurretAngleDeg() {
     return turretAngleDeg;
