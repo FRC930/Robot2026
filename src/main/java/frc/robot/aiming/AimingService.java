@@ -81,9 +81,10 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
 
     distanceToTargetM = horizontalDistance;
 
-    // Field-frame angle to target, converted to turret-frame (relative to robot heading)
+    // Field-frame angle to target, converted to turret-frame (0° = robot backward)
     double fieldAngleToTargetRad = Math.atan2(dy, dx);
-    double turretAngleRad = MathUtil.angleModulus(fieldAngleToTargetRad - heading.getRadians());
+    double turretAngleRad =
+        MathUtil.angleModulus(fieldAngleToTargetRad - heading.getRadians() - Math.PI);
     double rawTurretAngleDeg = Math.toDegrees(turretAngleRad);
 
     // Velocity compensation: project turret velocity onto radial and tangential axes
