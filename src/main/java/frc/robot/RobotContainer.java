@@ -239,8 +239,7 @@ public class RobotContainer {
                     frontRightCamera, robotToFrontRightCamera, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    backLeftCamera, robotToBackLeftCamera, drive::getPose));
+                new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
         aimingService =
             new AimingService(
                 drive::getPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
