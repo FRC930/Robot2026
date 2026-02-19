@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
@@ -15,14 +16,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class IntakeIOSim implements IntakeIO {
   // Extender simulation Volts since current limitting up/down in REAL robot (simulate angle
   // movement)
-  private Voltage m_extenderVoltageSetPoint = Volts.mutable(0.0);
+  private Angle m_extenderVoltageSetPoint = Degrees.mutable(0.0);
 
   // physical constants for intake extender (NOT ACCURATE)
   private static final double kArmGearRatio = 1.0;
@@ -76,15 +76,15 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   @Override
-  public void setExtenderTargetVolts(Voltage targetVoltage) {
-    m_extenderVoltageSetPoint = targetVoltage;
+  public void setExtenderTargetAngle(Angle targetAngle) {
+    m_extenderVoltageSetPoint = targetAngle;
   }
 
   @Override
   public void stop() {
     // If REAL robot use coast
     setRollerTargetSpeed(RPM.of(0));
-    setExtenderTargetVolts(Volts.of(0));
+    setExtenderTargetAngle(Degrees.of(0));
   }
 
   @Override
@@ -103,11 +103,11 @@ public class IntakeIOSim implements IntakeIO {
     double voltsToExtend = updateExtenderPID();
     input.extenderVoltage.mut_replace(
         Volts.of(voltsToExtend)); // TODO: Not sure how to get actual voltage from the motor
-    input.extenderVoltageSetPoint.mut_replace(m_extenderVoltageSetPoint);
+    input.extenderAngleSetPoint.mut_replace(m_extenderVoltageSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
 
     input.extenderEmulatedAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
-    input.extenderEmulatedSetAngle.mut_replace(emulateVoltsToRadians(m_extenderVoltageSetPoint));
+    // input.extenderEmulatedSetAngle.mut_replace(emulateVoltsToRadians(m_extenderVoltageSetPoint));
   }
 
   private void updateRollerPID() {
@@ -140,7 +140,7 @@ public class IntakeIOSim implements IntakeIO {
     // Current velocity from simulation
     double currentAngleRads = extenderArmSim.getAngleRads();
     // NOTE: Assuming if any voltage at maxRad
-    double targetAngleRads = emulateVoltsToRadians(m_extenderVoltageSetPoint.in(Volts));
+    double targetAngleRads = emulateVoltsToRadians(m_extenderVoltageSetPoint);
 
     // Logger.recordOutput(
     //     "EXTSETANGLE",
@@ -175,18 +175,7 @@ public class IntakeIOSim implements IntakeIO {
    * @param volts
    * @return
    */
-  public static double emulateVoltsToRadians(double volts) {
-    return (volts > 0.0 ? kMinExtenderRads : kMaxExtenderRads);
-  }
-
-  /**
-   * If volts > 0 assuming want to got to MaxAngle extend verses MinAngle retract Need to emulate an
-   * angle given using currentlimiting when extending intake
-   *
-   * @param volts
-   * @return
-   */
-  public static Angle emulateVoltsToRadians(Voltage volts) {
-    return Radians.of(emulateVoltsToRadians(volts.in(Volts)));
+  public static double emulateVoltsToRadians(Angle volts) {
+    return (volts.baseUnitMagnitude() > 0.0 ? kMinExtenderRads : kMaxExtenderRads);
   }
 }

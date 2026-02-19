@@ -24,11 +24,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   private final LoggedTunableGainsBuilder m_feederTunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/Feeder/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/Feeder/", 0.0, 0.0, 0.0, 0.15, 0.0, 0.11, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private final LoggedTunableGainsBuilder m_indexerTunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/Indexer/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/Indexer/", 6.5, 0.0, 0.15, 0.5, 0.0, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   public IndexerSubsystem(IndexerIO IO) {
     m_IO = IO;
