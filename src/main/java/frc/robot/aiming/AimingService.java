@@ -8,45 +8,64 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.FieldConstants;
+import frc.robot.subsystems.drive.PoseSnapshot;
 import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.VirtualSubsystem;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * Central aiming service that computes turret angle, hood angle, and shooter RPM every cycle.
- * Performs velocity-space compensation to account for robot motion while shooting.
+ * Central aiming service that computes turret angle, hood angle, and shooter RPM. Computation runs
+ * at 250Hz via AimingThread; logging and visualization run at 50Hz via periodic().
  */
 public class AimingService extends VirtualSubsystem implements AimingEvents {
 
-  private final Supplier<Pose2d> robotPoseSupplier;
-  private final Supplier<ChassisSpeeds> chassisSpeedsSupplier;
-  private final Supplier<Rotation2d> robotHeadingSupplier;
+  private final Supplier<PoseSnapshot> snapshotSupplier;
 
   private final EnumState<AimingTarget> targetState =
       new EnumState<>("Aiming/Target", AimingTarget.HUB);
 
-  private double turretAngleDeg = 0.0;
-  private double hoodAngleDeg = 45.0;
-  private double shooterRPM = 0.0;
-  private double distanceToTargetM = 0.0;
-  private boolean solutionValid = false;
+  // Thread-safe mirror of targetState (EnumState.currentState is not volatile)
+  private volatile AimingTarget currentTarget = AimingTarget.HUB;
+
+  // Volatile outputs written by computeAimingSolution() at 250Hz
+  private volatile double turretAngleDeg = 0.0;
+  private volatile double hoodAngleDeg = 45.0;
+  private volatile double shooterRPM = 0.0;
+  private volatile double distanceToTargetM = 0.0;
+  private volatile boolean solutionValid = false;
+
+  // Cached launcher params for BallTrajectorySim at 50Hz
+  private volatile double cachedLauncherSpeed = 0.0;
+  private volatile double cachedLauncherAngleRad = 0.0;
+
+  // EMA smoothing — alpha in (0, 1]. Lower = smoother, 1.0 = no filtering.
+  private static final LoggedTunableNumber rpmEmaAlpha =
+      new LoggedTunableNumber("Aiming/Smoothing/rpmEmaAlpha", 0.08);
+  private static final LoggedTunableNumber turretEmaAlpha =
+      new LoggedTunableNumber("Aiming/Smoothing/turretEmaAlpha", 0.15);
+  private static final LoggedTunableNumber hoodEmaAlpha =
+      new LoggedTunableNumber("Aiming/Smoothing/hoodEmaAlpha", 0.10);
+
+  // EMA state (only written by AimingThread, no synchronization needed)
+  private double smoothedRPM = 0.0;
+  private double smoothedTurretDeg = 0.0;
+  private double smoothedHoodDeg = 0.0;
+  private boolean emaInitialized = false;
 
   private final BallTrajectorySim trajectorySim = new BallTrajectorySim();
 
-  public AimingService(
-      Supplier<Pose2d> robotPoseSupplier,
-      Supplier<ChassisSpeeds> chassisSpeedsSupplier,
-      Supplier<Rotation2d> robotHeadingSupplier) {
-    this.robotPoseSupplier = robotPoseSupplier;
-    this.chassisSpeedsSupplier = chassisSpeedsSupplier;
-    this.robotHeadingSupplier = robotHeadingSupplier;
+  public AimingService(Supplier<PoseSnapshot> snapshotSupplier) {
+    this.snapshotSupplier = snapshotSupplier;
   }
 
   public void setTarget(AimingTarget target) {
     targetState.set(target);
+    currentTarget = target;
   }
 
   @Override
@@ -64,12 +83,60 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     return targetState.is(AimingTarget.PASS_HIGH);
   }
 
+  /** Called at 250Hz by AimingThread. Reads snapshot, extrapolates pose, computes solution. */
+  public void computeAimingSolution() {
+    PoseSnapshot snapshot = snapshotSupplier.get();
+
+    // Linear extrapolation: estimate current pose using velocity * dt
+    double now = Timer.getFPGATimestamp();
+    double dt = MathUtil.clamp(now - snapshot.timestampSeconds(), 0.0, 0.1);
+
+    ChassisSpeeds speeds = snapshot.chassisSpeeds();
+    Rotation2d heading = snapshot.heading();
+
+    // Field-relative velocity for extrapolation
+    double cos = heading.getCos();
+    double sin = heading.getSin();
+    double vxField = speeds.vxMetersPerSecond * cos - speeds.vyMetersPerSecond * sin;
+    double vyField = speeds.vxMetersPerSecond * sin + speeds.vyMetersPerSecond * cos;
+
+    Pose2d basePose = snapshot.pose();
+    Pose2d robotPose =
+        new Pose2d(
+            basePose.getX() + vxField * dt,
+            basePose.getY() + vyField * dt,
+            basePose.getRotation().plus(Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * dt)));
+    Rotation2d extrapolatedHeading = robotPose.getRotation();
+
+    // Compute the aiming solution using extrapolated pose
+    computeForPose(robotPose, speeds, extrapolatedHeading);
+  }
+
+  /** 50Hz logging and visualization only. Reads volatile fields. */
   @Override
   public void periodic() {
-    Pose2d robotPose = robotPoseSupplier.get();
-    ChassisSpeeds speeds = chassisSpeedsSupplier.get();
-    Rotation2d heading = robotHeadingSupplier.get();
+    targetState.log();
+    logOutputs();
 
+    // Trajectory visualization at 50Hz using cached launcher params
+    PoseSnapshot snapshot = snapshotSupplier.get();
+    if (solutionValid) {
+      Rotation2d heading = snapshot.heading();
+      Translation2d turretFieldPos = computeTurretFieldPosition(snapshot.pose(), heading);
+      double fieldTurretYaw = heading.getRadians() + Math.PI + Math.toRadians(turretAngleDeg);
+      Translation2d turretVelocity = computeTurretVelocity(snapshot.chassisSpeeds(), heading);
+      trajectorySim.simulate(
+          turretFieldPos,
+          fieldTurretYaw,
+          cachedLauncherAngleRad,
+          cachedLauncherSpeed,
+          turretVelocity);
+    } else {
+      trajectorySim.publishEmpty();
+    }
+  }
+
+  private void computeForPose(Pose2d robotPose, ChassisSpeeds speeds, Rotation2d heading) {
     Translation3d target = getTargetPosition();
     Translation2d turretFieldPos = computeTurretFieldPosition(robotPose, heading);
 
@@ -94,41 +161,27 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double vRadial = turretVelocity.getX() * ux + turretVelocity.getY() * uy;
     double vTangential = -turretVelocity.getX() * uy + turretVelocity.getY() * ux;
 
-    // Compute field-frame trajectory: pick a desired launch angle, compute the exact speed
-    // needed to hit the target at that angle. Ball arrives descending for angles above ~45 deg.
-    // Formula: v = (x / cos(theta)) * sqrt(g / (2 * (x*tan(theta) - y)))
     double fieldLaunchAngle = Math.toRadians(AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get());
     double tanTheta = Math.tan(fieldLaunchAngle);
     double cosTheta = Math.cos(fieldLaunchAngle);
     double denominator = horizontalDistance * tanTheta - verticalDistance;
 
     if (denominator <= 0) {
-      // Target is too close or angle too shallow to reach the height
       solutionValid = false;
-      logOutputs();
-      trajectorySim.publishEmpty();
       return;
     }
 
     double fieldTotalSpeed =
         (horizontalDistance / cosTheta) * Math.sqrt(AimingConstants.GRAVITY / (2.0 * denominator));
 
-    // Compute launcher exit velocity (compensate for both radial and tangential turret velocity).
-    // The launcher must provide a horizontal velocity that, combined with the turret's velocity,
-    // gives exactly fieldHorizontal toward the target and zero tangential drift.
     double fieldHorizontal = fieldTotalSpeed * Math.cos(fieldLaunchAngle);
     double fieldVertical = fieldTotalSpeed * Math.sin(fieldLaunchAngle);
 
-    // Solve the two constraints simultaneously:
-    //   launcherH * cos(yawCorr) + vRadial     = fieldHorizontal  (radial)
-    //   launcherH * sin(yawCorr) + vTangential  = 0               (tangential)
     double launcherRadial = fieldHorizontal - vRadial;
     double launcherTangential = -vTangential;
 
     if (launcherRadial <= AimingConstants.MIN_BALL_RADIAL_SPEED) {
       solutionValid = false;
-      logOutputs();
-      trajectorySim.publishEmpty();
       return;
     }
 
@@ -158,31 +211,43 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
 
     solutionValid = turretInRange && hoodInRange && rpmInRange;
 
-    turretAngleDeg =
+    double clampedTurret =
         MathUtil.clamp(
             compensatedTurretDeg, AimingConstants.TURRET_MIN_DEG, AimingConstants.TURRET_MAX_DEG);
-    hoodAngleDeg =
+    double clampedHood =
         MathUtil.clamp(
             launcherAngleDeg, AimingConstants.HOOD_MIN_DEG, AimingConstants.HOOD_MAX_DEG);
-    shooterRPM =
+    double clampedRPM =
         MathUtil.clamp(rpm, AimingConstants.SHOOTER_MIN_RPM, AimingConstants.SHOOTER_MAX_RPM);
 
-    // Trajectory visualization (launcher exit speed + turret velocity = field trajectory)
-    double fieldTurretYaw = heading.getRadians() + Math.toRadians(turretAngleDeg);
-    trajectorySim.simulate(
-        turretFieldPos, fieldTurretYaw, launcherAngleRad, launcherSpeed, turretVelocity);
+    // EMA smoothing to reduce high-frequency noise from pose estimation
+    if (!emaInitialized) {
+      smoothedTurretDeg = clampedTurret;
+      smoothedHoodDeg = clampedHood;
+      smoothedRPM = clampedRPM;
+      emaInitialized = true;
+    } else {
+      double aT = turretEmaAlpha.get();
+      double aH = hoodEmaAlpha.get();
+      double aR = rpmEmaAlpha.get();
+      smoothedTurretDeg = aT * clampedTurret + (1.0 - aT) * smoothedTurretDeg;
+      smoothedHoodDeg = aH * clampedHood + (1.0 - aH) * smoothedHoodDeg;
+      smoothedRPM = aR * clampedRPM + (1.0 - aR) * smoothedRPM;
+    }
 
-    logOutputs();
+    turretAngleDeg = smoothedTurretDeg;
+    hoodAngleDeg = smoothedHoodDeg;
+    shooterRPM = smoothedRPM;
+
+    // Cache launcher params for 50Hz trajectory visualization
+    cachedLauncherSpeed = launcherSpeed;
+    cachedLauncherAngleRad = launcherAngleRad;
   }
 
-  /**
-   * Get the correct target position based on aiming target state and alliance color. For HUB,
-   * targets the top rim so the ball arcs over and drops in. Pass targets are at ground level.
-   */
   private Translation3d getTargetPosition() {
     boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
 
-    switch (targetState.get()) {
+    switch (currentTarget) {
       case PASS_LOW:
         Translation2d lowPass =
             isRed ? AimingConstants.LOW_RED_PASS : AimingConstants.LOW_BLUE_PASS;
@@ -197,24 +262,17 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     }
   }
 
-  /** Compute the turret pivot position in field coordinates. */
   private Translation2d computeTurretFieldPosition(Pose2d robotPose, Rotation2d heading) {
     Translation2d rotatedOffset = AimingConstants.TURRET_OFFSET_FROM_CENTER.rotateBy(heading);
     return robotPose.getTranslation().plus(rotatedOffset);
   }
 
-  /**
-   * Compute the velocity of the turret pivot in field-frame. turretVelocity =
-   * robotLinearVelocity_field + omega x turretOffset_field
-   */
   private Translation2d computeTurretVelocity(ChassisSpeeds speeds, Rotation2d heading) {
-    // Convert robot-relative chassis speeds to field-relative
     double cos = heading.getCos();
     double sin = heading.getSin();
     double vxField = speeds.vxMetersPerSecond * cos - speeds.vyMetersPerSecond * sin;
     double vyField = speeds.vxMetersPerSecond * sin + speeds.vyMetersPerSecond * cos;
 
-    // Rotational contribution at turret offset: omega x r (2D cross product)
     Translation2d rotatedOffset = AimingConstants.TURRET_OFFSET_FROM_CENTER.rotateBy(heading);
     double omega = speeds.omegaRadiansPerSecond;
     double vxRot = -omega * rotatedOffset.getY();
@@ -229,7 +287,8 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     Logger.recordOutput("Aiming/ShooterRPM", shooterRPM);
     Logger.recordOutput("Aiming/DistanceToTargetM", distanceToTargetM);
     Logger.recordOutput("Aiming/SolutionValid", solutionValid);
-    Logger.recordOutput("Aiming/RobotPose", robotPoseSupplier.get());
+    PoseSnapshot snapshot = snapshotSupplier.get();
+    Logger.recordOutput("Aiming/RobotPose", snapshot.pose());
     Logger.recordOutput("Aiming/TargetPosition", getTargetPosition());
   }
 

@@ -18,7 +18,8 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
   private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);
 
-  private HoodIO m_IO;
+  private final HoodIO m_IO;
+  private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<HoodState> currentGoal = new EnumState<>("Hood/States", HoodState.IDLE);
 
@@ -72,19 +73,27 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   public void periodic() {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Hood", logged);
-    switch (currentGoal.get()) {
+    HoodState state = currentGoal.get();
+    shouldThreadCommand = (state == HoodState.AIMING);
+    switch (state) {
       case IDLE:
         m_IO.stop();
         break;
       case AIMING:
-        // TODO these are filler units
-        m_IO.setHoodTarget(Degrees.of(hoodAngleSupplier.getAsDouble()));
-        break;
+        break; // 250Hz thread handles motor commands
       case PASSING:
-        m_IO.setHoodTarget(Degrees.of(passAngle.get())); // Example pass angle
+        m_IO.setHoodTarget(Degrees.of(passAngle.get()));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+  }
+
+  public boolean shouldThreadCommand() {
+    return shouldThreadCommand;
+  }
+
+  public HoodIO getIO() {
+    return m_IO;
   }
 
   @Override

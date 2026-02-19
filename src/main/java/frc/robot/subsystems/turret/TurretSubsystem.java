@@ -21,7 +21,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10);
 
-  private TurretIO m_IO;
+  private final TurretIO m_IO;
+  private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<TurretState> m_state =
       new EnumState<>("Turret/States", TurretState.AIMING);
@@ -99,16 +100,25 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   public void periodic() {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Turret", logged);
-    switch (m_state.get()) {
+    TurretState state = m_state.get();
+    shouldThreadCommand = (state == TurretState.AIMING || state == TurretState.PASSING);
+    switch (state) {
       case AIMING:
       case PASSING:
-        setPosition(turretAngleSupplier.getAsDouble());
-        break;
+        break; // 250Hz thread handles motor commands
       case IDLE:
         setPosition(IdleAngle.get());
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+  }
+
+  public boolean shouldThreadCommand() {
+    return shouldThreadCommand;
+  }
+
+  public TurretIO getIO() {
+    return m_IO;
   }
 
   @Override

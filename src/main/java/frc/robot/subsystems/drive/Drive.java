@@ -134,6 +134,7 @@ public class Drive extends SubsystemBase {
 
   private SwerveDrivePoseEstimator poseEstimatorAutoAlign =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private volatile PoseSnapshot latestSnapshot = PoseSnapshot.IDENTITY;
   private final Consumer<Pose2d> resetSimulationPoseCallBack;
   private final Field2d ppField2d = new Field2d();
   private final Field2d robotField2d = new Field2d();
@@ -255,6 +256,18 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    // Publish snapshot for high-frequency aiming thread
+    latestSnapshot =
+        new PoseSnapshot(
+            getPose(),
+            getChassisSpeeds(),
+            getRotation(),
+            edu.wpi.first.wpilibj.Timer.getFPGATimestamp());
+  }
+
+  public PoseSnapshot getLatestSnapshot() {
+    return latestSnapshot;
   }
 
   public static AprilTagFieldLayout getAprilTagLayout() {

@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.util.Gains;
 
 public class TurretIOSim implements TurretIO {
-  private Angle turretAppliedAngle = Degrees.mutable(0.0);
+  private volatile Angle turretAppliedAngle = Degrees.mutable(0.0);
 
   private final SingleJointedArmSim turretSim;
   private ArmFeedforward ff = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
