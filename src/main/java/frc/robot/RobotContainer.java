@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.aiming.AimingBehavior;
 import frc.robot.aiming.AimingService;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
@@ -48,6 +49,7 @@ import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveZoneTracker;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.GyroIOSim;
@@ -122,6 +124,7 @@ public class RobotContainer {
   private final TurretSubsystem turret;
   private final HoodSubsystem hood;
   private final AimingService aimingService;
+  private final DriveZoneTracker driveZoneTracker;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -174,8 +177,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight),
                 (robotPose) -> {});
         aimingService =
-            new AimingService(
-                drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
+            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
         shooter =
@@ -241,8 +244,8 @@ public class RobotContainer {
                     frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
                 new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
         aimingService =
-            new AimingService(
-                drive::getPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
+            new AimingService(drive::getPose, drive::getChassisSpeeds, drive::getRotation);
+        driveZoneTracker = new DriveZoneTracker(drive::getPose);
         intake = new IntakeSubsystem(new IntakeIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
         climber =
@@ -281,8 +284,8 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         aimingService =
-            new AimingService(
-                drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation, robotGoals);
+            new AimingService(drive::getAutoAlignPose, drive::getChassisSpeeds, drive::getRotation);
+        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
@@ -302,10 +305,7 @@ public class RobotContainer {
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
     new TurretBehavior(turret);
-
-    // TODO (students): Create subsystem behaviors here, e.g.:
-    // new intakeBehavior(intake);
-    // new DriveBehavior(drive);
+    new AimingBehavior(aimingService);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
@@ -326,7 +326,16 @@ public class RobotContainer {
       configureTestButtonBindings();
     } else {
       SubsystemBehavior.configureAll(
-          new AllEvents(robotGoals, matchState, indexer, shooter, intake, climber, hood));
+          new AllEvents(
+              robotGoals,
+              matchState,
+              indexer,
+              shooter,
+              intake,
+              climber,
+              hood,
+              driveZoneTracker,
+              aimingService));
     }
     // Reset gyro / odometry
     final Runnable resetOdometry =
@@ -334,13 +343,15 @@ public class RobotContainer {
             ? () -> drive.setPose(driveSimulation.getSimulatedDriveTrainPose())
             : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d()));
 
-    // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY() * DRIVE_SPEED,
-            () -> -controller.getLeftX() * DRIVE_SPEED,
-            () -> -controller.getRightX() * ANGULAR_SPEED));
+    // Default command - auto-test pattern (no controller needed)
+    // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
+    drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> -controller.getLeftY() * DRIVE_SPEED,
+    //         () -> -controller.getLeftX() * DRIVE_SPEED,
+    //         () -> -controller.getRightX() * ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
