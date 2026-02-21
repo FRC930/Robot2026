@@ -37,8 +37,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
 
   private LoggedTunableNumber intakeTargetRPM =
       new LoggedTunableNumber("Intake/intakeTargetRPM", rpm);
-  private LoggedTunableNumber intakeExtenderTargetVolts =
-      new LoggedTunableNumber("Intake/intakeExtenderTargetVolts", 5);
+  private LoggedTunableNumber intakeExtenderTargetAngleUp =
+      new LoggedTunableNumber("Intake/intakeExtenderTargetAngle", 90.0);
+  private LoggedTunableNumber intakeExtenderTargetAngleDown =
+      new LoggedTunableNumber("Intake/intakeExtenderTargetAngle", 0.0);
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
 
@@ -123,23 +125,21 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public void periodic() {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Intake", logged);
-    // #region TODO IMPLEMENT ANGLES HERE
-    // switch (currentGoal.get()) {
-    //   case INTAKING:
-    //     m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
-    //     m_IO.setExtenderTargetAngle(Volts.of(intakeExtenderTargetVolts.get()));
-    //     break;
-    //   case OUTTAKING:
-    //     m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
-    //     m_IO.setExtenderTargetAngle(Volts.of(intakeExtenderTargetVolts.get()));
-    //     break;
-    //   case IDLE:
-    //     // stop();
-    //     m_IO.setRollerTargetSpeed(RPM.of(0.0));
-    //     m_IO.setExtenderTargetAngle(Volts.of(-intakeExtenderTargetVolts.get()));
-    //     break;
-    // }
-    // #endregion
+    switch (currentGoal.get()) {
+      case INTAKING:
+        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        break;
+      case OUTTAKING:
+        m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
+        m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        break;
+      case IDLE:
+        // stop();
+        m_IO.setRollerTargetSpeed(RPM.of(0.0));
+        m_IO.setExtenderTargetAngle(Degrees.of(-intakeExtenderTargetAngleUp.get()));
+        break;
+    }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));
     extenderGains.ifGainsHaveChanged((gains) -> this.m_IO.setExtenderGains(gains));
   }

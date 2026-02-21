@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -156,12 +157,14 @@ public class IntakeIOTalonFX implements IntakeIO {
   @Override
   public void setExtenderGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
     slot0Configs.kS = gains.kS;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
+    slot0Configs.kG = gains.kG;
     PhoenixUtil.tryUntilOk(5, () -> intakeExtenderMotor.getConfigurator().apply(slot0Configs));
   }
 }

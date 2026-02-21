@@ -151,9 +151,9 @@ public class RobotContainer {
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderUp =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 2.0);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 90.0);
   final LoggedTunableNumber setIntakeExtenderDown =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 2.0);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 0.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
 
@@ -398,13 +398,13 @@ public class RobotContainer {
 
     // Default command - auto-test pattern (no controller needed)
     // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
-    drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
-    // drive.setDefaultCommand(
-    //     DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> -controller.getLeftY() * DRIVE_SPEED,
-    //         () -> -controller.getLeftX() * DRIVE_SPEED,
-    //         () -> -controller.getRightX() * ANGULAR_SPEED));
+    // drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -controller.getLeftY() * DRIVE_SPEED,
+            () -> -controller.getLeftX() * DRIVE_SPEED,
+            () -> -controller.getRightX() * ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
