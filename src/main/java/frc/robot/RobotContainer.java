@@ -346,7 +346,10 @@ public class RobotContainer {
               freq,
               () -> {
                 if (hood.shouldThreadCommand()) {
-                  hood.getIO().setHoodTarget(Degrees.of(aimingService.getHoodAngleDeg()));
+                  // Transform angle from 0 degrees vertical to 0 degree horizontal so like tranform
+                  // the angle by 90 degrees
+                  double hoodAngle = 90.0 - aimingService.getHoodAngleDeg();
+                  hood.getIO().setHoodTarget(Degrees.of(hoodAngle));
                 }
               })
           .start();

@@ -19,7 +19,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
-  private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10);
+  private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10.00);
 
   private final TurretIO m_IO;
   private volatile boolean shouldThreadCommand = false;

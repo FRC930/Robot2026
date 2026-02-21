@@ -44,6 +44,10 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
+
+    // Set the initial position of the extender to be up (so that our starting configuration is
+    // within frame parameter + motors are intialized to correct positions)
+    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(10.0)));
   }
 
   @Override

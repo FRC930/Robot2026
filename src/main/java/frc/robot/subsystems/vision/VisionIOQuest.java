@@ -36,10 +36,10 @@ public class VisionIOQuest implements VisionIO {
   private boolean m_firstQuestPose = false;
   private final Transform3d ROBOT_TO_QUEST =
       new Transform3d(
-          Units.inchesToMeters(14.0),
-          Units.inchesToMeters(6.0),
-          Units.inchesToMeters(10.5),
-          new Rotation3d(Rotation2d.fromDegrees(-45.0)));
+          Units.inchesToMeters(-10.5),
+          Units.inchesToMeters(0.0),
+          Units.inchesToMeters(25.5),
+          new Rotation3d(Rotation2d.fromDegrees(180.0)));
   private int questDebug = 0;
 
   /**
