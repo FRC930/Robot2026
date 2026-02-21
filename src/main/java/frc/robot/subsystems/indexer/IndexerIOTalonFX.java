@@ -3,13 +3,11 @@ package frc.robot.subsystems.indexer;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -26,13 +24,15 @@ public class IndexerIOTalonFX implements IndexerIO {
   private AngularVelocity indexerSetPoint = RPM.of(0);
   private AngularVelocity feederSetPoint = RPM.of(0);
 
+  private static final double SENSOR_MECH_INDEXER = 14.4;
+
   private final NeutralOut m_neutralOut = new NeutralOut();
 
   public IndexerIOTalonFX(int indexerMotorCAN, int feederMotorCAN, CANBus canbus) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     feederMotor = new TalonFX(feederMotorCAN, canbus);
-    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true);
-    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true);
+    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
     configureTalons();
   }
 
@@ -45,7 +45,8 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
     configIndexer.Voltage.PeakForwardVoltage = 12.0;
     configIndexer.Voltage.PeakReverseVoltage = -12.0;
-    configIndexer.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    configIndexer.Feedback.SensorToMechanismRatio = SENSOR_MECH_INDEXER;
+    configIndexer.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     PhoenixUtil.tryUntilOk(
         5, () -> indexerMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(configIndexer));
@@ -66,16 +67,16 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   @Override
   public void setIndexerTarget(AngularVelocity velocity) {
-    if (!(velocity.in(RPM) == indexerSetPoint.in(RPM))) {
-      indexerMotor.setControl(indexerRequest.withVelocity(velocity).withSlot(0));
+    if (velocity.in(RPM) != indexerSetPoint.in(RPM)) {
+      indexerMotor.setControl(indexerRequest.withVelocity(velocity));
       indexerSetPoint = velocity;
     }
   }
 
   @Override
   public void setFeederTarget(AngularVelocity velocity) {
-    if (!(velocity.in(RPM) == indexerSetPoint.in(RPM))) {
-      feederMotor.setControl(indexerRequest.withVelocity(velocity).withSlot(0));
+    if (velocity.in(RPM) != feederSetPoint.in(RPM)) {
+      feederMotor.setControl(feederRequest.withVelocity(velocity));
       feederSetPoint = velocity;
     }
   }
@@ -105,43 +106,40 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   public void setIndexerGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
     slot0Configs.kS = gains.kS;
-    slot0Configs.kG = gains.kG;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(slot0Configs));
 
-    MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(motionMagicConfigs));
+    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
+    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
+    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
+    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
+    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
+    // PhoenixUtil.tryUntilOk(5, () ->
+    //   indexerMotor.getConfigurator().apply(motionMagicConfigs));
   }
 
   public void setFeederGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
     slot0Configs.kS = gains.kS;
-    slot0Configs.kG = gains.kG;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(slot0Configs));
 
-    MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(motionMagicConfigs));
+    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
+    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
+    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
+    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
+    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
+    // PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(motionMagicConfigs));
   }
 }

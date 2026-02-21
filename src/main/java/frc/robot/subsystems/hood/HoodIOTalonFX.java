@@ -3,12 +3,10 @@ package frc.robot.subsystems.hood;
 import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
@@ -17,7 +15,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX implements HoodIO {
 
-  public MotionMagicExpoTorqueCurrentFOC request;
+  public PositionVoltage request;
 
   public TalonFX motor;
 
@@ -26,15 +24,19 @@ public class HoodIOTalonFX implements HoodIO {
   public HoodIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
     m_setAngle = Degrees.of(0.0);
-    request = new MotionMagicExpoTorqueCurrentFOC(0);
+    request = new PositionVoltage(Degrees.of(0.0)).withSlot(0);
     configureTalons();
   }
 
   private void configureTalons() {
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfg.CurrentLimits.SupplyCurrentLimit = 80.0;
+    cfg.CurrentLimits.SupplyCurrentLimit = 40.0;
+    cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
+    cfg.CurrentLimits.StatorCurrentLimitEnable = true;
+    cfg.Voltage.PeakForwardVoltage = 12.0;
+    cfg.Voltage.PeakReverseVoltage = -12.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     cfg.Feedback.SensorToMechanismRatio =
         46.2; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
@@ -47,14 +49,18 @@ public class HoodIOTalonFX implements HoodIO {
   @Override
   public void setHoodTarget(Angle angle) {
     if (angle.in(Degrees) != m_setAngle.in(Degrees)) {
-      request = request.withPosition(angle).withSlot(0);
-      motor.setControl(request);
+      motor.setControl(request.withPosition(angle));
       m_setAngle = angle;
     }
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    Angle pos = Degrees.of(2.0);
+    request = request.withPosition(pos);
+    motor.setControl(request);
+    m_setAngle = pos;
+  }
 
   @Override
   public void updateInputs(HoodInputs input) {
@@ -68,22 +74,14 @@ public class HoodIOTalonFX implements HoodIO {
   @Override
   public void setGains(Gains gains) {
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+    // slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
     slot0Configs.kP = gains.kP;
     slot0Configs.kI = gains.kI;
     slot0Configs.kD = gains.kD;
     slot0Configs.kS = gains.kS;
-    slot0Configs.kG = gains.kG;
+    // slot0Configs.kG = gains.kG;
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
-
-    MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
   }
 }

@@ -25,7 +25,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/HoodSubsystem/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/HoodSubsystem/", 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 
@@ -77,12 +77,12 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     shouldThreadCommand = (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
-        m_IO.stop();
+        // m_IO.stop();
         break;
       case AIMING:
         break; // 250Hz thread handles motor commands
       case PASSING:
-        m_IO.setHoodTarget(Degrees.of(passAngle.get()));
+        // m_IO.setHoodTarget(Degrees.of(passAngle.get()));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

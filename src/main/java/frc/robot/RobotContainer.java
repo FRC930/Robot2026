@@ -63,12 +63,10 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hood.HoodBehavior;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.hood.HoodIOTalonFX;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.indexer.IndexerBehavior;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
-import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeBehavior;
 import frc.robot.subsystems.intake.IntakeIO;
@@ -154,12 +152,14 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
-  final LoggedTunableNumber setIntakeExtenderVolts =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setVolts", 2.0);
+  final LoggedTunableNumber setIntakeExtenderUp =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 105.0);
+  final LoggedTunableNumber setIntakeExtenderDown =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 0.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
     // Initialize reactive architecture
     operatorIntent = OperatorIntent.getInstance(0);
@@ -184,16 +184,27 @@ public class RobotContainer {
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
+        // intake = new IntakeSubsystem(new IntakeIO() {});
+
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
+
         shooter =
             new ShooterSubsystem(
                 new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
-        indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
+        // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
+
+        // indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
+        indexer = new IndexerSubsystem(new IndexerIO() {});
+
         turret =
             new TurretSubsystem(
                 new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
-        hood =
-            new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
+
+        // hood =
+        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus),
+        // aimingService::getHoodAngleDeg);
+        hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -389,13 +400,13 @@ public class RobotContainer {
 
     // Default command - auto-test pattern (no controller needed)
     // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
-    drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
-    // drive.setDefaultCommand(
-    //     DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> -controller.getLeftY() * DRIVE_SPEED,
-    //         () -> -controller.getLeftX() * DRIVE_SPEED,
-    //         () -> -controller.getRightX() * ANGULAR_SPEED));
+    // drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -controller.getLeftY() * DRIVE_SPEED,
+            () -> -controller.getLeftX() * DRIVE_SPEED,
+            () -> -controller.getRightX() * ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -438,36 +449,38 @@ public class RobotContainer {
     turret.setTestingState();
     climber.setTestingState();
     hood.setTestingState();
+    // testController
+    //     .a()
+    //     .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    // testController
+    //     .a()
+    //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    // testController
+    //     .x()
+    //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
+    //     .whileFalse(new InstantCommand(() -> turret.stop()));
+    // testController
+    //     .b()
+    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
+    // testController
+    //     .a()
+    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+    //     .whileFalse(new InstantCommand(() -> intake.stop()));
     testController
         .a()
-        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
-    testController
-        .povDown()
-        .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
-    testController
-        .x()
-        .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-        .whileFalse(new InstantCommand(() -> turret.stop()));
-    testController
-        .b()
-        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-        .whileFalse(new InstantCommand(() -> shooter.stop()));
-    testController
-        .y()
-        .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-        .whileFalse(new InstantCommand(() -> intake.stop()));
-    testController
-        .povUp()
-        .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
+        .whileTrue(
+            intake.getNewSetIntakeExtenderAngleCommand(
+                () -> Degrees.of(setIntakeExtenderUp.get()), false))
         .whileFalse(
-            intake.getNewSetIntakeExtenderVoltsCommand(
-                setIntakeExtenderVolts, true)); // Default value for intake extender volts
-    testController
-        .povRight()
-        .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(new InstantCommand(() -> hood.stop()));
+            intake.getNewSetIntakeExtenderAngleCommand(
+                () -> Degrees.of(setIntakeExtenderDown.get()), false));
+    // testController
+    //     .a()
+    //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
+    //     .whileFalse(new InstantCommand(() -> hood.stop()));
   }
 
   public void configureCharacterizationButtonBindings() {
