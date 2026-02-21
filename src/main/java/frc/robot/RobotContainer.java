@@ -63,7 +63,6 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hood.HoodBehavior;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.hood.HoodIOTalonFX;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.indexer.IndexerBehavior;
 import frc.robot.subsystems.indexer.IndexerIO;
@@ -82,6 +81,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.turret.TurretBehavior;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOSim;
+import frc.robot.subsystems.turret.TurretIOTalonFX;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -153,7 +153,7 @@ public class RobotContainer {
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
   final LoggedTunableNumber setIntakeExtenderUp =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 90.0);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 105.0);
   final LoggedTunableNumber setIntakeExtenderDown =
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 0.0);
   final LoggedTunableNumber setHoodAngle =
@@ -196,13 +196,14 @@ public class RobotContainer {
         // indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         indexer = new IndexerSubsystem(new IndexerIO() {});
 
-        // turret =
-        //     new TurretSubsystem(
-        //         new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
-        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
+        turret =
+            new TurretSubsystem(
+                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
+        // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         // hood =
-        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus),
+        // aimingService::getHoodAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for

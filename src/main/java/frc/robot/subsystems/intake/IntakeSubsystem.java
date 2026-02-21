@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           "Gains/IntakeSubsystem/", 0.4, 0, 0.02, 0.33, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   public LoggedTunableGainsBuilder extenderGains =
       new LoggedTunableGainsBuilder(
-          "Gains/ExtenderSubsystem/", 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/ExtenderSubsystem/", 200.0, 0, 0.0, 0.0, 0.425, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private IntakeInputsAutoLogged logged = new IntakeInputsAutoLogged();
 
