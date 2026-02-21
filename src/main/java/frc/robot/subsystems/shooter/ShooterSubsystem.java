@@ -29,7 +29,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/ShooterSubsystem/", 0.9, 0, 0.0, 0.0, 0.4, 0.17, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0);
+          "Gains/ShooterSubsystem/", 1.0, 0, 0.0, 0.4, 0.0, 0.17, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0);
 
   public ShooterSubsystem(ShooterIO IO, DoubleSupplier shooterRPMSupplier) {
     m_IO = IO;
@@ -122,7 +122,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   public Command getNewSetShooterSpeedCommand(DoubleSupplier speed) {
     return new InstantCommand(
         () -> {
-          setShooterSpeed(AngularVelocity.ofBaseUnits(speed.getAsDouble(), RPM));
+          setShooterSpeed(RPM.of(speed.getAsDouble()));
         },
         this);
   }

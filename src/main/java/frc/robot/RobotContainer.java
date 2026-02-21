@@ -63,6 +63,7 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hood.HoodBehavior;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.HoodIOTalonFX;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.indexer.IndexerBehavior;
 import frc.robot.subsystems.indexer.IndexerIO;
@@ -201,8 +202,7 @@ public class RobotContainer {
         turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         // hood =
-        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus),
-        // aimingService::getHoodAngleDeg);
+        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -460,10 +460,10 @@ public class RobotContainer {
     //     .x()
     //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
     //     .whileFalse(new InstantCommand(() -> turret.stop()));
-    testController
-        .b()
-        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-        .whileFalse(new InstantCommand(() -> shooter.stop()));
+    // testController
+    //     .b()
+    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
     // testController
     //     .a()
     //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
@@ -477,7 +477,7 @@ public class RobotContainer {
             intake.getNewSetIntakeExtenderAngleCommand(
                 () -> Degrees.of(setIntakeExtenderDown.get()), false));
     // testController
-    //     .povRight()
+    //     .a()
     //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
     //     .whileFalse(new InstantCommand(() -> hood.stop()));
   }
