@@ -29,6 +29,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   /** Creates a new ExampleSubsystem. */
   private IntakeIO m_IO;
 
+  public static final double INTAKE_EXTENDER_ANGLE_UP = 105.0;
+
   private double rpm =
       (11.0 / 12.0)
           * IntakeIOTalonFX.KRACKEN_X60_FOC_MAX_RPM.in(RPM)
@@ -37,9 +39,9 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   private LoggedTunableNumber intakeTargetRPM =
       new LoggedTunableNumber("Intake/intakeTargetRPM", rpm);
   private LoggedTunableNumber intakeExtenderTargetAngleUp =
-      new LoggedTunableNumber("Intake/intakeExtenderTargetAngle", 90.0);
+      new LoggedTunableNumber("Intake/intakeExtenderTargetAngleUp", INTAKE_EXTENDER_ANGLE_UP);
   private LoggedTunableNumber intakeExtenderTargetAngleDown =
-      new LoggedTunableNumber("Intake/intakeExtenderTargetAngle", 0.0);
+      new LoggedTunableNumber("Intake/intakeExtenderTargetAngleDown", 0.0);
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
 
@@ -66,11 +68,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.extenderAngleSetPoint = Degrees.mutable(0.0);
     logged.extenderSupplyCurrent = Amps.mutable(0.0);
     logged.extenderTorqueCurrent = Amps.mutable(0);
-    // logged.extenderEmulatedAngle = Radians.mutable(0);
-    // logged.extenderEmulatedSetAngle = Radians.mutable(0);
     m_IO.setRollerGains(rollerGains.build());
     m_IO.setExtenderGains(extenderGains.build());
-
     RobotVisualization.instance().setExenderSource(logged.extenderAngle);
   }
 

@@ -94,6 +94,13 @@ public class IntakeIOTalonFX implements IntakeIO {
         5, () -> intakeExtenderMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(
         5, () -> intakeExtenderMotor.getConfigurator().apply(configIntakeExtender));
+
+    // Set the initial position of the extender to be up (so that our starting configuration is
+    // within frame parameter + motors are intialized to correct positions)
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            intakeExtenderMotor.setPosition(Degrees.of(IntakeSubsystem.INTAKE_EXTENDER_ANGLE_UP)));
   }
 
   @Override
@@ -111,11 +118,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     inputs.extenderAngleSetPoint.mut_replace(intakeExtenderSetPoint);
     inputs.extenderSupplyCurrent.mut_replace(intakeExtenderMotor.getSupplyCurrent().getValue());
     inputs.extenderTorqueCurrent.mut_replace(intakeExtenderMotor.getTorqueCurrent().getValue());
-    // Used for 3d model in advantage scope TODO MAY WANT PID extenderEmulatedAngle
-    // inputs.extenderEmulatedAngle.mut_replace(
-    //     IntakeIOSim.emulateVoltsToRadians(intakeExtenderMotor.getMotorVoltage().getValue()));
-    // inputs.extenderEmulatedSetAngle.mut_replace(
-    //     IntakeIOSim.emulateVoltsToRadians(intakeExtenderSetPoint));
   }
 
   @Override

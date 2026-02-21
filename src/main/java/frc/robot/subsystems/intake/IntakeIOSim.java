@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
@@ -20,14 +19,17 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class IntakeIOSim implements IntakeIO {
-  private Angle m_extenderAngleSetPoint = Degrees.mutable(0.0);
 
   // physical constants for intake extender (NOT ACCURATE)
   private static final double kArmGearRatio = 1.0;
   private static final double kArmLengthMeters = Units.inchesToMeters(12.0);
   private static final double kArmMassKg = Units.lbsToKilograms(3.0);
   public static final double kMinExtenderRads = Units.degreesToRadians(0.0);
-  public static final double kMaxExtenderRads = Units.degreesToRadians(90.0);
+  public static final double kMaxExtenderRads =
+      Units.degreesToRadians(IntakeSubsystem.INTAKE_EXTENDER_ANGLE_UP);
+
+  // intake extender stow (up) angle setpoint, in radians (0 is down, positive is up)
+  private Angle m_extenderAngleSetPoint = Radians.mutable(kMaxExtenderRads);
 
   private SingleJointedArmSim extenderArmSim;
   private ArmFeedforward extenderFF = new ArmFeedforward(0.0, 0.0, 0.0, 0.0);
@@ -63,7 +65,7 @@ public class IntakeIOSim implements IntakeIO {
             kMinExtenderRads,
             kMaxExtenderRads,
             false, // TODO NOT using gravity may need to switch angles so 0 is down. and 90 is up
-            kMinExtenderRads,
+            kMaxExtenderRads, // make sure to set m_extenderAngleSetPoint to this angle
             0.001,
             0.001);
   }
@@ -105,8 +107,6 @@ public class IntakeIOSim implements IntakeIO {
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
-    // input.extenderEmulatedAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
-    // input.extenderEmulatedSetAngle.mut_replace(emulateVoltsToRadians(m_extenderVoltageSetPoint));
   }
 
   private void updateRollerPID() {
