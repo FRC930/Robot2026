@@ -29,8 +29,8 @@ public interface IntakeIO {
     public MutCurrent extenderSupplyCurrent;
     public MutCurrent extenderTorqueCurrent;
     // Emulated Angle/SetAngle (given extender using current limits)
-    public MutAngle extenderEmulatedAngle;
-    public MutAngle extenderEmulatedSetAngle;
+    // public MutAngle extenderEmulatedAngle;
+    // public MutAngle extenderEmulatedSetAngle;
   }
 
   public default void setRollerTargetSpeed(AngularVelocity target) {}

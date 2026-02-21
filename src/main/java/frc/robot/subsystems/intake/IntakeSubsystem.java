@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Fahrenheit;
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.Angle;
@@ -66,12 +65,12 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.extenderAngleSetPoint = Degrees.mutable(0.0);
     logged.extenderSupplyCurrent = Amps.mutable(0.0);
     logged.extenderTorqueCurrent = Amps.mutable(0);
-    logged.extenderEmulatedAngle = Radians.mutable(0);
-    logged.extenderEmulatedSetAngle = Radians.mutable(0);
+    // logged.extenderEmulatedAngle = Radians.mutable(0);
+    // logged.extenderEmulatedSetAngle = Radians.mutable(0);
     m_IO.setRollerGains(rollerGains.build());
     m_IO.setExtenderGains(extenderGains.build());
 
-    RobotVisualization.instance().setExenderSource(logged.extenderEmulatedAngle);
+    RobotVisualization.instance().setExenderSource(logged.extenderAngle);
   }
 
   /**
@@ -137,7 +136,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       case IDLE:
         // stop();
         m_IO.setRollerTargetSpeed(RPM.of(0.0));
-        m_IO.setExtenderTargetAngle(Degrees.of(-intakeExtenderTargetAngleUp.get()));
+        m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));

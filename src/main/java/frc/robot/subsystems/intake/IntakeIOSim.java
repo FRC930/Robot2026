@@ -20,9 +20,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class IntakeIOSim implements IntakeIO {
-  // Extender simulation Volts since current limitting up/down in REAL robot (simulate angle
-  // movement)
-  private Angle m_extenderVoltageSetPoint = Degrees.mutable(0.0);
+  private Angle m_extenderAngleSetPoint = Degrees.mutable(0.0);
 
   // physical constants for intake extender (NOT ACCURATE)
   private static final double kArmGearRatio = 1.0;
@@ -77,7 +75,7 @@ public class IntakeIOSim implements IntakeIO {
 
   @Override
   public void setExtenderTargetAngle(Angle targetAngle) {
-    m_extenderVoltageSetPoint = targetAngle;
+    m_extenderAngleSetPoint = targetAngle;
   }
 
   @Override
@@ -103,10 +101,10 @@ public class IntakeIOSim implements IntakeIO {
     double voltsToExtend = updateExtenderPID();
     input.extenderVoltage.mut_replace(
         Volts.of(voltsToExtend)); // TODO: Not sure how to get actual voltage from the motor
-    input.extenderAngleSetPoint.mut_replace(m_extenderVoltageSetPoint);
+    input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
-
-    input.extenderEmulatedAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
+    input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
+    // input.extenderEmulatedAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
     // input.extenderEmulatedSetAngle.mut_replace(emulateVoltsToRadians(m_extenderVoltageSetPoint));
   }
 
@@ -140,7 +138,7 @@ public class IntakeIOSim implements IntakeIO {
     // Current velocity from simulation
     double currentAngleRads = extenderArmSim.getAngleRads();
     // NOTE: Assuming if any voltage at maxRad
-    double targetAngleRads = emulateVoltsToRadians(m_extenderVoltageSetPoint);
+    double targetAngleRads = m_extenderAngleSetPoint.in(Radians);
 
     // Logger.recordOutput(
     //     "EXTSETANGLE",
