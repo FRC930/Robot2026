@@ -114,6 +114,20 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         });
   }
 
+  public Command shootingCommand() {
+    return run(() -> {
+          if (Constants.currentMode == Constants.Mode.SIM) {
+            if (m_IO instanceof IntakeIOSim) {
+              IntakeIOSim sim = (IntakeIOSim) m_IO;
+              sim.shootFuel();
+            }
+          }
+          currentGoal.set(IntakeState.SHOOTING);
+          // TODO: Add a wait command for 80ms
+        })
+        .until(() -> currentGoal.get() == IntakeState.INTAKING);
+  }
+
   public void setTestingState() {
     currentGoal.set(IntakeState.TESTING);
   }
@@ -127,6 +141,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Intake", logged);
     switch (currentGoal.get()) {
+      case SHOOTING:
       case INTAKING:
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
@@ -165,6 +180,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   @Override
   public Trigger isOuttakingTrigger() {
     return currentGoal.is(IntakeState.OUTTAKING);
+  }
+
+  public Trigger isShootingTrigger() {
+    return currentGoal.is(IntakeState.SHOOTING);
   }
 
   public Command getNewSetIntakeVelocityCommand(DoubleSupplier rpm) {

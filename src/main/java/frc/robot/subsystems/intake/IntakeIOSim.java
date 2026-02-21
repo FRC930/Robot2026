@@ -209,4 +209,8 @@ public class IntakeIOSim implements IntakeIO {
     extenderArmSim.update(.02);
     return totalVoltage;
   }
+
+  public void shootFuel() {
+    intakeSim.obtainGamePieceFromIntake();
+  }
 }
