@@ -76,6 +76,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterBehavior;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.turret.TurretBehavior;
 import frc.robot.subsystems.turret.TurretIO;
@@ -108,7 +109,7 @@ public class RobotContainer {
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = false;
+  private static final boolean ISTESTING = true;
 
   private final AprilTagVision vision;
 
@@ -186,10 +187,10 @@ public class RobotContainer {
 
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
 
-        // shooter =
-        //     new ShooterSubsystem(
-        //         new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
-        shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
+        shooter =
+            new ShooterSubsystem(
+                new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
+        // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
 
         // indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         indexer = new IndexerSubsystem(new IndexerIO() {});
@@ -459,10 +460,10 @@ public class RobotContainer {
     //     .x()
     //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
     //     .whileFalse(new InstantCommand(() -> turret.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
+    testController
+        .b()
+        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+        .whileFalse(new InstantCommand(() -> shooter.stop()));
     // testController
     //     .a()
     //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
