@@ -60,6 +60,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.rollerTorqueCurrent = Amps.mutable(0);
     logged.rollerVoltage = Volts.mutable(0);
     logged.leaderRollerTemp = Fahrenheit.mutable(0);
+    logged.followerRollerTemp = Fahrenheit.mutable(0);
     logged.extenderVoltage = Volts.mutable(0.0);
     logged.extenderAngle = Degrees.mutable(0.0);
     logged.extenderAngleSetPoint = Degrees.mutable(0.0);

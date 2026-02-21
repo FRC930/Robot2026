@@ -1,7 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.Fahrenheit;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.MutAngle;
@@ -21,7 +19,7 @@ public interface IntakeIO {
     public MutCurrent rollerTorqueCurrent;
     public MutVoltage rollerVoltage;
     public MutTemperature leaderRollerTemp;
-    public MutTemperature followerRollerTemp = Fahrenheit.mutable(0);
+    public MutTemperature followerRollerTemp;
 
     public MutVoltage extenderVoltage;
     public MutAngle extenderAngle;
