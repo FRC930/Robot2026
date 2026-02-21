@@ -82,7 +82,8 @@ public class IntakeIOSim implements IntakeIO {
   public void stop() {
     // If REAL robot use coast
     setRollerTargetSpeed(RPM.of(0));
-    setExtenderTargetAngle(Degrees.of(0));
+    // Doing nothing with extender motor
+    // setExtenderTargetAngle(Degrees.of(0));
   }
 
   @Override
@@ -164,16 +165,5 @@ public class IntakeIOSim implements IntakeIO {
     // Advance simulation
     extenderArmSim.update(.02);
     return totalVoltage;
-  }
-
-  /**
-   * If volts > 0 assuming want to got to MaxAngle extend verses MinAngle retract Need to emulate an
-   * angle given using currentlimiting when extending intake
-   *
-   * @param volts
-   * @return
-   */
-  public static double emulateVoltsToRadians(Angle volts) {
-    return (volts.baseUnitMagnitude() > 0.0 ? kMinExtenderRads : kMaxExtenderRads);
   }
 }
