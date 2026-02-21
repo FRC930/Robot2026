@@ -112,7 +112,7 @@ public class RobotContainer {
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = true;
+  private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;
 
