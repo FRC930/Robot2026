@@ -44,6 +44,10 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
+
+    // Set the initial position of the extender to be up (so that our starting configuration is
+    // within frame parameter + motors are intialized to correct positions)
+    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(10.0)));
   }
 
   @Override
@@ -83,5 +87,13 @@ public class HoodIOTalonFX implements HoodIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
+
+    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
+    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
+    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
+    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
+    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
+    // PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
   }
 }

@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.aiming.AimingBehavior;
@@ -93,6 +94,7 @@ import frc.robot.util.GoalBehavior;
 import frc.robot.util.HighFrequencyLoop;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.SubsystemBehavior;
+import org.dyn4j.geometry.Vector2;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
@@ -344,7 +346,10 @@ public class RobotContainer {
               freq,
               () -> {
                 if (hood.shouldThreadCommand()) {
-                  hood.getIO().setHoodTarget(Degrees.of(aimingService.getHoodAngleDeg()));
+                  // Transform angle from 0 degrees vertical to 0 degree horizontal so like tranform
+                  // the angle by 90 degrees
+                  double hoodAngle = 90.0 - aimingService.getHoodAngleDeg();
+                  hood.getIO().setHoodTarget(Degrees.of(hoodAngle));
                 }
               })
           .start();
@@ -479,6 +484,46 @@ public class RobotContainer {
                 () -> Degrees.of(setIntakeExtenderDown.get()), false));
     // testController
     //     .a()
+    //     .povDown()
+    //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    testController
+        .x()
+        .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
+        .whileFalse(new InstantCommand(() -> turret.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(
+            new RepeatCommand(
+                new InstantCommand(
+                    () -> {
+                      if (new Vector2(testController.getRightX(), testController.getRightY())
+                              .getMagnitudeSquared()
+                          >= 0.25) {
+                        double ROT_CONST = 0.5;
+                        turret.setPosition(
+                            Math.toDegrees(
+                                    Math.atan2(
+                                        -testController.getRightX(), -testController.getRightY()))
+                                * ROT_CONST);
+                      }
+                    })));
+    testController
+        .b()
+        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+        .whileFalse(new InstantCommand(() -> shooter.stop()));
+    // testController
+    //     .y()
+    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+    //     .whileFalse(new InstantCommand(() -> intake.stop()));
+    // testController
+    //     .povUp()
+    //     .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
+    //     .whileFalse(
+    //         intake.getNewSetIntakeExtenderVoltsCommand(
+    //             setIntakeExtenderVolts, true)); // Default value for intake extender volts
+    // testController
+    //     .povRight()
     //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
     //     .whileFalse(new InstantCommand(() -> hood.stop()));
   }

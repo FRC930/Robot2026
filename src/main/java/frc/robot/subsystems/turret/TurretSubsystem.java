@@ -19,7 +19,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
-  private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10);
+  private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10.00);
 
   private final TurretIO m_IO;
   private volatile boolean shouldThreadCommand = false;
@@ -28,8 +28,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
       new EnumState<>("Turret/States", TurretState.AIMING);
 
   private static final double VIEW_CHANGE = 0.0;
-  private static final double TURRET_MIN_POS = -180.0;
-  private static final double TURRET_MAX_POS = 180.0;
+  private static final double TURRET_MIN_POS = -90.0;
+  private static final double TURRET_MAX_POS = 90.0;
 
   private TurretInputsAutoLogged logged = new TurretInputsAutoLogged();
 
@@ -54,7 +54,7 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/TurretSubsystem/", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/TurretSubsystem/", 210.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   /**
    * Sets the target angle of the subsystem.
