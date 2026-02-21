@@ -3,10 +3,9 @@ package frc.robot.subsystems.turret;
 import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -20,7 +19,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class TurretIOTalonFX implements TurretIO {
 
-  public MotionMagicTorqueCurrentFOC request;
+  public PositionVoltage request;
 
   public TalonFX motor;
 
@@ -57,7 +56,7 @@ public class TurretIOTalonFX implements TurretIO {
     canCoder1 = new CANcoder(canCoder1ID, canbus);
     canCoder2 = new CANcoder(canCoder2ID, canbus);
     m_setAngle = Degrees.of(0.0);
-    request = new MotionMagicTorqueCurrentFOC(0);
+    request = new PositionVoltage(Degrees.of(0)).withSlot(0);
 
     configureTalons();
   }
@@ -108,11 +107,11 @@ public class TurretIOTalonFX implements TurretIO {
 
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfg.CurrentLimits.SupplyCurrentLimit = 80.0;
-    cfg.CurrentLimits.StatorCurrentLimit = 80.0;
+    cfg.CurrentLimits.SupplyCurrentLimit = 40.0;
+    cfg.CurrentLimits.StatorCurrentLimit = 120.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     // TODO find actual gear ratios & set encoder ratios (math)
-    cfg.Feedback.SensorToMechanismRatio = 10.0 / 195.0;
+    cfg.Feedback.SensorToMechanismRatio = 195.0 / 10.0;
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
@@ -131,14 +130,15 @@ public class TurretIOTalonFX implements TurretIO {
   @Override
   public void setTarget(double angle) {
     if (angle != m_setAngle.in(Degrees)) {
-      request = request.withPosition(Degrees.of(angle)).withSlot(0);
-      motor.setControl(request);
+      motor.setControl(request.withPosition(Degrees.of(angle)));
       m_setAngle = Degrees.of(angle);
     }
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    setTarget(0.0);
+  }
 
   @Override
   public void updateInputs(TurretInputs inputs) {
@@ -169,14 +169,6 @@ public class TurretIOTalonFX implements TurretIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
-
-    MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
   }
 
   @Override
