@@ -58,7 +58,7 @@ public final class AimingConstants {
   // Ball arrives descending as long as this is above the minimum-energy angle (~45° for level
   // targets).
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 55.0);
+      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 75.0);
 
   // ===== PASS TARGET POSITIONS =====
   public static final Translation2d LOW_RED_PASS =
