@@ -19,8 +19,8 @@ public final class AimingConstants {
   public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
 
   // Turret angular limits (degrees) - full [-180, 180] coverage, not continuous rotation
-  public static final double TURRET_MIN_DEG = -180.0;
-  public static final double TURRET_MAX_DEG = 180.0;
+  public static final double TURRET_MIN_DEG = -90.0;
+  public static final double TURRET_MAX_DEG = 90.0;
 
   // ===== BALL PHYSICS (tunable for field calibration) =====
   public static final LoggedTunableNumber BALL_MASS_KG =
