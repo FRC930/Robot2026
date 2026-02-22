@@ -116,9 +116,10 @@ public class TurretIOTalonFX implements TurretIO {
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
 
-    double startAngle =
-        calculateTurretAngleFromCANCoderDegrees(
-            getCanCoderAngle1().in(Degrees), getCanCoderAngle2().in(Degrees));
+    // TODO figure out why not working
+    double startAngle = 0.0;
+    // calculateTurretAngleFromCANCoderDegrees(
+    //     getCanCoderAngle1().in(Degrees), getCanCoderAngle2().in(Degrees));
     motor.setPosition(startAngle, KCANTIMEOUT);
 
     // High-frequency signal updates for 250Hz turret thread

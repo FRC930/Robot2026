@@ -8,9 +8,9 @@ import frc.robot.util.LoggedTunableNumber;
 public enum IndexerState {
   TESTING(RPM.zero(), RPM.zero()),
   IDLE(RPM.zero(), RPM.zero()),
-  FEEDING(
-      RPM.of(new LoggedTunableNumber("Indexer/setIndexerPoint", 2500).get()),
-      RPM.of(new LoggedTunableNumber("Indexer/setFeederPoint", 2500).get()));
+  FEEDING( // TODO get log tunable numbers to work
+      RPM.of(new LoggedTunableNumber("Indexer/setIndexerPoint", 100).get()),
+      RPM.of(new LoggedTunableNumber("Indexer/setFeederPoint", 1000).get()));
 
   private AngularVelocity m_indexerVelocity;
   private AngularVelocity m_feederVelocity;

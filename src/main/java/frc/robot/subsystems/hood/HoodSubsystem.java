@@ -74,7 +74,8 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Hood", logged);
     HoodState state = currentGoal.get();
-    shouldThreadCommand = (state == HoodState.AIMING);
+    // TODO find out why state is not being set to aiming
+    shouldThreadCommand = true; // (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
         // m_IO.stop();

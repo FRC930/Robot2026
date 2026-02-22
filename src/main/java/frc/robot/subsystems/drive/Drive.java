@@ -260,7 +260,7 @@ public class Drive extends SubsystemBase {
     // Publish snapshot for high-frequency aiming thread
     latestSnapshot =
         new PoseSnapshot(
-            getPose(),
+            getAutoAlignPose(),
             getChassisSpeeds(),
             getRotation(),
             edu.wpi.first.wpilibj.Timer.getFPGATimestamp());

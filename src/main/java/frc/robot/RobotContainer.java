@@ -64,10 +64,12 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hood.HoodBehavior;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.HoodIOTalonFX;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.indexer.IndexerBehavior;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeBehavior;
 import frc.robot.subsystems.intake.IntakeIO;
@@ -119,8 +121,8 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private SwerveDriveSimulation driveSimulation = null;
-  private final double DRIVE_SPEED = 0.55;
-  private final double ANGULAR_SPEED = 0.55;
+  private final double DRIVE_SPEED = 0.75;
+  private final double ANGULAR_SPEED = 0.75;
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
@@ -195,18 +197,17 @@ public class RobotContainer {
                 new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
         // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
 
-        // indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
-        indexer = new IndexerSubsystem(new IndexerIO() {});
+        indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
+        // indexer = new IndexerSubsystem(new IndexerIO() {});
 
         turret =
             new TurretSubsystem(
                 new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
         // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
-        // hood =
-        //     new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus),
-        // aimingService::getHoodAngleDeg);
-        hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
+        hood =
+            new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
