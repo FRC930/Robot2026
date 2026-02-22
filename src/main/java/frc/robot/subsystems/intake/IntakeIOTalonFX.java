@@ -139,10 +139,10 @@ public class IntakeIOTalonFX implements IntakeIO {
 
   @Override
   public void setExtenderTargetAngle(Angle target) {
-    if (intakeExtenderSetPoint.in(Degrees) != target.in(Degrees)) {
+    //if (intakeExtenderSetPoint.in(Degrees) != target.in(Degrees)) {
       intakeExtenderMotor.setControl(intakeExtenderRequest.withPosition(target));
       intakeExtenderSetPoint = target;
-    }
+    //}
   }
 
   @Override
