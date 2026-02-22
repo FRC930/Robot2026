@@ -2,15 +2,13 @@ package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.RPM;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.util.LoggedTunableNumber;
+import java.util.function.DoubleSupplier;
 
 public enum IndexerState {
   TESTING(() -> 0.0, () -> 0.0),
-  IDLE(() -> 0.0 , () ->  0.0),
+  IDLE(() -> 0.0, () -> 0.0),
   FEEDING( // TODO get log tunable numbers to work
       new LoggedTunableNumber("Indexer/setIndexerPoint", 100),
       new LoggedTunableNumber("Indexer/setFeederPoint", 1000));
@@ -24,7 +22,7 @@ public enum IndexerState {
   }
 
   public AngularVelocity indexerVelocity() {
-    return  RPM.of(m_indexerVelocity.getAsDouble());
+    return RPM.of(m_indexerVelocity.getAsDouble());
   }
 
   public AngularVelocity feederVelocity() {

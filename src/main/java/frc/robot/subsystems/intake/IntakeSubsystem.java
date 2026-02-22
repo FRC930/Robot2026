@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           / IntakeIOTalonFX.GEAR_RATIO_ROLLERS;
 
   private LoggedTunableNumber intakeTargetRPM =
-      new LoggedTunableNumber("Intake/intakeTargetRPM", rpm);
+      new LoggedTunableNumber("Intake/intakeTargetRPM", 2000);
   private LoggedTunableNumber intakeExtenderTargetAngleUp =
       new LoggedTunableNumber("Intake/intakeExtenderTargetAngleUp", INTAKE_EXTENDER_ANGLE_UP);
   private LoggedTunableNumber intakeExtenderTargetAngleDown =
