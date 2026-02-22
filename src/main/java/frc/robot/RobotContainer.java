@@ -121,8 +121,8 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private SwerveDriveSimulation driveSimulation = null;
-  private final double DRIVE_SPEED = 0.55;
-  private final double ANGULAR_SPEED = 0.55;
+  private final double DRIVE_SPEED = 0.75;
+  private final double ANGULAR_SPEED = 0.75;
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
