@@ -135,6 +135,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController cocontroller = new CommandXboxController(1);
   private final CommandXboxController testController = new CommandXboxController(3);
   private final CommandXboxController characterizeController = new CommandXboxController(4);
 
@@ -398,6 +399,7 @@ public class RobotContainer {
               driveZoneTracker,
               aimingService));
     }
+    configureCocontrollerButtonBindings();
     // Reset gyro / odometry
     final Runnable resetOdometry =
         Constants.currentMode == Constants.Mode.SIM
@@ -527,6 +529,21 @@ public class RobotContainer {
     //     .povRight()
     //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
     //     .whileFalse(new InstantCommand(() -> hood.stop()));
+  }
+
+  int int1 = 930;
+  int int2 = 0;
+
+  public void configureCocontrollerButtonBindings() {
+    cocontroller
+        .start()
+        .and(cocontroller.povDown())
+        .and(cocontroller.leftBumper())
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  System.out.println(int1 / int2);
+                }));
   }
 
   public void configureCharacterizationButtonBindings() {

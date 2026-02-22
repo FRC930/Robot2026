@@ -82,6 +82,10 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToAim() {
-    return driver.a();
+    return driver.y();
+  }
+
+  public Trigger wantsToIntake() {
+    return driver.leftBumper();
   }
 }
