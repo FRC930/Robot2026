@@ -184,7 +184,7 @@ project.compileJava.dependsOn(spotlessApply)
 spotless {
     java {
         target fileTree(".") {
-            include "**/*.java"
+            include "**/*.javax"
             exclude "**/build/**", "**/build-*/**"
         }
         toggleOffOn()
