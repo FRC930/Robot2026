@@ -18,6 +18,6 @@ public class ShooterBehavior extends SubsystemBehavior {
         .isShootingTrigger()
         .or(events.goals().isPassingTrigger())
         .whileTrue(shooter.shooterCommand())
-        .whileFalse(shooter.prespinCommand());
+        .whileFalse(shooter.idleCommand());
   }
 }
