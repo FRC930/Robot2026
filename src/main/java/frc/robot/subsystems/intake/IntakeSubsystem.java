@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotVisualization;
+import frc.robot.aiming.AimingService;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -115,17 +116,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   }
 
   public Command shootingCommand() {
-    return run(() -> {
-          if (Constants.currentMode == Constants.Mode.SIM) {
-            if (m_IO instanceof IntakeIOSim) {
-              IntakeIOSim sim = (IntakeIOSim) m_IO;
-              sim.shootFuel();
-            }
-          }
+    return runOnce(
+        () -> {
           currentGoal.set(IntakeState.SHOOTING);
-          // TODO: Add a wait command for 80ms
-        })
-        .until(() -> currentGoal.get() == IntakeState.INTAKING);
+        });
   }
 
   public void setTestingState() {
@@ -142,6 +136,15 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     Logger.processInputs("RobotState/Intake", logged);
     switch (currentGoal.get()) {
       case SHOOTING:
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.shootFuel();
+            AimingService.trajectorySim.setSpawnFuelOnGround(true);
+            // TODO: Add a wait command for 80ms
+          }
+        }
+        // NO break; on purpose
       case INTAKING:
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
@@ -149,6 +152,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
             sim.setRunning(true);
+            if (currentGoal.get() == IntakeState.INTAKING) {
+
+              AimingService.trajectorySim.setSpawnFuelOnGround(false);
+            }
           }
         }
         break;

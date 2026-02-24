@@ -1,7 +1,10 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
@@ -10,6 +13,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -21,7 +27,9 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.ironmaple.simulation.IntakeSimulation;
+import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 
 public class IntakeIOSim implements IntakeIO {
   private final IntakeSimulation intakeSim;
@@ -128,6 +136,19 @@ public class IntakeIOSim implements IntakeIO {
 
   public int getGamePiecesAmount() {
     return intakeSim.getGamePiecesAmount();
+  }
+
+  public static void spawnFuel(double x, double y) {
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                new Translation2d(Inches.of(16), Inches.of(1)),
+                new Translation2d(x, y),
+                new ChassisSpeeds(0.1, 0.1, 0.1),
+                new Rotation2d(Degrees.of(0.0)),
+                Meters.of(0.1),
+                MetersPerSecond.of(0),
+                Degrees.of(0)));
   }
 
   @Override

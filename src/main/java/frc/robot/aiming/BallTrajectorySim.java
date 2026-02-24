@@ -2,6 +2,7 @@ package frc.robot.aiming;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.littletonrobotics.junction.Logger;
@@ -105,8 +106,23 @@ public class BallTrajectorySim {
 
       // Remove balls that hit the ground on the way down
       if (p.pz < 0 && p.vz < 0) {
-        it.remove();
+        removeBalls(it, p.px, p.py);
       }
+    }
+  }
+
+  // Set to false to stop always spawning fuel on ground impact.
+  // Call setSpawnFuelOnGround(true) to re-enable.
+  public boolean spawnFuelOnGround = false;
+
+  public void setSpawnFuelOnGround(boolean spawn) {
+    this.spawnFuelOnGround = spawn;
+  }
+
+  public void removeBalls(Iterator<Projectile> it, double x, double y) {
+    it.remove();
+    if (spawnFuelOnGround == true) {
+      IntakeIOSim.spawnFuel(x, y);
     }
   }
 
@@ -117,6 +133,7 @@ public class BallTrajectorySim {
       positions[i] = new Translation3d(p.px, p.py, p.pz);
     }
     Logger.recordOutput("Aiming/BallTrajectory", positions);
+    Logger.recordOutput("Aiming/spawningFuel", spawnFuelOnGround);
   }
 
   private static class Projectile {
