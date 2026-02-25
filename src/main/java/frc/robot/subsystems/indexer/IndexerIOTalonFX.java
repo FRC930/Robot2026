@@ -39,7 +39,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   private void configureTalons() {
     TalonFXConfiguration configIndexer = new TalonFXConfiguration();
     configIndexer.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configIndexer.CurrentLimits.StatorCurrentLimit = 80.0;
+    configIndexer.CurrentLimits.StatorCurrentLimit = 200.0;
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
     configIndexer.CurrentLimits.SupplyCurrentLimit = 40.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
