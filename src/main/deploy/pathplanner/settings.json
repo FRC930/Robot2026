@@ -6,14 +6,17 @@
     "DepotShootCenter",
     "DepotShootLeft",
     "DepotShootRight",
+    "Feed Center",
     "Feed Right",
     "FeedLeft",
-    "Feed Center",
+    "Shooting",
     "OutpostShootCenter",
     "OutpostShootLeft",
     "OutpostShootRight"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Shoots"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
