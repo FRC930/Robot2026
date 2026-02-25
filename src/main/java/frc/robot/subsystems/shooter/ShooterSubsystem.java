@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<ShooterState> m_state =
-      new EnumState<>("Shooter/States", ShooterState.PRESPIN);
+      new EnumState<>("Shooter/States", ShooterState.IDLE);
 
   private ShooterInputsAutoLogged logged = new ShooterInputsAutoLogged();
 

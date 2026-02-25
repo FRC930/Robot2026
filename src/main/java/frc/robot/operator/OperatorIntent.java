@@ -44,7 +44,7 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToScoreTrigger() {
-    return driver.rightTrigger(0.5);
+    return driver.rightBumper();
   }
 
   public CommandXboxController getDriver() {
@@ -77,11 +77,15 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToPass() {
-    return driver.rightBumper();
+    return driver.leftBumper();
   }
 
   @Override
   public Trigger wantsToAim() {
-    return driver.a();
+    return driver.y();
+  }
+
+  public Trigger wantsToIntake() {
+    return driver.leftBumper();
   }
 }

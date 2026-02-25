@@ -19,7 +19,7 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   private static RobotGoals instance;
 
   private final EnumState<RobotGoal> currentGoal =
-      new EnumState<>("RobotGoals/Goal", RobotGoal.INTAKING);
+      new EnumState<>("RobotGoals/Goal", RobotGoal.IDLE);
 
   private RobotGoals() {}
 
@@ -88,5 +88,10 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   @Override
   public Trigger isClimbingL3() {
     return currentGoal.is(RobotGoal.CLIMBINGL3);
+  }
+
+  @Override
+  public Trigger isIntaking() {
+    return currentGoal.is(RobotGoal.INTAKING);
   }
 }

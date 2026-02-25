@@ -21,4 +21,6 @@ public interface RobotEvents {
   public Trigger isClimbingL2();
 
   public Trigger isClimbingL3();
+
+  public Trigger isIntaking();
 }

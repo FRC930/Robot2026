@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           / IntakeIOTalonFX.GEAR_RATIO_ROLLERS;
 
   private LoggedTunableNumber intakeTargetRPM =
-      new LoggedTunableNumber("Intake/intakeTargetRPM", rpm);
+      new LoggedTunableNumber("Intake/intakeTargetRPM", 2000);
   private LoggedTunableNumber intakeExtenderTargetAngleUp =
       new LoggedTunableNumber("Intake/intakeExtenderTargetAngleUp", INTAKE_EXTENDER_ANGLE_UP);
   private LoggedTunableNumber intakeExtenderTargetAngleDown =
@@ -136,7 +136,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       case IDLE:
         // stop();
         m_IO.setRollerTargetSpeed(RPM.of(0.0));
-        m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
+        // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
+        // TODO add a up state for when not intaking and not
         break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));

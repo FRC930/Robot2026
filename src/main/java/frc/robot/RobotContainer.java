@@ -593,9 +593,6 @@ public class RobotContainer {
       vision.updateStartingPosition();
       vision.enableUpdateOdometryBasedOnApriltags();
       m_teleopInitialized = true;
-      // TODO uncomment
-      //   SignalLogger.setPath("/media/sda1/");
-      //   SignalLogger.start();
     }
   }
 

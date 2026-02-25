@@ -30,6 +30,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   private AngularVelocity intakeSetPoint = RPM.of(0);
   private PositionVoltage intakeExtenderRequest;
   private Angle intakeExtenderSetPoint = Degrees.of(0);
+  boolean firstTime = true;
   public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
   public static double GEAR_RATIO_ROLLERS = 2.0;
   public static double GEAR_RATIO_EXTENDER = 46.0;
@@ -139,9 +140,10 @@ public class IntakeIOTalonFX implements IntakeIO {
 
   @Override
   public void setExtenderTargetAngle(Angle target) {
-    if (intakeExtenderSetPoint.in(Degrees) != target.in(Degrees)) {
+    if (intakeExtenderSetPoint.in(Degrees) != target.in(Degrees) || firstTime) {
       intakeExtenderMotor.setControl(intakeExtenderRequest.withPosition(target));
       intakeExtenderSetPoint = target;
+      firstTime = false;
     }
   }
 
