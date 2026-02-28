@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.aiming.AimingConstants;
 import frc.robot.util.Gains;
@@ -135,14 +134,14 @@ public class TurretIOTalonFX implements TurretIO {
     PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(new CANcoderConfiguration()));
     CANcoderConfiguration cfg1 = new CANcoderConfiguration();
     cfg1.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg1.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°) 
+    cfg1.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°)
     PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(cfg1));
 
     // Configure CANcoder 2
     PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(new CANcoderConfiguration()));
     CANcoderConfiguration cfg2 = new CANcoderConfiguration();
     cfg2.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg2.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°) 
+    cfg2.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°)
     PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(cfg2));
   }
 

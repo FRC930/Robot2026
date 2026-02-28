@@ -121,8 +121,12 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private SwerveDriveSimulation driveSimulation = null;
-  private final double DRIVE_SPEED = 0.75;
-  private final double ANGULAR_SPEED = 0.75;
+
+  private final double REG_DRIVE_SPEED = 0.75;
+  private final double REG_ANGULAR_SPEED = 0.75;
+
+  private final double SLOW_DRIVE_SPEED = 0.5;
+  private final double SLOW_ANGULAR_SPEED = 0.5;
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
@@ -410,12 +414,27 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY() * DRIVE_SPEED,
-            () -> -controller.getLeftX() * DRIVE_SPEED,
-            () -> -controller.getRightX() * ANGULAR_SPEED));
+            () -> -controller.getLeftY() * REG_DRIVE_SPEED,
+            () -> -controller.getLeftX() * REG_DRIVE_SPEED,
+            () -> -controller.getRightX() * REG_ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+    controller
+        .leftTrigger()
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -controller.getLeftY() * SLOW_DRIVE_SPEED,
+                () -> -controller.getLeftX() * SLOW_DRIVE_SPEED,
+                () -> -controller.getRightX() * SLOW_ANGULAR_SPEED))
+        .whileFalse(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -controller.getLeftY() * REG_DRIVE_SPEED,
+                () -> -controller.getLeftX() * REG_DRIVE_SPEED,
+                () -> -controller.getRightX() * REG_ANGULAR_SPEED));
 
     // Maple-Sim Button Bindings
     // // Spawns Fuel
