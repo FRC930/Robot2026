@@ -28,8 +28,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
       new EnumState<>("Turret/States", TurretState.AIMING);
 
   private static final double VIEW_CHANGE = 0.0;
-  private static final double TURRET_MIN_POS = -90.0;
-  private static final double TURRET_MAX_POS = 90.0;
+  public static final double TURRET_MIN_POS = -180.0;
+  public static final double TURRET_MAX_POS = 180.0;
 
   private TurretInputsAutoLogged logged = new TurretInputsAutoLogged();
 
@@ -54,7 +54,7 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/TurretSubsystem/", 210.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/TurretSubsystem/", 170.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   /**
    * Sets the target angle of the subsystem.

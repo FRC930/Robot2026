@@ -25,7 +25,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/HoodSubsystem/", 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/HoodSubsystem/", 450.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 

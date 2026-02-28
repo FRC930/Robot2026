@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
@@ -20,6 +21,9 @@ public class HoodIOTalonFX implements HoodIO {
   public TalonFX motor;
 
   private Angle m_setAngle;
+
+  public static final double MINANGLE = 26.0;
+  public static final double MAXANGLE = 42.0;
 
   public HoodIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
@@ -39,7 +43,7 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.Voltage.PeakReverseVoltage = -12.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     cfg.Feedback.SensorToMechanismRatio =
-        46.2; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
+        51; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
     // Hood
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
@@ -47,12 +51,13 @@ public class HoodIOTalonFX implements HoodIO {
 
     // Set the initial position of the extender to be up (so that our starting configuration is
     // within frame parameter + motors are intialized to correct positions)
-    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(10.0)));
+    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(MINANGLE)));
   }
 
   @Override
   public void setHoodTarget(Angle angle) {
     if (angle.in(Degrees) != m_setAngle.in(Degrees)) {
+      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), MINANGLE, MAXANGLE));
       motor.setControl(request.withPosition(angle));
       m_setAngle = angle;
     }

@@ -28,7 +28,7 @@ public class ShooterIOTalonFX implements ShooterIO {
 
   /* Keep a neutral out so we can disable the motor */
   private final NeutralOut m_brake = new NeutralOut();
-  private static final double GEAR_RATIO = 1.5;
+  private static final double GEAR_RATIO = 1.333; // 24/18
 
   public ShooterIOTalonFX(
       int shooterMotorCAN,
@@ -40,7 +40,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1 = new TalonFX(followerMotor1CAN, canbus);
     follower2 = new TalonFX(followerMotor2CAN, canbus);
     follower3 = new TalonFX(followerMotor3CAN, canbus);
-    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
     configureTalons();
   }
 

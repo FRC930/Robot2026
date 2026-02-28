@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.361938074143875,
-        "y": 1.861119879782652
+        "x": 1.5764839282889709,
+        "y": 0.7080299854857488
       },
       "isLocked": false,
       "linkedName": "outpostShootCenter.0"
     },
     {
       "anchor": {
-        "x": 3.5251957295373675,
-        "y": 3.9650652431791222
+        "x": 3.534450784593438,
+        "y": 0.7129759036144572
       },
       "prevControl": {
-        "x": 3.432901828414776,
-        "y": 3.6156253816247075
+        "x": 2.602923928269947,
+        "y": 0.7344096720361996
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
     "rotation": -179.39049342332478
   },
   "reversed": false,
-  "folder": "OutpostShootCenter",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

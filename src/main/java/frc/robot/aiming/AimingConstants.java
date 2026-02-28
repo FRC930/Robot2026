@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.util.LoggedTunableNumber;
 
 public final class AimingConstants {
@@ -19,8 +20,8 @@ public final class AimingConstants {
   public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
 
   // Turret angular limits (degrees) - full [-180, 180] coverage, not continuous rotation
-  public static final double TURRET_MIN_DEG = -90.0;
-  public static final double TURRET_MAX_DEG = 90.0;
+  public static final double TURRET_MIN_DEG = TurretSubsystem.TURRET_MIN_POS;
+  public static final double TURRET_MAX_DEG = TurretSubsystem.TURRET_MAX_POS;
 
   // ===== BALL PHYSICS (tunable for field calibration) =====
   public static final LoggedTunableNumber BALL_MASS_KG =
@@ -45,8 +46,9 @@ public final class AimingConstants {
   // ===== HOOD PARAMETERS =====
   // Hood measures from vertical (0° = straight up), but the aiming algorithm uses
   // 0° = horizontal. Converted: 10° off vertical = 80°, 43° off vertical = 47°.
-  public static final double HOOD_MIN_DEG = 47.0;
-  public static final double HOOD_MAX_DEG = 80.0;
+  // This is correct, it is the ball trajectory & is supposed to be inverted.
+  public static final double HOOD_MIN_DEG = 90 - TurretSubsystem.TURRET_MAX_POS;
+  public static final double HOOD_MAX_DEG = 90 - TurretSubsystem.TURRET_MIN_POS;
 
   // ===== SIMULATION PARAMETERS =====
   public static final double SIM_DT = 0.005;

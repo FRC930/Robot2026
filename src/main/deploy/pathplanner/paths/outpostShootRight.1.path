@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5242876288513332,
-        "y": 1.1718082779223309
+        "x": 1.2885052115921694,
+        "y": 0.7924406176786765
       },
       "isLocked": false,
       "linkedName": "outpostShootRight.0"
     },
     {
       "anchor": {
-        "x": 3.5251957295399725,
-        "y": 3.9973428232462647
+        "x": 3.3403708987161194,
+        "y": 0.6583373493975899
       },
       "prevControl": {
-        "x": 3.0779594824408734,
-        "y": 3.5011340837062503
+        "x": 2.9820122923678545,
+        "y": 0.590130381883154
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
     "rotation": -179.93002080705588
   },
   "reversed": false,
-  "folder": "OutpostShootRight",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
