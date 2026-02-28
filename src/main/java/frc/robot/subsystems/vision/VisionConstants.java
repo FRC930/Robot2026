@@ -60,7 +60,7 @@ public class VisionConstants {
           Units.inchesToMeters(23.34),
           new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
 
-  // LL Forward 0.318008, LL Right -0.03302(Negitive in code), LL up 0.592836, LL Roll 0.0, LL Pitch
+  // LL Forward 0.318008, LL Right -0.3302(Negitive in code), LL up 0.592836, LL Roll 0.0, LL Pitch
   // 0.0, LL Yaw 0.0.
   public static Transform3d robotToFrontLeftForwardCamera =
       new Transform3d(

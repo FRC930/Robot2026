@@ -22,6 +22,9 @@ public class HoodIOTalonFX implements HoodIO {
 
   private Angle m_setAngle;
 
+  public static final double MINANGLE = 26.0;
+  public static final double MAXANGLE = 42.0;
+
   public HoodIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
     m_setAngle = Degrees.of(0.0);
@@ -48,13 +51,13 @@ public class HoodIOTalonFX implements HoodIO {
 
     // Set the initial position of the extender to be up (so that our starting configuration is
     // within frame parameter + motors are intialized to correct positions)
-    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(10.0)));
+    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(MINANGLE)));
   }
 
   @Override
   public void setHoodTarget(Angle angle) {
     if (angle.in(Degrees) != m_setAngle.in(Degrees)) {
-      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), 10.0, 25.0));
+      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), MINANGLE, MAXANGLE));
       motor.setControl(request.withPosition(angle));
       m_setAngle = angle;
     }
