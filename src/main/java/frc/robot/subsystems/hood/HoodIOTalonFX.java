@@ -48,13 +48,13 @@ public class HoodIOTalonFX implements HoodIO {
 
     // Set the initial position of the extender to be up (so that our starting configuration is
     // within frame parameter + motors are intialized to correct positions)
-    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(10.0)));
+    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Degrees.of(26.0)));
   }
 
   @Override
   public void setHoodTarget(Angle angle) {
     if (angle.in(Degrees) != m_setAngle.in(Degrees)) {
-      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), 10.0, 25.0));
+      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), 26.0, 42.0));
       motor.setControl(request.withPosition(angle));
       m_setAngle = angle;
     }

@@ -45,8 +45,8 @@ public final class AimingConstants {
   // ===== HOOD PARAMETERS =====
   // Hood measures from vertical (0° = straight up), but the aiming algorithm uses
   // 0° = horizontal. Converted: 10° off vertical = 80°, 43° off vertical = 47°.
-  public static final double HOOD_MIN_DEG = 47.0;
-  public static final double HOOD_MAX_DEG = 80.0;
+  public static final double HOOD_MIN_DEG = 48.0;
+  public static final double HOOD_MAX_DEG = 64.0;
 
   // ===== SIMULATION PARAMETERS =====
   public static final double SIM_DT = 0.005;
