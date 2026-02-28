@@ -137,8 +137,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         stop();
         // m_IO.setRollerTargetSpeed(RPM.of(0.0));
         // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
-        // TODO add a up state for when not intaking and not
-        break;
+        // TODO add a up state for when not intaking and not outtaking
+      break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));
     extenderGains.ifGainsHaveChanged((gains) -> this.m_IO.setExtenderGains(gains));

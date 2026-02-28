@@ -9,7 +9,7 @@ import java.util.function.DoubleSupplier;
 public enum IndexerState {
   TESTING(() -> 0.0, () -> 0.0),
   IDLE(() -> 0.0, () -> 0.0),
-  FEEDING( // TODO get log tunable numbers to work
+  FEEDING(
       new LoggedTunableNumber("Indexer/setIndexerPoint", 100),
       new LoggedTunableNumber("Indexer/setFeederPoint", 1000));
 
