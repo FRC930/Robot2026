@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
@@ -53,6 +54,7 @@ public class HoodIOTalonFX implements HoodIO {
   @Override
   public void setHoodTarget(Angle angle) {
     if (angle.in(Degrees) != m_setAngle.in(Degrees)) {
+      angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), 10.0, 25.0));
       motor.setControl(request.withPosition(angle));
       m_setAngle = angle;
     }

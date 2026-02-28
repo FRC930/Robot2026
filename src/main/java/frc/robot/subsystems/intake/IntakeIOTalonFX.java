@@ -58,7 +58,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.Voltage.PeakForwardVoltage = 12.0;
     leaderConfig.Voltage.PeakReverseVoltage = -12.0;
     leaderConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
-    leaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    leaderConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     PhoenixUtil.tryUntilOk(
         5, () -> leaderIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(leaderConfig));
@@ -72,7 +72,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
-    followConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    followConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     followConfig.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(
         5, () -> followIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
