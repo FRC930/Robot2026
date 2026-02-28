@@ -28,7 +28,7 @@ public class ShooterIOTalonFX implements ShooterIO {
 
   /* Keep a neutral out so we can disable the motor */
   private final NeutralOut m_brake = new NeutralOut();
-  private static final double GEAR_RATIO = 1.5;
+  private static final double GEAR_RATIO = 1.333; // 24/18
 
   public ShooterIOTalonFX(
       int shooterMotorCAN,

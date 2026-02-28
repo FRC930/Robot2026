@@ -39,7 +39,7 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.Voltage.PeakReverseVoltage = -12.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     cfg.Feedback.SensorToMechanismRatio =
-        46.2; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
+        51; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
     // Hood
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));

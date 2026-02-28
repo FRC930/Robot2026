@@ -24,7 +24,7 @@ public class IndexerIOTalonFX implements IndexerIO {
   private AngularVelocity indexerSetPoint = RPM.of(0);
   private AngularVelocity feederSetPoint = RPM.of(0);
 
-  private static final double SENSOR_MECH_INDEXER = 14.4;
+  private static final double SENSOR_MECH_INDEXER = 24;
 
   private final NeutralOut m_neutralOut = new NeutralOut();
 
