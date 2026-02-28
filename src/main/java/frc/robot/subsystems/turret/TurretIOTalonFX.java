@@ -135,14 +135,14 @@ public class TurretIOTalonFX implements TurretIO {
     PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(new CANcoderConfiguration()));
     CANcoderConfiguration cfg1 = new CANcoderConfiguration();
     cfg1.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg1.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1; // [0, 1] (0° or 360°) 
+    cfg1.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°) 
     PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(cfg1));
 
     // Configure CANcoder 2
     PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(new CANcoderConfiguration()));
     CANcoderConfiguration cfg2 = new CANcoderConfiguration();
     cfg2.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg2.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1; // [0, 1] (0° or 360°) 
+    cfg2.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°) 
     PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(cfg2));
   }
 
