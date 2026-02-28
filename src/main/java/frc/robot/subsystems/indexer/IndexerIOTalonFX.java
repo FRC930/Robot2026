@@ -31,8 +31,8 @@ public class IndexerIOTalonFX implements IndexerIO {
   public IndexerIOTalonFX(int indexerMotorCAN, int feederMotorCAN, CANBus canbus) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     feederMotor = new TalonFX(feederMotorCAN, canbus);
-    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
-    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
     configureTalons();
   }
 

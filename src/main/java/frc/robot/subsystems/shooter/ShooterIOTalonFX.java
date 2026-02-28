@@ -40,7 +40,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1 = new TalonFX(followerMotor1CAN, canbus);
     follower2 = new TalonFX(followerMotor2CAN, canbus);
     follower3 = new TalonFX(followerMotor3CAN, canbus);
-    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
     configureTalons();
   }
 
