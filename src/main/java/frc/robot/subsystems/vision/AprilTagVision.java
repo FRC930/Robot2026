@@ -41,7 +41,6 @@ public class AprilTagVision extends Vision {
     // try {
     //   aprilTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory() + "/output.json");
     // } catch (IOException e) {
-    //   // TODO Auto-generated catch block
     //   e.printStackTrace();
     //   throw new RuntimeException(e);
     // }
