@@ -57,7 +57,7 @@
     "rotation": -179.39049342332478
   },
   "reversed": false,
-  "folder": "OutpostShootCenter",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
