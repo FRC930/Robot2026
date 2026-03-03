@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.188614457831325,
-        "y": 1.3904939759036141
+        "y": 1.3904939759036143
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "OutpostShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
