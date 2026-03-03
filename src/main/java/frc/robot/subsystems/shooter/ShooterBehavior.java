@@ -16,7 +16,6 @@ public class ShooterBehavior extends SubsystemBehavior {
     events
         .goals()
         .isShootingTrigger()
-        .or(events.goals().isPassingTrigger())
         .whileTrue(shooter.shooterCommand())
         .whileFalse(shooter.idleCommand());
   }

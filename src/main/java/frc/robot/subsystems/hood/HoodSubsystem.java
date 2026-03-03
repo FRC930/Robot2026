@@ -57,10 +57,6 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         });
   }
 
-  public Command passCommand() {
-    return new InstantCommand(() -> currentGoal.set(HoodState.PASSING), this);
-  }
-
   public void setTestingState() {
     currentGoal.set(HoodState.TESTING);
   }
@@ -82,9 +78,6 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
         break;
       case AIMING:
         break; // 250Hz thread handles motor commands
-      case PASSING:
-        // m_IO.setHoodTarget(Degrees.of(passAngle.get()));
-        break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }

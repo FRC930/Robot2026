@@ -12,8 +12,6 @@ public interface RobotEvents {
 
   public Trigger isShootingTrigger();
 
-  public Trigger isPassingTrigger();
-
   public Trigger isClimbingL0();
 
   public Trigger isClimbingL1();

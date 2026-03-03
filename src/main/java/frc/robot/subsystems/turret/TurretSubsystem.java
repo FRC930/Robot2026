@@ -81,13 +81,6 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
         });
   }
 
-  public Command passingCommand() {
-    return runOnce(
-        () -> {
-          m_state.set(TurretState.PASSING);
-        });
-  }
-
   public void setTestingState() {
     m_state.set(TurretState.TESTING);
   }
@@ -101,10 +94,9 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Turret", logged);
     TurretState state = m_state.get();
-    shouldThreadCommand = (state == TurretState.AIMING || state == TurretState.PASSING);
+    shouldThreadCommand = state == TurretState.AIMING;
     switch (state) {
       case AIMING:
-      case PASSING:
         break; // 250Hz thread handles motor commands
       case IDLE:
         setPosition(IdleAngle.get());
@@ -124,11 +116,6 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   @Override
   public Trigger isIdleTrigger() {
     return m_state.is(TurretState.IDLE);
-  }
-
-  @Override
-  public Trigger isPassingTrigger() {
-    return m_state.is(TurretState.PASSING);
   }
 
   public Command getNewSetTurretAngleCommand(DoubleSupplier angle) {
