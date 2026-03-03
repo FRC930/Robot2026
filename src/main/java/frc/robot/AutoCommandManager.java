@@ -67,7 +67,6 @@ public class AutoCommandManager {
     NamedCommands.registerCommand(
         "Shooting", goals.setGoalCommand(RobotGoal.SHOOTING).andThen(new WaitCommand(5.0)));
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
-    NamedCommands.registerCommand("Passing", goals.setGoalCommand(RobotGoal.PASSING));
     NamedCommands.registerCommand("Shooting", goals.setGoalCommand(RobotGoal.SHOOTING));
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
     // TODO: Make only the intake retract
