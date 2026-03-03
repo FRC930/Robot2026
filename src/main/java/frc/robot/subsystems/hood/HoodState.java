@@ -4,5 +4,4 @@ public enum HoodState {
   TESTING,
   IDLE,
   AIMING,
-  PASSING,
 }
