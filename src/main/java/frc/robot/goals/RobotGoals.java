@@ -94,4 +94,9 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   public Trigger isIntaking() {
     return currentGoal.is(RobotGoal.INTAKING);
   }
+
+  @Override
+  public Trigger isRevIndex() {
+    return currentGoal.is(RobotGoal.REV_INDEXER);
+  }
 }
