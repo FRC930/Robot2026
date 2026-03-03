@@ -11,7 +11,7 @@ public enum IndexerState {
   IDLE(() -> 0.0, () -> 0.0),
   FEEDING(
       new LoggedTunableNumber("Indexer/setIndexerPoint", 100),
-      new LoggedTunableNumber("Indexer/setFeederPoint", 1000));
+      new LoggedTunableNumber("Indexer/setFeederPoint", 4000));
 
   private DoubleSupplier m_indexerVelocity;
   private DoubleSupplier m_feederVelocity;
