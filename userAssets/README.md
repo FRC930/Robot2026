@@ -21,7 +21,7 @@ Close it and go back into Advantage Scope.
 
 Now that you are back in Advantage Scope Simulate Robot Code in WPILIB and connect to the Sim.
 
-On the Left side column find ```/AdvantageKit/RealOutputs/Odometry/Robot``` and drag the Robot Pose2D into the Poses tab at the bottom of your screen below the 3D Field. 
+On the Left side column find ```/AdvantageKit/RealOutputs/Odometry/Robot``` and drag the Robot Pose2D into the Poses tab at the bottom of your screen below the 3D Field.
 
 If you see KitBot 2026 or any other model that isn't 930 2026, right click the pose and select 930 2026.
 
