@@ -9,10 +9,10 @@
     "Feed Center",
     "Feed Right",
     "FeedLeft",
-    "Shooting",
     "OutpostShootCenter",
     "OutpostShootLeft",
-    "OutpostShootRight"
+    "OutpostShootRight",
+    "Shooting"
   ],
   "autoFolders": [
     "Shoots"
