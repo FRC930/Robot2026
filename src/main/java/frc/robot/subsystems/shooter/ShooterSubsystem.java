@@ -30,18 +30,18 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
           "Gains/ShooterSubsystem/",
-          0.75,
+          1.0,
           0,
           0.01,
           0.22,
           0.0,
           0.15,
-          0.0,
-          10.0,
-          10.0,
+          0.03,
           0.0,
           0.0,
-          0.5);
+          0.0,
+          0.0,
+          0.0);
 
   public ShooterSubsystem(ShooterIO IO, DoubleSupplier shooterRPMSupplier) {
     m_IO = IO;
