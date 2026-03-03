@@ -62,5 +62,9 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .wantsToIntake()
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    intent
+        .wantsToRevIndexer()
+        .onTrue(goals.setGoalCommand(RobotGoal.REV_INDEXER))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

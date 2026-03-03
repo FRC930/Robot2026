@@ -68,6 +68,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         m_IO.stop();
         break;
       case FEEDING:
+      case REVERSING:
         m_IO.setIndexerTarget(this.m_state.get().indexerVelocity());
         m_IO.setFeederTarget(this.m_state.get().feederVelocity());
         break;
@@ -92,6 +93,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   public Command indexingCommand() {
     return runOnce(() -> m_state.set(IndexerState.FEEDING));
+  }
+
+  public Command reverseCommand() {
+    return runOnce(() -> m_state.set(IndexerState.REVERSING));
   }
 
   public Command getNewSetIndexerVelocityCommand(DoubleSupplier velocity) {

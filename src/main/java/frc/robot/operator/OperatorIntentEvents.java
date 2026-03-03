@@ -26,4 +26,6 @@ public interface OperatorIntentEvents {
   Trigger wantsToAim();
 
   Trigger wantsToIntake();
+
+  Trigger wantsToRevIndexer();
 }

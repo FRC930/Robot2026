@@ -18,5 +18,10 @@ public class IndexerBehavior extends SubsystemBehavior {
         .or(events.goals().isPassingTrigger())
         .whileTrue(indexer.indexingCommand())
         .whileFalse(indexer.idleCommand());
+    events
+        .goals()
+        .isRevIndex()
+        .whileTrue(indexer.reverseCommand())
+        .whileFalse(indexer.idleCommand());
   }
 }
