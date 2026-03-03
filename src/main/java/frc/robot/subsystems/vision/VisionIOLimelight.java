@@ -68,7 +68,8 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    // Set IMU mode based on enabled state; https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2#using-limelight-4s-built-in-imu-with-imumode_set--setimumode
+    // Set IMU mode based on enabled state;
+    // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2#using-limelight-4s-built-in-imu-with-imumode_set--setimumode
     EnabledState newIsDisabled =
         DriverStation.isDisabled() ? EnabledState.DISABLED : EnabledState.ENABLED;
 

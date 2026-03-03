@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.hood.HoodIOTalonFX;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -39,16 +40,18 @@ public final class AimingConstants {
   public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
       new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
-      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.8);
+      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.675);
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 6000.0;
 
   // ===== HOOD PARAMETERS =====
   // Hood measures from vertical (0° = straight up), but the aiming algorithm uses
   // 0° = horizontal. Converted: 10° off vertical = 80°, 43° off vertical = 47°.
-  // This is correct, it is the ball trajectory & is supposed to be inverted.
-  public static final double HOOD_MIN_DEG = 90 - TurretSubsystem.TURRET_MAX_POS;
-  public static final double HOOD_MAX_DEG = 90 - TurretSubsystem.TURRET_MIN_POS;
+  // This is correct, it is the ball trajectory & is SUPPOSED to be inverted
+  // The hood MAXANGLE should be used to calcute the HOOD_MIN_DEG.
+  // The hood MINANGLE should be used to calcute the HOOD_MAX_DEG.
+  public static final double HOOD_MIN_DEG = 90.0 - HoodIOTalonFX.MAXANGLE;
+  public static final double HOOD_MAX_DEG = 90.0 - HoodIOTalonFX.MINANGLE;
 
   // ===== SIMULATION PARAMETERS =====
   public static final double SIM_DT = 0.005;
@@ -60,7 +63,7 @@ public final class AimingConstants {
   // Ball arrives descending as long as this is above the minimum-energy angle (~45° for level
   // targets).
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 75.0);
+      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 64.0);
 
   // ===== PASS TARGET POSITIONS =====
   public static final Translation2d LOW_RED_PASS =
