@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.aiming.AimingService;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
@@ -59,6 +60,8 @@ public class IntakeIOSim implements IntakeIO {
   // private ProfiledPIDController rollerPID =
   //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
   private PIDController rollerPID = new PIDController(0.0031, 0.0, 0.0);
+
+  private int counter = 0;
 
   public IntakeIOSim(AbstractDriveTrainSimulation driveTrain) {
 
@@ -232,6 +235,17 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   public void shootFuel() {
-    intakeSim.obtainGamePieceFromIntake();
+    counter++;
+    if (counter > 10) {
+      if (intakeSim.getGamePiecesAmount() > 0) {
+        intakeSim.obtainGamePieceFromIntake();
+        AimingService.trajectorySim.setSpawnFuelOnGround(true);
+      } else {
+        AimingService.trajectorySim.setSpawnFuelOnGround(false);
+      }
+      counter = 0;
+    } else {
+      AimingService.trajectorySim.setSpawnFuelOnGround(false);
+    }
   }
 }

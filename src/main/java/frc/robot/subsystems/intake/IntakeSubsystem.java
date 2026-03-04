@@ -140,7 +140,6 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
             sim.shootFuel();
-            AimingService.trajectorySim.setSpawnFuelOnGround(true);
             // TODO: Add a wait command for 80ms
           }
         }
@@ -152,19 +151,21 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
             sim.setRunning(true);
-            if (currentGoal.get() == IntakeState.INTAKING) {
-
-              AimingService.trajectorySim.setSpawnFuelOnGround(false);
-            }
           }
         }
         break;
       case OUTTAKING:
         m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          AimingService.trajectorySim.setSpawnFuelOnGround(false);
+        }
         break;
       case IDLE:
         stop();
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          AimingService.trajectorySim.setSpawnFuelOnGround(false);
+        }
         // m_IO.setRollerTargetSpeed(RPM.of(0.0));
         // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         // TODO add a up state for when not intaking and not outtaking

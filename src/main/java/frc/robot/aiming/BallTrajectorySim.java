@@ -44,11 +44,8 @@ public class BallTrajectorySim {
       double launchAngleRad,
       double ballSpeed,
       Translation2d turretVelocity) {
-
-    // Spawn a new ball at regular intervals
-    spawnCounter++;
-    if (spawnCounter >= SPAWN_INTERVAL_CYCLES) {
-      spawnCounter = 0;
+    if (spawnFuelOnGround == true) {
+      // Spawn a new ball at regular intervals
       spawnBall(turretFieldPos, turretYawRad, launchAngleRad, ballSpeed, turretVelocity);
     }
 
@@ -121,9 +118,7 @@ public class BallTrajectorySim {
 
   public void removeBalls(Iterator<Projectile> it, double x, double y) {
     it.remove();
-    if (spawnFuelOnGround == true) {
-      IntakeIOSim.spawnFuel(x, y);
-    }
+    IntakeIOSim.spawnFuel(x, y);
   }
 
   private void logPositions() {
