@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.266975088967973,
-        "y": 3.222680901542111
+        "x": 7.8397564102486825,
+        "y": 4.523384615386682
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.621423487544485,
-        "y": 2.254353499406881
+        "x": 7.462722513088089,
+        "y": 5.445361256546294
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "intakeShootLeft.1"
     },
     {
       "anchor": {
-        "x": 0.477,
-        "y": 0.666
+        "x": 2.9419685863874343,
+        "y": 5.331392670157068
       },
       "prevControl": {
-        "x": 1.3088018979833937,
-        "y": 1.1676749703440101
+        "x": 5.615481675392674,
+        "y": 5.245916230366491
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6083865086599781,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "IntakeShootLeft",
   "idealStartingState": {
-    "velocity": 1.0,
-    "rotation": 180.0
+    "velocity": 0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

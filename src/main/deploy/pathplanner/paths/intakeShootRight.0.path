@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6162827225130885,
-        "y": 5.583073298429319
+        "x": 3.502435897435899,
+        "y": 2.6047307692307697
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.042863874345549,
-        "y": 5.6495549738219895
+        "x": 4.5024358974359036,
+        "y": 2.6047307692307697
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.0998481675392675,
-        "y": 5.981963350785341
+        "x": 6.182924731182795,
+        "y": 1.8260161290322596
       },
       "prevControl": {
-        "x": 5.80288734795971,
-        "y": 5.475780135592914
+        "x": 6.16341935483871,
+        "y": 3.015844086021506
       },
       "nextControl": {
-        "x": 6.517732984293195,
-        "y": 6.694267015706807
+        "x": 6.1958364342165915,
+        "y": 1.0384022439706397
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.719151832460733,
-        "y": 6.888963350785341
+        "x": 7.757983870967742,
+        "y": 1.2457311827957005
       },
       "prevControl": {
-        "x": 6.042863874345551,
-        "y": 6.893712041884817
+        "x": 6.711445409429281,
+        "y": 1.2922440033085207
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "feedLeft.0"
+      "linkedName": "intakeShootRight.0"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7547974413645872,
+      "waypointRelativePos": 0.8035087719298092,
       "rotationDegrees": 180.0
     }
   ],
@@ -54,24 +54,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Idle",
-      "waypointRelativePos": 0,
+      "name": "Intaking",
+      "waypointRelativePos": 0.9568106312292031,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Idle"
-        }
-      }
-    },
-    {
-      "name": "Passing",
-      "waypointRelativePos": 0.5363457760314719,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Passing"
+          "name": "Intaking"
         }
       }
     }
@@ -86,10 +75,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "FeedLeft",
+  "folder": "IntakeShootRight",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
