@@ -93,6 +93,6 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToRevIndexer() {
-    return driver.povLeft();
+    return driver.rightTrigger();
   }
 }

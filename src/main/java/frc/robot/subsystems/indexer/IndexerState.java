@@ -13,8 +13,8 @@ public enum IndexerState {
       new LoggedTunableNumber("Indexer/setIndexerPoint", 100),
       new LoggedTunableNumber("Indexer/setFeederPoint", 4000)),
   REVERSING(
-      new LoggedTunableNumber("Indexer/setIndexerPointReverse", -100),
-      new LoggedTunableNumber("Indexer/setFeederPointReverse", -1000));
+      new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50),
+      new LoggedTunableNumber("Indexer/setFeederPointReverse", -2000));
 
   private DoubleSupplier m_indexerVelocity;
   private DoubleSupplier m_feederVelocity;

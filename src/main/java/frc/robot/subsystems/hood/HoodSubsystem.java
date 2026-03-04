@@ -21,7 +21,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   private final HoodIO m_IO;
   private volatile boolean shouldThreadCommand = false;
 
-  private final EnumState<HoodState> currentGoal = new EnumState<>("Hood/States", HoodState.IDLE);
+  private final EnumState<HoodState> currentGoal = new EnumState<>("Hood/States", HoodState.AIMING);
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
@@ -75,7 +75,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     Logger.processInputs("RobotState/Hood", logged);
     HoodState state = currentGoal.get();
     // TODO find out why state is not being set to aiming
-    shouldThreadCommand = true; // (state == HoodState.AIMING);
+    shouldThreadCommand = (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
         // m_IO.stop();
