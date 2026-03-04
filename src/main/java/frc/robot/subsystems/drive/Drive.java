@@ -10,6 +10,7 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
@@ -111,7 +112,7 @@ public class Drive extends SubsystemBase {
                   KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
                   WHEEL_COF))
           // Configures the bumper size (dimensions of the robot bumper)
-          .withBumperSize(Inches.of(30), Inches.of(30));
+          .withBumperSize(Meters.of(0.864), Meters.of(1.016));
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;

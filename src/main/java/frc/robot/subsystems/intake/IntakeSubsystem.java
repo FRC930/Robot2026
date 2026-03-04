@@ -140,7 +140,6 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
             sim.shootFuel();
-            // TODO: Add a wait command for 80ms
           }
         }
         // NO break; on purpose
