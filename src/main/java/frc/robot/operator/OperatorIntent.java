@@ -86,7 +86,13 @@ public class OperatorIntent implements OperatorIntentEvents {
     return driver.y();
   }
 
+  @Override
   public Trigger wantsToIntake() {
     return driver.leftBumper();
+  }
+
+  @Override
+  public Trigger wantsToRevIndexer() {
+    return driver.rightTrigger();
   }
 }

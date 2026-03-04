@@ -24,21 +24,15 @@ public class RobotGoalsBehavior extends GoalBehavior {
   @Override
   public void configure(OperatorIntentEvents intent) {
     intent
-        .wantsToScoreTrigger()
-        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING))
-        .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
-    intent
         .wantsToOuttake()
         .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-    intent
-        .wantsToPass()
-        .onTrue(goals.setGoalCommand(RobotGoal.PASSING))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
     intent
         .wantsToClimbL0()
         .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+        
     intent
         .wantsToClimbL1()
         .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))
@@ -55,12 +49,27 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
     intent
-        .wantsToAim()
-        .onTrue(goals.setGoalCommand(RobotGoal.AIMING))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-    intent
         .wantsToIntake()
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
+        .wantsToScoreTrigger()
+        .and(intent.wantsToRevIndexer().negate())
+        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
+
+    intent
+        .wantsToPass()
+        .and(intent.wantsToRevIndexer().negate())
+        .whileTrue(goals.setGoalCommand(RobotGoal.PASSING));
+
+    intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
+
+    intent
+        .wantsToScoreTrigger()
+        .or(intent.wantsToRevIndexer())
+        .or(intent.wantsToPass())
+        .negate()
+        .whileTrue(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }
