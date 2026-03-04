@@ -9,6 +9,8 @@
     "Feed Center",
     "Feed Right",
     "FeedLeft",
+    "IntakeShootRight",
+    "IntakeShootLeft",
     "OutpostShootCenter",
     "OutpostShootLeft",
     "OutpostShootRight",
