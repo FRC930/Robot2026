@@ -118,7 +118,9 @@ public class RobotContainer {
 
   // Subsystems
   private final Drive drive;
-  private SwerveDriveSimulation driveSimulation = null;
+  public static final SwerveDriveSimulation driveSimulation =
+      new SwerveDriveSimulation(Drive.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
+  ;
 
   private final double REG_DRIVE_SPEED = 0.9;
   private final double REG_ANGULAR_SPEED = 0.75;
@@ -239,8 +241,6 @@ public class RobotContainer {
         break;
 
       case SIM:
-        driveSimulation =
-            new SwerveDriveSimulation(Drive.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
         SimulatedArena.overrideInstance(new Arena2026Rebuilt(false));
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
         drive =

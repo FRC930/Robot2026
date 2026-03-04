@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
@@ -257,10 +258,16 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
+    Pose2d currentPose;
+    if (Constants.currentMode == Mode.SIM) {
+      currentPose = RobotContainer.driveSimulation.getSimulatedDriveTrainPose();
+    } else {
+      currentPose = getAutoAlignPose();
+    }
     // Publish snapshot for high-frequency aiming thread
     latestSnapshot =
         new PoseSnapshot(
-            getAutoAlignPose(),
+            currentPose,
             getChassisSpeeds(),
             getRotation(),
             edu.wpi.first.wpilibj.Timer.getFPGATimestamp());
