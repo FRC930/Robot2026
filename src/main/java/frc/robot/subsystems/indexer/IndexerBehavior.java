@@ -12,16 +12,14 @@ public class IndexerBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
+    events.goals().isIdleTrigger().whileTrue(indexer.idleCommand());
+
+    events.goals().isReverseIndexer().whileTrue(indexer.reverseCommand());
+
     events
         .goals()
         .isShootingTrigger()
         .or(events.goals().isPassingTrigger())
-        .whileTrue(indexer.indexingCommand())
-        .whileFalse(indexer.idleCommand());
-    events
-        .goals()
-        .isReverseIndexer()
-        .whileTrue(indexer.reverseCommand())
-        .whileFalse(indexer.idleCommand());
+        .whileTrue(indexer.indexingCommand());
   }
 }
