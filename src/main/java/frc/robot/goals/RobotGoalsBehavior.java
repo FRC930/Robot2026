@@ -64,7 +64,7 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
     intent
         .wantsToRevIndexer()
-        .onTrue(goals.setGoalCommand(RobotGoal.REV_INDEXER))
+        .onTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

@@ -24,5 +24,5 @@ public interface RobotEvents {
 
   public Trigger isIntaking();
 
-  public Trigger isRevIndex();
+  public Trigger isReverseIndexer();
 }

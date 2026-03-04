@@ -20,7 +20,7 @@ public class IndexerBehavior extends SubsystemBehavior {
         .whileFalse(indexer.idleCommand());
     events
         .goals()
-        .isRevIndex()
+        .isReverseIndexer()
         .whileTrue(indexer.reverseCommand())
         .whileFalse(indexer.idleCommand());
   }

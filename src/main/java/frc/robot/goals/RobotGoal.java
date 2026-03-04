@@ -17,5 +17,5 @@ public enum RobotGoal {
   CLIMBINGL1,
   CLIMBINGL2,
   CLIMBINGL3,
-  REV_INDEXER
+  REVERSE_INDEXER
 }
