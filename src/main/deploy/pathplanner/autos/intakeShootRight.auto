@@ -5,39 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "feedRight.0"
+            "name": "Idle"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "feedRight.1"
+            "pathName": "intakeShootRight.0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "feedRight.2"
+            "pathName": "intakeShootRight.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "feedRight.1"
+            "pathName": "intakeShootRight.2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "feedRight.3"
+            "pathName": "intakeShootRight.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 17.0
           }
         },
         {

@@ -32,7 +32,7 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .wantsToClimbL0()
         .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-        
+
     intent
         .wantsToClimbL1()
         .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))

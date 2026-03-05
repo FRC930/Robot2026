@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6570308357864797,
-        "y": 5.522757200924201
+        "x": 1.4703408636101138,
+        "y": 5.999281447396619
       },
       "isLocked": false,
       "linkedName": "depotShootLeft.0"
     },
     {
       "anchor": {
-        "x": 0.6620684736102904,
-        "y": 4.843666191155493
+        "x": 1.3279615384615397,
+        "y": 5.995206847364959
       },
       "prevControl": {
-        "x": 0.6672030620405128,
-        "y": 5.338583782466374
+        "x": 0.5777484392950133,
+        "y": 5.996790274445213
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
     "rotation": -179.99999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "DepotShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

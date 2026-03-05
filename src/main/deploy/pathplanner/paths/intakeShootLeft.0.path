@@ -3,38 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5467141162514837,
-        "y": 4.051138790035587
+        "x": 3.5373205128205143,
+        "y": 5.30247435897436
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.722950349155016,
-        "y": 3.1666454245771676
+        "x": 4.537320512820514,
+        "y": 5.30247435897436
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0904939759036145,
-        "y": 0.7129759036144572
+        "x": 6.293205128206969,
+        "y": 5.883884615390919
       },
       "prevControl": {
-        "x": 1.914859522646155,
-        "y": 1.5978982717105248
+        "x": 6.293205128206969,
+        "y": 5.058200166580582
+      },
+      "nextControl": {
+        "x": 6.293205128206969,
+        "y": 6.913489787930695
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.8397564102486825,
+        "y": 6.872282051284117
+      },
+      "prevControl": {
+        "x": 6.289795811518326,
+        "y": 6.917455497382199
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "outpostShootCenter.0"
+      "linkedName": "intakeShootLeft.0"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6385964912280686,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Intaking",
-      "waypointRelativePos": 0.07245657568239064,
+      "waypointRelativePos": 0.67,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -54,10 +75,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "OutpostShootCenter",
+  "folder": "IntakeShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

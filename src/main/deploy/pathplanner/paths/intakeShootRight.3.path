@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.266975088967973,
-        "y": 3.222680901542111
+        "x": 3.308819277108434,
+        "y": 2.526975903614458
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.621423487544485,
-        "y": 2.254353499406881
+        "x": 2.2715273401297487,
+        "y": 1.6571021007105347
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "intakeShootRight.2"
     },
     {
       "anchor": {
-        "x": 0.477,
-        "y": 0.666
+        "x": 0.9711371117688226,
+        "y": 0.9750014254100756
       },
       "prevControl": {
-        "x": 1.3088018979833937,
-        "y": 1.1676749703440101
+        "x": 1.8672094009254476,
+        "y": 1.7508688952895943
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
-  },
-  "reversed": false,
-  "folder": null,
-  "idealStartingState": {
-    "velocity": 1.0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "reversed": false,
+  "folder": "IntakeShootRight",
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
 }

@@ -31,7 +31,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "feedLeft.2"
+            "pathName": "feedLeft.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Passing"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
           }
         }
       ]
