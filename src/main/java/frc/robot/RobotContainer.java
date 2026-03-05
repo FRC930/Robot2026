@@ -53,6 +53,7 @@ import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveBehavior;
 import frc.robot.subsystems.drive.DriveZoneTracker;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -120,7 +121,6 @@ public class RobotContainer {
   private final Drive drive;
   public static final SwerveDriveSimulation driveSimulation =
       new SwerveDriveSimulation(Drive.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
-  ;
 
   private final double REG_DRIVE_SPEED = 0.9;
   private final double REG_ANGULAR_SPEED = 0.75;
@@ -361,6 +361,7 @@ public class RobotContainer {
 
     // Create goal behaviors (wires operator intent → robot goals)
     new RobotGoalsBehavior(robotGoals);
+    new DriveBehavior(drive);
     new IndexerBehavior(indexer);
     new IntakeBehavior(intake);
     new ShooterBehavior(shooter);
@@ -405,33 +406,25 @@ public class RobotContainer {
             ? () -> drive.setPose(driveSimulation.getSimulatedDriveTrainPose())
             : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d()));
 
-    // Default command - auto-test pattern (no controller needed)
-    // To restore normal driving, uncomment joystickDrive and comment out autoDriveTest
-    // drive.setDefaultCommand(DriveCommands.autoDriveTest(drive));
+    // Effective speed limit = min(operator slow button, goal-based limit from DriveBehavior)
+    drive.setOperatorSpeedLimit(REG_DRIVE_SPEED);
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY() * REG_DRIVE_SPEED,
-            () -> -controller.getLeftX() * REG_DRIVE_SPEED,
+            () -> -controller.getLeftY() * drive.getEffectiveSpeedLimit(),
+            () -> -controller.getLeftX() * drive.getEffectiveSpeedLimit(),
             () -> -controller.getRightX() * REG_ANGULAR_SPEED));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
+    // Slow button sets operator speed limit directly
     controller
         .leftTrigger()
         .whileTrue(
-            DriveCommands.joystickDrive(
-                drive,
-                () -> -controller.getLeftY() * SLOW_DRIVE_SPEED,
-                () -> -controller.getLeftX() * SLOW_DRIVE_SPEED,
-                () -> -controller.getRightX() * REG_ANGULAR_SPEED))
-        .whileFalse(
-            DriveCommands.joystickDrive(
-                drive,
-                () -> -controller.getLeftY() * REG_DRIVE_SPEED,
-                () -> -controller.getLeftX() * REG_DRIVE_SPEED,
-                () -> -controller.getRightX() * REG_ANGULAR_SPEED));
+            Commands.startEnd(
+                () -> drive.setOperatorSpeedLimit(SLOW_DRIVE_SPEED),
+                () -> drive.setOperatorSpeedLimit(REG_DRIVE_SPEED)));
 
     // Maple-Sim Button Bindings
     // // Spawns Fuel

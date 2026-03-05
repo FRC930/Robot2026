@@ -138,6 +138,10 @@ public class Drive extends SubsystemBase {
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
   private volatile PoseSnapshot latestSnapshot = PoseSnapshot.IDENTITY;
   private final Consumer<Pose2d> resetSimulationPoseCallBack;
+
+  // Speed limiting: effective limit is min(operator, goal)
+  private double operatorSpeedLimit = 1.0;
+  private double goalSpeedLimit = 1.0;
   private final Field2d ppField2d = new Field2d();
   private final Field2d robotField2d = new Field2d();
 
@@ -444,6 +448,21 @@ public class Drive extends SubsystemBase {
     addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs, false);
     addVisionMeasurementAutoAlign(
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs, false);
+  }
+
+  public void setOperatorSpeedLimit(double limit) {
+    this.operatorSpeedLimit = limit;
+    Logger.recordOutput("Drive/OperatorSpeedLimit", limit);
+  }
+
+  public void setGoalSpeedLimit(double limit) {
+    this.goalSpeedLimit = limit;
+    Logger.recordOutput("Drive/GoalSpeedLimit", limit);
+  }
+
+  @AutoLogOutput(key = "Drive/EffectiveSpeedLimit")
+  public double getEffectiveSpeedLimit() {
+    return Math.min(operatorSpeedLimit, goalSpeedLimit);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
