@@ -57,7 +57,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
   private double smoothedHoodDeg = 0.0;
   private boolean emaInitialized = false;
 
-  private final BallTrajectorySim trajectorySim = new BallTrajectorySim();
+  public static final BallTrajectorySim trajectorySim = new BallTrajectorySim();
 
   public AimingService(Supplier<PoseSnapshot> snapshotSupplier) {
     this.snapshotSupplier = snapshotSupplier;

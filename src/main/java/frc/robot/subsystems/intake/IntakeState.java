@@ -4,5 +4,6 @@ public enum IntakeState {
   TESTING,
   IDLE,
   INTAKING,
-  OUTTAKING
+  OUTTAKING,
+  SHOOTING
 }

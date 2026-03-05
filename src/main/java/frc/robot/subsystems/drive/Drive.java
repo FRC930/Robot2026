@@ -10,6 +10,7 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
@@ -110,7 +112,7 @@ public class Drive extends SubsystemBase {
                   KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
                   WHEEL_COF))
           // Configures the bumper size (dimensions of the robot bumper)
-          .withBumperSize(Inches.of(30), Inches.of(30));
+          .withBumperSize(Meters.of(0.864), Meters.of(1.016));
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
@@ -257,10 +259,16 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
+    Pose2d currentPose;
+    if (Constants.currentMode == Mode.SIM) {
+      currentPose = RobotContainer.driveSimulation.getSimulatedDriveTrainPose();
+    } else {
+      currentPose = getAutoAlignPose();
+    }
     // Publish snapshot for high-frequency aiming thread
     latestSnapshot =
         new PoseSnapshot(
-            getAutoAlignPose(),
+            currentPose,
             getChassisSpeeds(),
             getRotation(),
             edu.wpi.first.wpilibj.Timer.getFPGATimestamp());

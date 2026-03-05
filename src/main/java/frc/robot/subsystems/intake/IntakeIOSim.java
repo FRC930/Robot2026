@@ -1,6 +1,10 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Volts;
@@ -9,6 +13,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -17,8 +24,16 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.aiming.AimingService;
+import org.ironmaple.simulation.IntakeSimulation;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 
 public class IntakeIOSim implements IntakeIO {
+  private final IntakeSimulation intakeSim;
 
   // physical constants for intake extender (NOT ACCURATE)
   private static final double kArmGearRatio = 1.0;
@@ -46,7 +61,9 @@ public class IntakeIOSim implements IntakeIO {
   //     new ProfiledPIDController(0.0069, 0.0, 0.0, new Constraints(6000, 10000));
   private PIDController rollerPID = new PIDController(0.0031, 0.0, 0.0);
 
-  public IntakeIOSim() {
+  private int counter = 0;
+
+  public IntakeIOSim(AbstractDriveTrainSimulation driveTrain) {
 
     // Setup Intake roller
     rollerFlyWheelSim =
@@ -68,6 +85,38 @@ public class IntakeIOSim implements IntakeIO {
             kMaxExtenderRads, // make sure to set m_extenderAngleSetPoint to this angle
             0.001,
             0.001);
+
+    // TODO: FINAL INTAKE SPACE CONFIGURATION FOR MAPLE-SIM
+    // Here, create the intake simulation with respect to the intake on your real robot
+    this.intakeSim =
+        IntakeSimulation.OverTheBumperIntake(
+            // Specify the type of game pieces that the intake can collect
+            "Fuel",
+            // Specify the drivetrain to which this intake is attached
+            driveTrain,
+            // Width of the intake
+            Meters.of(0.6),
+            // The extension length of the intake beyond the robot's frame (when activated)
+            Meters.of(0.2),
+            // The intake is mounted on the back side of the chassis
+            IntakeSimulation.IntakeSide.FRONT,
+            // The intake can hold up to 67 gamepiece
+            67);
+  }
+
+  public void setRunning(boolean runIntake) {
+    if (runIntake)
+      intakeSim.startIntake(); // Extends the intake out from the chassis frame and starts detecting
+    // contacts with game pieces
+    else intakeSim.stopIntake(); // Retracts the intake into the chassis frame, disabling game piece
+    // collection
+  }
+
+  public Command setRunnningCommand(boolean runIntake) {
+    return new InstantCommand(
+        () -> {
+          setRunning(runIntake);
+        });
   }
 
   @Override
@@ -86,6 +135,23 @@ public class IntakeIOSim implements IntakeIO {
     setRollerTargetSpeed(RPM.of(0));
     // Doing nothing with extender motor
     // setExtenderTargetAngle(Degrees.of(0));
+  }
+
+  public int getGamePiecesAmount() {
+    return intakeSim.getGamePiecesAmount();
+  }
+
+  public static void spawnFuel(double x, double y) {
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                new Translation2d(Inches.of(16), Inches.of(1)),
+                new Translation2d(x, y),
+                new ChassisSpeeds(0.1, 0.1, 0.1),
+                new Rotation2d(Degrees.of(0.0)),
+                Meters.of(0.1),
+                MetersPerSecond.of(0),
+                Degrees.of(0)));
   }
 
   @Override
@@ -107,6 +173,7 @@ public class IntakeIOSim implements IntakeIO {
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
+    input.numberFuelHave = getGamePiecesAmount();
   }
 
   private void updateRollerPID() {
@@ -165,5 +232,20 @@ public class IntakeIOSim implements IntakeIO {
     // Advance simulation
     extenderArmSim.update(.02);
     return totalVoltage;
+  }
+
+  public void shootFuel() {
+    counter++;
+    if (counter > 10) {
+      if (intakeSim.getGamePiecesAmount() > 0) {
+        intakeSim.obtainGamePieceFromIntake();
+        AimingService.trajectorySim.setSpawnFuelOnGround(true);
+      } else {
+        AimingService.trajectorySim.setSpawnFuelOnGround(false);
+      }
+      counter = 0;
+    } else {
+      AimingService.trajectorySim.setSpawnFuelOnGround(false);
+    }
   }
 }
