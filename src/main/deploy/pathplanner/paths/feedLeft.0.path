@@ -65,13 +65,13 @@
       }
     },
     {
-      "name": "Passing",
+      "name": "Shooting",
       "waypointRelativePos": 0.5363457760314719,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Passing"
+          "name": "Shooting"
         }
       }
     }

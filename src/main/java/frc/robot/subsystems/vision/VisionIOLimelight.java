@@ -76,9 +76,9 @@ public class VisionIOLimelight implements VisionIO {
     if (!m_isDisabled.equals(newIsDisabled)) {
       m_isDisabled = newIsDisabled;
       if (newIsDisabled.equals(EnabledState.DISABLED)) {
-        imuMode.accept(1);
+        imuMode.accept(0);
       } else {
-        imuMode.accept(4);
+        imuMode.accept(0);
       }
     }
 

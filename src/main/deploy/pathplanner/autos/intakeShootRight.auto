@@ -7,18 +7,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Idle"
           }
         },
@@ -41,9 +29,21 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "intakeShootRight.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 9.89
+            "waitTime": 17.0
           }
         },
         {
