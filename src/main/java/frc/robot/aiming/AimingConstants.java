@@ -65,7 +65,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 71.0);
   public static final LoggedTunableNumber TARGET_PASS_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetPassLaunchAngleDeg", 55.0);
+      new LoggedTunableNumber("Aiming/targetPassLaunchAngleDeg", 61.0);
 
   // ===== PASS TARGET POSITIONS =====
   public static final Translation2d LOW_RED_PASS =
