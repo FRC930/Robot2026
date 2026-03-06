@@ -66,7 +66,10 @@ public class VisionIOQuest implements VisionIO {
       questDebug = 0;
     }
 
-    if (!m_initialPoseSet && DriverStation.isEnabled()) {
+    if (!m_initialPoseSet
+        && DriverStation.isEnabled()
+        && m_getPose.get() != null
+        && inputs.connected) {
       Pose2d currentPose = m_getPose.get();
       questNav.setPose(new Pose3d(currentPose).transformBy(ROBOT_TO_QUEST));
       m_initialPoseSet = true;

@@ -161,7 +161,11 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double vRadial = turretVelocity.getX() * ux + turretVelocity.getY() * uy;
     double vTangential = -turretVelocity.getX() * uy + turretVelocity.getY() * ux;
 
-    double fieldLaunchAngle = Math.toRadians(AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get());
+    double fieldLaunchAngle =
+        Math.toRadians(
+            currentTarget == AimingTarget.HUB
+                ? AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get()
+                : AimingConstants.TARGET_PASS_LAUNCH_ANGLE_DEG.get());
     double tanTheta = Math.tan(fieldLaunchAngle);
     double cosTheta = Math.cos(fieldLaunchAngle);
     double denominator = horizontalDistance * tanTheta - verticalDistance;
