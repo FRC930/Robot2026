@@ -21,6 +21,18 @@
           "data": {
             "pathName": "outpostShootLeft.1"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
         }
       ]
     }

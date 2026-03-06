@@ -21,6 +21,12 @@
           "data": {
             "pathName": "outpostShootRight.1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
         }
       ]
     }

@@ -33,6 +33,12 @@
           "data": {
             "pathName": "feedCenter.2"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
         }
       ]
     }
