@@ -202,6 +202,10 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M.get();
     double rpm = (shooterSurfaceSpeedMps / flywheelCircumference) * 60.0;
 
+    // Distance-based RPM scaling to compensate for unmodeled drag
+    double distanceOffset = horizontalDistance - AimingConstants.RPM_REF_DISTANCE_M.get();
+    rpm *= 1.0 + AimingConstants.RPM_DISTANCE_SCALE.get() * distanceOffset;
+
     // Clamp and validate
     boolean turretInRange =
         compensatedTurretDeg >= AimingConstants.TURRET_MIN_DEG
