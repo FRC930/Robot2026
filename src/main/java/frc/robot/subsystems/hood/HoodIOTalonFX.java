@@ -22,8 +22,8 @@ public class HoodIOTalonFX implements HoodIO {
 
   private Angle m_setAngle;
 
-  public static final double MINANGLE = 15.0;
-  public static final double MAXANGLE = 30.0;
+  public static final double MINANGLE = 16.0;
+  public static final double MAXANGLE = 31.0;
 
   public HoodIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
