@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.696180722891567,
+        "x": 3.54922891566265,
         "y": 5.510240963855422
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.696180722891567,
+        "x": 4.549228915662652,
         "y": 5.510240963855422
       },
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.0"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2869638554216865,
+        "x": 8.248144578313253,
         "y": 5.510240963855422
       },
       "prevControl": {
-        "x": 4.286963855421686,
+        "x": 7.248144578313253,
         "y": 5.510240963855422
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.1"
+      "linkedName": "intakeShootLeftLine.0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7,
-      "maxWaypointRelativePos": 0.6,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.32456575682381417,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -45,7 +45,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.37419354838709723,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -59,7 +71,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "IntakeDepoShootLeft",
+  "folder": "IntakeShootLeftLine",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

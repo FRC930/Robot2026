@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9702891566265057,
-        "y": 5.958277108433736
+        "x": 0.809806282722513,
+        "y": 5.995206847364959
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.970289156626505,
-        "y": 5.958277108433736
+        "x": 1.6180786727223364,
+        "y": 5.999281447396619
       },
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.2"
+      "linkedName": "depotShootLeft.0"
     },
     {
       "anchor": {
-        "x": 2.915421686746988,
-        "y": 5.958277108433736
+        "x": 1.3279615384615397,
+        "y": 5.995206847364959
       },
       "prevControl": {
-        "x": 1.915421686746988,
-        "y": 5.958277108433736
+        "x": 0.5777484392950133,
+        "y": 5.996790274445213
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Shooting",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooting"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.89057097735028
+    "rotation": -179.99999
   },
   "reversed": false,
-  "folder": "IntakeDepoShootLeft",
+  "folder": "DepotShootLeft",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.1185960034179
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
