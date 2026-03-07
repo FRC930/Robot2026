@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 3.4508795180722887,
+        "x": 1.9559343794579167,
         "y": 5.510240963855422
       },
       "prevControl": {
-        "x": 4.450879518072286,
+        "x": 2.9559343794579154,
         "y": 5.510240963855422
       },
       "nextControl": null,
@@ -28,7 +28,12 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9189765458422227,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -68,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -38.18770074729399
   },
   "reversed": false,
   "folder": "IntakeShootLeftLine",
