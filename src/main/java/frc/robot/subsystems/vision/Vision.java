@@ -112,7 +112,7 @@ public class Vision extends SubsystemBase {
                   || observation.pose().getY() < 0.0
                   || observation.pose().getY() > aprilTagLayout.getFieldWidth();
         } else {
-          rejectPose =
+          rejectPose = true || // TODO TAKE OUT before match
               // Must be within the field boundaries
               observation.pose().getX() < 0.0
                   || observation.pose().getX() > aprilTagLayout.getFieldLength()
