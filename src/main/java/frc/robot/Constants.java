@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.MatchType;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -17,9 +19,16 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+  
+  public static final boolean overrideEnableLoggedTunableNumbers = false;
+
+  public static final boolean isInElim = DriverStation.getMatchType() == MatchType.Elimination;
+  public static final boolean isInQual = DriverStation.getMatchType() == MatchType.Qualification;
+  public static final boolean isInPrac = DriverStation.getMatchType() == MatchType.Practice;
+  public static final boolean isInMatch = isInElim || isInQual || isInPrac;
 
   /** Enable tuning mode to allow real-time parameter adjustment from SmartDashboard */
-  public static final boolean tuningMode = true;
+  public static final boolean tuningMode = !isInMatch || overrideEnableLoggedTunableNumbers; 
 
   public static enum Mode {
     /** Running on a real robot. */
