@@ -28,25 +28,25 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToClimbL0()
-        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    // intent
+    //     .wantsToClimbL0()
+    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
+    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToClimbL1()
-        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    // intent
+    //     .wantsToClimbL1()
+    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))
+    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToClimbL2()
-        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL2))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    // intent
+    //     .wantsToClimbL2()
+    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL2))
+    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToClimbL3()
-        .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL3))
-        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    // intent
+    //     .wantsToClimbL3()
+    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL3))
+    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
     intent
         .wantsToIntake()
@@ -64,6 +64,11 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .whileTrue(goals.setGoalCommand(RobotGoal.PASSING));
 
     intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
+
+    intent
+        .wantsToRaiseIntake()
+        .whileTrue(goals.setGoalCommand(RobotGoal.RAISED_INTAKE))
+        .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
     intent
         .wantsToScoreTrigger()

@@ -8,4 +8,8 @@ public interface IntakeEvents {
   public Trigger isIntakingTrigger();
 
   public Trigger isOuttakingTrigger();
+
+  public Trigger isShootingTrigger();
+
+  public Trigger isRaisedTrigger();
 }
