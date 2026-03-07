@@ -212,7 +212,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         // TODO add a up state for when not intaking and not outtaking
         break;
       case AGITATING:
-        m_IO.setRollerTargetSpeed(RPM.of(0.0));
+        m_IO.stop();
         updateAgitation();
         break;
     }
