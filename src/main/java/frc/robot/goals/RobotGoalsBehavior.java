@@ -66,6 +66,11 @@ public class RobotGoalsBehavior extends GoalBehavior {
     intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
 
     intent
+        .wantsToRaiseIntake()
+        .whileTrue(goals.setGoalCommand(RobotGoal.RAISED_INTAKE))
+        .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
         .wantsToScoreTrigger()
         .or(intent.wantsToRevIndexer())
         .or(intent.wantsToPass())
