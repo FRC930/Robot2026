@@ -6,5 +6,6 @@ public enum IntakeState {
   INTAKING,
   OUTTAKING,
   SHOOTING,
-  RAISED
+  RAISED,
+  AGITATING
 }

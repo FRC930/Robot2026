@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.Fahrenheit;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,6 +47,23 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       new LoggedTunableNumber("Intake/intakeExtenderTargetAngleDown", 0.0);
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
+
+  // Agitation tunables
+  private static final LoggedTunableNumber agitateDownAngle =
+      new LoggedTunableNumber("Intake/agitateDownAngle", 20.0);
+  private static final LoggedTunableNumber agitateUpAngle =
+      new LoggedTunableNumber("Intake/agitateUpAngle", 60.0);
+  private static final LoggedTunableNumber agitateMaxVelocity =
+      new LoggedTunableNumber("Intake/agitateMaxVelocityDegPerSec", 200.0);
+  private static final LoggedTunableNumber agitateMaxAcceleration =
+      new LoggedTunableNumber("Intake/agitateMaxAccelDegPerSec2", 400.0);
+  private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
+
+  // Agitation state
+  private TrapezoidProfile agitateProfile;
+  private TrapezoidProfile.State agitateCurrentState = new TrapezoidProfile.State(0, 0);
+  private double agitateGoalPosition;
+  private boolean agitateInitialized = false;
 
   public LoggedTunableGainsBuilder rollerGains =
       new LoggedTunableGainsBuilder(
@@ -129,6 +147,13 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         });
   }
 
+  public Command agitateCommand() {
+    return runOnce(
+        () -> {
+          currentGoal.set(IntakeState.AGITATING);
+        });
+  }
+
   public void setTestingState() {
     currentGoal.set(IntakeState.TESTING);
   }
@@ -151,6 +176,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         }
         // NO break; on purpose
       case INTAKING:
+        agitateInitialized = false;
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
@@ -161,6 +187,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         }
         break;
       case OUTTAKING:
+        agitateInitialized = false;
         m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
@@ -175,6 +202,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         }
         break;
       case IDLE:
+        agitateInitialized = false;
         stop();
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
@@ -183,9 +211,42 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         // TODO add a up state for when not intaking and not outtaking
         break;
+      case AGITATING:
+        m_IO.stop();
+        updateAgitation();
+        break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));
     extenderGains.ifGainsHaveChanged((gains) -> this.m_IO.setExtenderGains(gains));
+  }
+
+  private void updateAgitation() {
+    if (!agitateInitialized) {
+      agitateProfile =
+          new TrapezoidProfile(
+              new TrapezoidProfile.Constraints(
+                  agitateMaxVelocity.get(), agitateMaxAcceleration.get()));
+      agitateCurrentState = new TrapezoidProfile.State(logged.extenderAngle.in(Degrees), 0);
+      agitateGoalPosition = agitateDownAngle.get();
+      agitateInitialized = true;
+    }
+
+    TrapezoidProfile.State goal = new TrapezoidProfile.State(agitateGoalPosition, 0);
+    agitateCurrentState = agitateProfile.calculate(0.020, agitateCurrentState, goal);
+
+    m_IO.setExtenderTargetAngle(Degrees.of(agitateCurrentState.position));
+
+    if (Math.abs(agitateCurrentState.position - agitateGoalPosition)
+        < AGITATE_POSITION_TOLERANCE_DEG) {
+      if (agitateGoalPosition == agitateDownAngle.get()) {
+        agitateGoalPosition = agitateUpAngle.get();
+      } else {
+        agitateGoalPosition = agitateDownAngle.get();
+      }
+    }
+
+    Logger.recordOutput("Intake/AgitateSetpoint", agitateCurrentState.position);
+    Logger.recordOutput("Intake/AgitateGoal", agitateGoalPosition);
   }
 
   @Override
