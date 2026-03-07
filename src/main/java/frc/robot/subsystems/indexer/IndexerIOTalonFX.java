@@ -41,7 +41,7 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configIndexer.CurrentLimits.StatorCurrentLimit = 200.0;
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
-    configIndexer.CurrentLimits.SupplyCurrentLimit = 40.0;
+    configIndexer.CurrentLimits.SupplyCurrentLimit = 22.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
     configIndexer.Voltage.PeakForwardVoltage = 12.0;
     configIndexer.Voltage.PeakReverseVoltage = -12.0;
