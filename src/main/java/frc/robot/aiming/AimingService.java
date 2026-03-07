@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.PoseSnapshot;
 import frc.robot.util.EnumState;
@@ -118,21 +119,23 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     targetState.log();
     logOutputs();
 
-    // Trajectory visualization at 50Hz using cached launcher params
-    PoseSnapshot snapshot = snapshotSupplier.get();
-    if (solutionValid) {
-      Rotation2d heading = snapshot.heading();
-      Translation2d turretFieldPos = computeTurretFieldPosition(snapshot.pose(), heading);
-      double fieldTurretYaw = heading.getRadians() + Math.PI + Math.toRadians(turretAngleDeg);
-      Translation2d turretVelocity = computeTurretVelocity(snapshot.chassisSpeeds(), heading);
-      trajectorySim.simulate(
-          turretFieldPos,
-          fieldTurretYaw,
-          cachedLauncherAngleRad,
-          cachedLauncherSpeed,
-          turretVelocity);
-    } else {
-      trajectorySim.publishEmpty();
+    // Trajectory visualization at 50Hz — skip on real robot to save CPU
+    if (Constants.currentMode != Constants.Mode.REAL) {
+      PoseSnapshot snapshot = snapshotSupplier.get();
+      if (solutionValid) {
+        Rotation2d heading = snapshot.heading();
+        Translation2d turretFieldPos = computeTurretFieldPosition(snapshot.pose(), heading);
+        double fieldTurretYaw = heading.getRadians() + Math.PI + Math.toRadians(turretAngleDeg);
+        Translation2d turretVelocity = computeTurretVelocity(snapshot.chassisSpeeds(), heading);
+        trajectorySim.simulate(
+            turretFieldPos,
+            fieldTurretYaw,
+            cachedLauncherAngleRad,
+            cachedLauncherSpeed,
+            turretVelocity);
+      } else {
+        trajectorySim.publishEmpty();
+      }
     }
   }
 
@@ -201,6 +204,10 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double shooterSurfaceSpeedMps = launcherSpeed / AimingConstants.SPEED_TRANSFER_RATIO.get();
     double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M.get();
     double rpm = (shooterSurfaceSpeedMps / flywheelCircumference) * 60.0;
+
+    // Distance-based RPM scaling to compensate for unmodeled drag
+    double distanceOffset = horizontalDistance - AimingConstants.RPM_REF_DISTANCE_M.get();
+    rpm *= 1.0 + AimingConstants.RPM_DISTANCE_SCALE.get() * distanceOffset;
 
     // Clamp and validate
     boolean turretInRange =

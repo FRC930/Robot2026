@@ -77,6 +77,14 @@ public final class AimingConstants {
   public static final Translation2d HIGH_BLUE_PASS =
       new Translation2d(Meters.of(1.1), Meters.of(7.1));
 
+  // ===== DISTANCE-BASED RPM SCALING =====
+  // Adjusts RPM based on distance: rpm *= 1.0 + rpmDistanceScale * (distance - rpmRefDistance)
+  // Positive scale → far shots boosted, close shots reduced
+  public static final LoggedTunableNumber RPM_DISTANCE_SCALE =
+      new LoggedTunableNumber("Aiming/rpmDistanceScale", 0.01);
+  public static final LoggedTunableNumber RPM_REF_DISTANCE_M =
+      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 5.0);
+
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)
   public static final double MIN_BALL_RADIAL_SPEED = 0.5;
