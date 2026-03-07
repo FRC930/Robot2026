@@ -25,7 +25,7 @@ public final class Constants {
   public static final boolean isInElim = DriverStation.getMatchType() == MatchType.Elimination;
   public static final boolean isInQual = DriverStation.getMatchType() == MatchType.Qualification;
   public static final boolean isInPrac = DriverStation.getMatchType() == MatchType.Practice;
-  public static final boolean isInMatch = isInElim || isInQual || isInPrac;
+  public static final boolean isInMatch = isInElim || isInQual;
 
   /** Enable tuning mode to allow real-time parameter adjustment from SmartDashboard */
   public static final boolean tuningMode = !isInMatch || overrideEnableLoggedTunableNumbers;
