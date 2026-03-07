@@ -4,12 +4,14 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -30,6 +32,25 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
       new LoggedTunableGainsBuilder(
           "Gains/Indexer/", 2.5, 0.0, 0.0, 0.3, 0.0, 2.75, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
+  // Jam detection tunable thresholds
+  private final LoggedTunableNumber m_jamVelocityThreshold =
+      new LoggedTunableNumber("Indexer/JamVelocityThresholdRPM", 10.0);
+  private final LoggedTunableNumber m_jamCurrentThreshold =
+      new LoggedTunableNumber("Indexer/JamCurrentThresholdAmps", 150.0);
+  private final LoggedTunableNumber m_jamDetectionTimeSec =
+      new LoggedTunableNumber("Indexer/JamDetectionTimeSec", 0.2);
+  private final LoggedTunableNumber m_autoReverseTimeSec =
+      new LoggedTunableNumber("Indexer/AutoReverseTimeSec", 0.4);
+  private final LoggedTunableNumber m_maxJamRetries =
+      new LoggedTunableNumber("Indexer/JamMaxRetries", 3);
+
+  // Jam detection internal state
+  private final Timer m_stallTimer = new Timer();
+  private final Timer m_autoReverseTimer = new Timer();
+  private boolean m_isStalling = false;
+  private boolean m_isAutoReversing = false;
+  private int m_jamRetryCount = 0;
+
   public IndexerSubsystem(IndexerIO IO) {
     m_IO = IO;
 
@@ -40,12 +61,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_logged.indexerSetPoint = RPM.mutable(0);
     m_IO.setIndexerGains(m_indexerTunableGains.build());
 
-    m_logged.feederSupplyCurrent = Amps.mutable(0);
-    m_logged.feederVelocity = RPM.mutable(0);
-    m_logged.feederSetPoint = RPM.mutable(0);
     m_logged.feederVoltage = Volts.mutable(0);
     m_logged.feederSupplyCurrent = Amps.mutable(0);
     m_logged.feederTorqueCurrent = Amps.mutable(0);
+    m_logged.feederVelocity = RPM.mutable(0);
+    m_logged.feederSetPoint = RPM.mutable(0);
     m_IO.setFeederGains(m_feederTunableGains.build());
   }
 
@@ -63,18 +83,71 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_IO.updateInputs(m_logged);
     Logger.processInputs("RobotState/Indexer", m_logged);
 
-    switch (this.m_state.get()) {
+    IndexerState state = m_state.get();
+    switch (state) {
       case IDLE:
+        resetJamDetection();
         m_IO.stop();
         break;
       case FEEDING:
+        checkForJam();
+        state = m_state.get();
+        m_IO.setIndexerTarget(state.indexerVelocity());
+        m_IO.setFeederTarget(state.feederVelocity());
+        break;
       case REVERSING:
-        m_IO.setIndexerTarget(this.m_state.get().indexerVelocity());
-        m_IO.setFeederTarget(this.m_state.get().feederVelocity());
+        if (m_isAutoReversing && m_autoReverseTimer.hasElapsed(m_autoReverseTimeSec.get())) {
+          m_state.set(IndexerState.FEEDING);
+          m_isAutoReversing = false;
+          m_isStalling = false;
+          state = IndexerState.FEEDING;
+        }
+        m_IO.setIndexerTarget(state.indexerVelocity());
+        m_IO.setFeederTarget(state.feederVelocity());
+        break;
+      default:
         break;
     }
-    m_feederTunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setFeederGains(gains));
-    m_indexerTunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setIndexerGains(gains));
+
+    Logger.recordOutput("Indexer/IsAutoReversing", m_isAutoReversing);
+    Logger.recordOutput("Indexer/IsStalling", m_isStalling);
+    Logger.recordOutput("Indexer/JamRetryCount", m_jamRetryCount);
+
+    m_feederTunableGains.ifGainsHaveChanged((gains) -> m_IO.setFeederGains(gains));
+    m_indexerTunableGains.ifGainsHaveChanged((gains) -> m_IO.setIndexerGains(gains));
+  }
+
+  private void checkForJam() {
+    double velocity = Math.abs(m_logged.indexerVelocity.in(RPM));
+    double current = Math.abs(m_logged.indexerTorqueCurrent.in(Amps));
+
+    boolean stalled =
+        velocity < m_jamVelocityThreshold.get() || current > m_jamCurrentThreshold.get();
+
+    if (stalled) {
+      if (!m_isStalling) {
+        m_stallTimer.restart();
+        m_isStalling = true;
+      } else if (m_stallTimer.hasElapsed(m_jamDetectionTimeSec.get())
+          && m_jamRetryCount < (int) m_maxJamRetries.get()) {
+        m_state.set(IndexerState.REVERSING);
+        m_autoReverseTimer.restart();
+        m_isAutoReversing = true;
+        m_jamRetryCount++;
+        m_isStalling = false;
+      }
+    } else {
+      m_isStalling = false;
+      m_jamRetryCount = 0;
+    }
+  }
+
+  private void resetJamDetection() {
+    m_isStalling = false;
+    m_isAutoReversing = false;
+    m_jamRetryCount = 0;
+    m_stallTimer.stop();
+    m_autoReverseTimer.stop();
   }
 
   @Override
@@ -92,7 +165,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
   }
 
   public Command indexingCommand() {
-    return runOnce(() -> m_state.set(IndexerState.FEEDING));
+    return runOnce(
+        () -> {
+          m_state.set(IndexerState.FEEDING);
+          resetJamDetection();
+        });
   }
 
   public Command reverseCommand() {
