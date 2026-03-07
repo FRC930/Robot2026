@@ -189,7 +189,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight),
                 (robotPose) -> {});
         aimingService = new AimingService(drive::getLatestSnapshot);
-        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
+        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         // intake = new IntakeSubsystem(new IntakeIO() {});
 
@@ -263,7 +263,7 @@ public class RobotContainer {
                     frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
                 new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
-        driveZoneTracker = new DriveZoneTracker(drive::getPose);
+        driveZoneTracker = new DriveZoneTracker(drive::getPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
         indexer = new IndexerSubsystem(new IndexerIOSim());
         climber =
@@ -302,7 +302,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         aimingService = new AimingService(drive::getLatestSnapshot);
-        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose);
+        driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});

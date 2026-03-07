@@ -6,4 +6,6 @@ public interface DriveEvents {
   Trigger isInNeutralZone();
 
   Trigger isOnUpperFieldHalf();
+
+  Trigger isNotMoving();
 }

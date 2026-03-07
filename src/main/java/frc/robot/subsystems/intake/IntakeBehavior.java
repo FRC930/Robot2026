@@ -17,7 +17,16 @@ public class IntakeBehavior extends SubsystemBehavior {
     events.goals().isIdleTrigger().whileTrue(this.intake.idleCommand());
     events.goals().isOuttakingTrigger().whileTrue(this.intake.outtakeCommand());
     events.goals().isIntakingTrigger().whileTrue(this.intake.intakeCommand());
-    events.goals().isShootingTrigger().whileTrue(this.intake.shootingCommand());
+    events
+        .goals()
+        .isShootingTrigger()
+        .and(events.drive().isNotMoving().negate())
+        .whileTrue(this.intake.shootingCommand());
+    events
+        .goals()
+        .isShootingTrigger()
+        .and(events.drive().isNotMoving())
+        .whileTrue(this.intake.agitateCommand());
     events.goals().isPassingTrigger().whileTrue(this.intake.idleCommand());
     events.goals().isRaisedIntakeTrigger().whileTrue(this.intake.raisedCommand());
     events.goals().isClimbingL0().whileTrue(this.intake.idleCommand());
