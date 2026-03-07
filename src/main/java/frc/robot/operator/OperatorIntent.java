@@ -98,6 +98,6 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToRaiseIntake() {
-    return driver.x();
+    return driver.povUp();
   }
 }

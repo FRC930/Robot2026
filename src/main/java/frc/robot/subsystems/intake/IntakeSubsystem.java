@@ -124,10 +124,9 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
 
   public Command raisedCommand() {
     return runOnce(
-      () -> {
-        currentGoal.set(IntakeState.RAISED);
-      }
-    );
+        () -> {
+          currentGoal.set(IntakeState.RAISED);
+        });
   }
 
   public void setTestingState() {

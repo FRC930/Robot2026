@@ -28,6 +28,6 @@ public interface OperatorIntentEvents {
   Trigger wantsToIntake();
 
   Trigger wantsToRevIndexer();
-  
+
   Trigger wantsToRaiseIntake();
 }
