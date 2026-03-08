@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5441084337349398,
+        "x": 2.04410843373494,
         "y": 5.991
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 4.05
+        "x": 2.532951807228916,
+        "y": 5.379108433734939
       },
       "prevControl": {
-        "x": 2.5,
-        "y": 5.05
+        "x": 2.532951807228916,
+        "y": 5.679108433734939
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Shooting",
-      "waypointRelativePos": 0.3333333333333333,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,7 +45,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

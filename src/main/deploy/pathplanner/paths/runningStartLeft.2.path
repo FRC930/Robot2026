@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.8,
+        "x": 8.565,
         "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.799999999999999,
+        "x": 7.564999999999999,
         "y": 5.5
       },
       "isLocked": false,
@@ -102,7 +102,7 @@
   "eventMarkers": [
     {
       "name": "Idle",
-      "waypointRelativePos": 0.42580645161290365,
+      "waypointRelativePos": 0.5687344913151335,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
