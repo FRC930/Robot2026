@@ -68,12 +68,12 @@ public class VisionIOQuest implements VisionIO {
     if (questDebug++ > 50) {
       questDebug = 0;
     }
-    
+
     if (conditionDebouncer.calculate(
-            !m_initialPoseSet
-                && DriverStation.isEnabled()
-                && m_getPose.get() != null
-                && inputs.connected)) {
+        !m_initialPoseSet
+            && DriverStation.isEnabled()
+            && m_getPose.get() != null
+            && inputs.connected)) {
       // Clear out all unreadFrames() Assume bad given never setPose()
       questNav.getAllUnreadPoseFrames();
 
