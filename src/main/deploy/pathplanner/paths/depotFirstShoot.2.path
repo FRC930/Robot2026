@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.85,
+        "y": 5.53
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.6,
+        "y": 5.53
+      },
+      "isLocked": false,
+      "linkedName": "depotFirstShoot.1.end"
+    },
+    {
+      "anchor": {
+        "x": 3.3333333333333335,
+        "y": 5.53
+      },
+      "prevControl": {
+        "x": 3.5833333333333335,
+        "y": 5.53
+      },
+      "nextControl": {
+        "x": 3.0833333333333335,
+        "y": 5.53
+      },
+      "isLocked": false,
+      "linkedName": "depotFirstShoot.1.wp1"
+    },
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 5.53
+      },
+      "prevControl": {
+        "x": 2.176776695296637,
+        "y": 5.706776695296637
+      },
+      "nextControl": {
+        "x": 1.2928932188134517,
+        "y": 4.822893218813453
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 4.0
+      },
+      "prevControl": {
+        "x": 2.0,
+        "y": 4.25
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Idle",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Idle"
+        }
+      }
+    },
+    {
+      "name": "Shooting",
+      "waypointRelativePos": 2.0009169600938983,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooting"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "DepotFirstShoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

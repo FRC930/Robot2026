@@ -5,7 +5,8 @@
   "pathFolders": [
     "IntakeDepoShootLeft",
     "IntakeShootLeftLine",
-    "IntakeShootRightLine"
+    "IntakeShootRightLine",
+    "DepotFirstShoot"
   ],
   "autoFolders": [
     "Shoots"
