@@ -54,9 +54,9 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   private static final LoggedTunableNumber agitateUpAngle =
       new LoggedTunableNumber("Intake/agitateUpAngle", 60.0);
   private static final LoggedTunableNumber agitateMaxVelocity =
-      new LoggedTunableNumber("Intake/agitateMaxVelocityDegPerSec", 200.0);
+      new LoggedTunableNumber("Intake/agitateMaxVelocityDegPerSec", 800.0);
   private static final LoggedTunableNumber agitateMaxAcceleration =
-      new LoggedTunableNumber("Intake/agitateMaxAccelDegPerSec2", 400.0);
+      new LoggedTunableNumber("Intake/agitateMaxAccelDegPerSec2", 1000.0);
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   // Agitation state
