@@ -51,24 +51,24 @@ public class OperatorIntent implements OperatorIntentEvents {
     return driver;
   }
 
-  @Override
-  public Trigger wantsToClimbL0() {
-    return driver.povLeft();
-  }
+  // @Override
+  // public Trigger wantsToClimbL0() {
+  //   return driver.povLeft();
+  // }
 
-  public Trigger wantsToClimbL1() {
-    return driver.povUp();
-  }
+  // public Trigger wantsToClimbL1() {
+  //   return driver.povUp();
+  // }
 
-  @Override
-  public Trigger wantsToClimbL2() {
-    return driver.povRight();
-  }
+  // @Override
+  // public Trigger wantsToClimbL2() {
+  //   return driver.povRight();
+  // }
 
-  @Override
-  public Trigger wantsToClimbL3() {
-    return driver.povDown();
-  }
+  // @Override
+  // public Trigger wantsToClimbL3() {
+  //   return driver.povDown();
+  // }
 
   @Override
   public Trigger wantsToOuttake() {
@@ -94,5 +94,10 @@ public class OperatorIntent implements OperatorIntentEvents {
   @Override
   public Trigger wantsToRevIndexer() {
     return driver.rightTrigger();
+  }
+
+  @Override
+  public Trigger wantsToRaiseIntake() {
+    return driver.povUp();
   }
 }

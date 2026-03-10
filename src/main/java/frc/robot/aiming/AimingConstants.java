@@ -40,7 +40,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
       new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
-      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.6);
+      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.62);
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 6000.0;
 
@@ -64,6 +64,12 @@ public final class AimingConstants {
   // targets).
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 71.0);
+  public static final LoggedTunableNumber TARGET_FAR_LAUNCH_ANGLE_DEG =
+      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 65.0);
+  public static final LoggedTunableNumber FAR_DISTANCE_THRESHOLD_M =
+      new LoggedTunableNumber("Aiming/farDistanceThresholdM", 3.5);
+  public static final LoggedTunableNumber FAR_DISTANCE_HYSTERESIS_M =
+      new LoggedTunableNumber("Aiming/farDistanceHysteresisM", 0.3);
   public static final LoggedTunableNumber TARGET_PASS_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetPassLaunchAngleDeg", 61.0);
 

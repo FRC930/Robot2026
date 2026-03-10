@@ -57,6 +57,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
   private double smoothedTurretDeg = 0.0;
   private double smoothedHoodDeg = 0.0;
   private boolean emaInitialized = false;
+  private boolean usingFarAngle = false;
 
   public static final BallTrajectorySim trajectorySim = new BallTrajectorySim();
 
@@ -164,11 +165,23 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double vRadial = turretVelocity.getX() * ux + turretVelocity.getY() * uy;
     double vTangential = -turretVelocity.getX() * uy + turretVelocity.getY() * ux;
 
-    double fieldLaunchAngle =
-        Math.toRadians(
-            currentTarget == AimingTarget.HUB
-                ? AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get()
-                : AimingConstants.TARGET_PASS_LAUNCH_ANGLE_DEG.get());
+    double launchAngleDeg;
+    if (currentTarget == AimingTarget.HUB) {
+      double threshold = AimingConstants.FAR_DISTANCE_THRESHOLD_M.get();
+      double hysteresis = AimingConstants.FAR_DISTANCE_HYSTERESIS_M.get();
+      if (usingFarAngle) {
+        usingFarAngle = horizontalDistance > (threshold - hysteresis);
+      } else {
+        usingFarAngle = horizontalDistance > (threshold + hysteresis);
+      }
+      launchAngleDeg =
+          usingFarAngle
+              ? AimingConstants.TARGET_FAR_LAUNCH_ANGLE_DEG.get()
+              : AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get();
+    } else {
+      launchAngleDeg = AimingConstants.TARGET_PASS_LAUNCH_ANGLE_DEG.get();
+    }
+    double fieldLaunchAngle = Math.toRadians(launchAngleDeg);
     double tanTheta = Math.tan(fieldLaunchAngle);
     double cosTheta = Math.cos(fieldLaunchAngle);
     double denominator = horizontalDistance * tanTheta - verticalDistance;

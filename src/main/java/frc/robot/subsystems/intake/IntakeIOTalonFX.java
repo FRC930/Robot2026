@@ -87,8 +87,8 @@ public class IntakeIOTalonFX implements IntakeIO {
     configIntakeExtender.CurrentLimits.StatorCurrentLimitEnable = true;
     configIntakeExtender.CurrentLimits.SupplyCurrentLimit = 80.0; // this may need to be adjusted
     configIntakeExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
-    configIntakeExtender.Voltage.PeakForwardVoltage = 12.0;
-    configIntakeExtender.Voltage.PeakReverseVoltage = -12.0;
+    configIntakeExtender.Voltage.PeakForwardVoltage = 8.0;
+    configIntakeExtender.Voltage.PeakReverseVoltage = -8.0;
     configIntakeExtender.Feedback.SensorToMechanismRatio = GEAR_RATIO_EXTENDER;
     configIntakeExtender.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     PhoenixUtil.tryUntilOk(
