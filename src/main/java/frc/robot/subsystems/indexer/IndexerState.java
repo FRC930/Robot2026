@@ -10,7 +10,7 @@ public enum IndexerState {
   TESTING(() -> 0.0, () -> 0.0),
   IDLE(() -> 0.0, () -> 0.0),
   FEEDING(
-      new LoggedTunableNumber("Indexer/setIndexerPoint", 100),
+      new LoggedTunableNumber("Indexer/setIndexerPoint", 160),
       new LoggedTunableNumber("Indexer/setFeederPoint", 4000)),
   REVERSING(
       new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50),
