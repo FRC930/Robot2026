@@ -30,9 +30,20 @@ public class AutoCommandManager {
     configureNamedCommands(drive, goals);
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices");
 
     for (String autoName : AutoBuilder.getAllAutoNames()) {
+      boolean competitionUsed =
+          new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".compflag")
+              .exists();
+      boolean inCompetition = false;
+
+      // if (inCompetition && !competitionUsed) {
+      //   continue;
+      // }
+
+      System.out.println("trying " + autoName);
+
       try {
         // Validate if path .0 exists
         PathPlannerPath path = PathPlannerPath.fromPathFile(autoName + ".0");
