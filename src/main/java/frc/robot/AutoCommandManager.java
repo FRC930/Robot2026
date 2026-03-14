@@ -37,7 +37,7 @@ public class AutoCommandManager {
       boolean competitionUsed =
           new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".compflag")
               .exists();
-      boolean inCompetition = true;
+      boolean inCompetition = false;
 
       if (inCompetition && !competitionUsed) {
         continue;
