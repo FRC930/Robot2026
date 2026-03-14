@@ -13,7 +13,6 @@
 
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,8 +42,6 @@ public class VisionIOQuest implements VisionIO {
           new Rotation3d(Rotation2d.fromDegrees(180.0)));
   private int questDebug = 0;
 
-  private final Debouncer conditionDebouncer = new Debouncer(0.2);
-
   /**
    * Creates a new VisionIOLimelight.
    *
@@ -69,11 +66,12 @@ public class VisionIOQuest implements VisionIO {
       questDebug = 0;
     }
 
-    if (conditionDebouncer.calculate(
-        !m_initialPoseSet
-            && DriverStation.isEnabled()
-            && m_getPose.get() != null
-            && inputs.connected)) {
+    if (!m_initialPoseSet
+        && inputs.connected
+        && m_getPose.get() != null
+        && m_getPose.get().getX() > 0.0
+        && m_getPose.get().getY() > 0.0
+        && DriverStation.isEnabled()) {
       // Clear out all unreadFrames() Assume bad given never setPose()
       questNav.getAllUnreadPoseFrames();
 
