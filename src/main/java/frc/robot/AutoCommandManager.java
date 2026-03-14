@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,13 +37,15 @@ public class AutoCommandManager {
       boolean competitionUsed =
           new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".compflag")
               .exists();
-      boolean inCompetition = false;
+      boolean inCompetition = true;
 
-      // if (inCompetition && !competitionUsed) {
-      //   continue;
-      // }
+      if (inCompetition && !competitionUsed) {
+        continue;
+      }
 
       System.out.println("trying " + autoName);
+
+      autoChooser.addOption(autoName, new PathPlannerAuto(autoName));
 
       try {
         // Validate if path .0 exists
