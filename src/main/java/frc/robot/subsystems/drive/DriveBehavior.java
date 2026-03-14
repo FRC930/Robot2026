@@ -32,7 +32,6 @@ public class DriveBehavior extends SubsystemBehavior {
     events
         .goals()
         .isShootingTrigger()
-        .or(events.goals().isPassingTrigger())
         .whileTrue(
             Commands.startEnd(
                 () -> drive.setGoalSpeedLimit(shootingSpeedLimit.get()),
