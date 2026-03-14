@@ -19,7 +19,8 @@ public class IndexerBehavior extends SubsystemBehavior {
     events
         .goals()
         .isShootingTrigger()
-        .or(events.goals().isPassingTrigger())
-        .whileTrue(indexer.indexingCommand());
+        .and(events.turret().isInToleranceTrigger())
+        .whileTrue(indexer.indexingCommand())
+        .whileFalse(indexer.idleCommand());
   }
 }

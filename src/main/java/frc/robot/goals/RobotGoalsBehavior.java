@@ -58,11 +58,6 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .and(intent.wantsToRevIndexer().negate())
         .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
 
-    intent
-        .wantsToPass()
-        .and(intent.wantsToRevIndexer().negate())
-        .whileTrue(goals.setGoalCommand(RobotGoal.PASSING));
-
     intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
 
     intent

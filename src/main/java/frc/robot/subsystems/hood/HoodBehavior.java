@@ -19,6 +19,5 @@ public class HoodBehavior extends SubsystemBehavior {
     //     .whileTrue(hood.aimCommand());
     // TODO if idle hood set idle command on false or while false hood aiming command
     events.goals().isShootingTrigger().whileTrue(hood.aimCommand()).whileFalse(hood.aimCommand());
-    events.goals().isPassingTrigger().whileTrue(hood.passCommand()).whileFalse(hood.aimCommand());
   }
 }

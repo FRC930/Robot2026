@@ -9,6 +9,7 @@ import frc.robot.subsystems.hood.HoodEvents;
 import frc.robot.subsystems.indexer.IndexerEvents;
 import frc.robot.subsystems.intake.IntakeEvents;
 import frc.robot.subsystems.shooter.ShooterEvents;
+import frc.robot.subsystems.turret.TurretEvents;
 
 // Hold all the events in one variable.
 public record AllEvents(
@@ -16,6 +17,7 @@ public record AllEvents(
     MatchEvents match,
     IndexerEvents indexer,
     ShooterEvents shooter,
+    TurretEvents turret,
     IntakeEvents intake,
     ClimberEvents climber,
     HoodEvents hood,

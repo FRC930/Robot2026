@@ -13,11 +13,5 @@ public class TurretBehavior extends SubsystemBehavior {
   }
 
   @Override
-  public void configure(AllEvents events) {
-    events
-        .goals()
-        .isPassingTrigger()
-        .onTrue(turret.passingCommand())
-        .onFalse(turret.aimingCommand());
-  }
+  public void configure(AllEvents events) {}
 }

@@ -20,6 +20,8 @@ import org.littletonrobotics.junction.Logger;
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10.00);
+  private LoggedTunableNumber ToleranceAngle =
+      new LoggedTunableNumber("Turret/ToleranceAngle", 30.0);
 
   private final TurretIO m_IO;
   private volatile boolean shouldThreadCommand = false;
@@ -81,13 +83,6 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
         });
   }
 
-  public Command passingCommand() {
-    return runOnce(
-        () -> {
-          m_state.set(TurretState.PASSING);
-        });
-  }
-
   public void setTestingState() {
     m_state.set(TurretState.TESTING);
   }
@@ -101,10 +96,9 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Turret", logged);
     TurretState state = m_state.get();
-    shouldThreadCommand = (state == TurretState.AIMING || state == TurretState.PASSING);
+    shouldThreadCommand = state == TurretState.AIMING;
     switch (state) {
       case AIMING:
-      case PASSING:
         break; // 250Hz thread handles motor commands
       case IDLE:
         setPosition(IdleAngle.get());
@@ -127,8 +121,8 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
   }
 
   @Override
-  public Trigger isPassingTrigger() {
-    return m_state.is(TurretState.PASSING);
+  public Trigger isInToleranceTrigger() {
+    return new Trigger(() -> isTurretInTolerance());
   }
 
   public Command getNewSetTurretAngleCommand(DoubleSupplier angle) {
@@ -137,5 +131,12 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
           m_IO.setTarget(angle.getAsDouble());
         },
         this);
+  }
+
+  private boolean isTurretInTolerance() {
+    return MathUtil.isNear(
+        logged.turretSetAngle.in(Degrees),
+        logged.turretAngle.in(Degrees),
+        ToleranceAngle.getAsDouble());
   }
 }
