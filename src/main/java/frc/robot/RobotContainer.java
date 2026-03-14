@@ -388,7 +388,7 @@ public class RobotContainer {
     if (isTesting) {
       configureTestButtonBindings();
     } else {
-      SubsystemBehavior.configureAll(
+      AllEvents robotEvents =
           new AllEvents(
               robotGoals,
               matchState,
@@ -399,7 +399,13 @@ public class RobotContainer {
               climber,
               hood,
               driveZoneTracker,
-              aimingService));
+              aimingService);
+
+      SubsystemBehavior.configureAll(robotEvents);
+      robotGoals
+          .isShootingTrigger()
+          .and(robotEvents.drive().isNotMoving())
+          .whileTrue(Commands.runOnce(drive::stopWithX, drive));
     }
     // Reset gyro / odometry
     final Runnable resetOdometry =
