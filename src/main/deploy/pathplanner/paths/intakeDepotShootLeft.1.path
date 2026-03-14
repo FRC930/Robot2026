@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.696180722891567,
+        "x": 7.700699001426534,
         "y": 5.510240963855422
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.696180722891567,
+        "x": 6.700699001426534,
         "y": 5.510240963855422
       },
       "isLocked": false,
@@ -59,7 +59,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "IntakeDepoShootLeft",
+  "folder": "IntakeDepotShootLef",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
