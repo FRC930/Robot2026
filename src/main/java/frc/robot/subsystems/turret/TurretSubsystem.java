@@ -20,6 +20,8 @@ import org.littletonrobotics.junction.Logger;
 public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   private LoggedTunableNumber IdleAngle = new LoggedTunableNumber("Turret/IdleAngle", 10.00);
+  private LoggedTunableNumber ToleranceAngle =
+      new LoggedTunableNumber("Turret/ToleranceAngle", 30.0);
 
   private final TurretIO m_IO;
   private volatile boolean shouldThreadCommand = false;
@@ -118,11 +120,23 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     return m_state.is(TurretState.IDLE);
   }
 
+  @Override
+  public Trigger isInToleranceTrigger() {
+    return new Trigger(() -> isTurretInTolerance());
+  }
+
   public Command getNewSetTurretAngleCommand(DoubleSupplier angle) {
     return new InstantCommand(
         () -> {
           m_IO.setTarget(angle.getAsDouble());
         },
         this);
+  }
+
+  private boolean isTurretInTolerance() {
+    return MathUtil.isNear(
+        logged.turretSetAngle.in(Degrees),
+        logged.turretAngle.in(Degrees),
+        ToleranceAngle.getAsDouble());
   }
 }

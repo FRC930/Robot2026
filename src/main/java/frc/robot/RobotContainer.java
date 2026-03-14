@@ -394,6 +394,7 @@ public class RobotContainer {
               matchState,
               indexer,
               shooter,
+              turret,
               intake,
               climber,
               hood,
