@@ -75,6 +75,7 @@ public class DriveCommands {
             0.0,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    SlewRateLimiter filter = new SlewRateLimiter(10);
     angleController.enableContinuousInput(-Math.PI, Math.PI);
     return Commands.run(
             () -> {
@@ -100,7 +101,8 @@ public class DriveCommands {
                     controllerAngle += Math.PI;
                   }
                   omega =
-                      angleController.calculate(drive.getRotation().getRadians(), controllerAngle);
+                      angleController.calculate(
+                          drive.getRotation().getRadians(), filter.calculate(controllerAngle));
                 }
               } else {
                 // Apply rotation deadband
@@ -139,7 +141,6 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Rotation2d> rotationSupplier) {
-
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
