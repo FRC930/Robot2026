@@ -162,6 +162,14 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     m_IO.stop();
   }
 
+  public void setRollerSupplyCurrentLimit(double amps) {
+    m_IO.setRollerSupplyCurrentLimit(amps);
+  }
+
+  public void setExtenderSupplyCurrentLimit(double amps) {
+    m_IO.setExtenderSupplyCurrentLimit(amps);
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(logged);

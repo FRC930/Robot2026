@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -126,6 +127,19 @@ public class ShooterIOTalonFX implements ShooterIO {
     inputs.shooterTorqueCurrent.mut_replace(shooterMotor.getTorqueCurrent().getValue());
     inputs.shooterVoltage.mut_replace(shooterMotor.getMotorVoltage().getValue());
     inputs.shooterSupplyCurrent.mut_replace(shooterMotor.getSupplyCurrent().getValue());
+  }
+
+  @Override
+  public void setSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 80.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> shooterMotor.getConfigurator().apply(limits));
+    PhoenixUtil.tryUntilOk(5, () -> follower1.getConfigurator().apply(limits));
+    PhoenixUtil.tryUntilOk(5, () -> follower2.getConfigurator().apply(limits));
+    PhoenixUtil.tryUntilOk(5, () -> follower3.getConfigurator().apply(limits));
   }
 
   @Override

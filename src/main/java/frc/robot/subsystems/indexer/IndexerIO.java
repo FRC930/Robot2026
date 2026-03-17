@@ -40,4 +40,10 @@ public interface IndexerIO {
 
   public default void setFeederGains(Gains gains) {}
   ;
+
+  public default void setIndexerSupplyCurrentLimit(double amps) {}
+  ;
+
+  public default void setFeederSupplyCurrentLimit(double amps) {}
+  ;
 }

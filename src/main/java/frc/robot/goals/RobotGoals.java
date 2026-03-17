@@ -34,9 +34,9 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
     return instance;
   }
 
-  // public RobotGoal getCurrentGoal() {
-  //   return currentGoal.get();
-  // }
+  public RobotGoal getCurrentGoal() {
+    return currentGoal.get();
+  }
 
   @Override
   public void periodic() {}

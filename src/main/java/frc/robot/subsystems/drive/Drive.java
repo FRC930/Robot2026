@@ -460,6 +460,13 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/GoalSpeedLimit", limit);
   }
 
+  /** Sets the supply current limit for all drive motors across all modules. */
+  public void setDriveSupplyCurrentLimit(double amps) {
+    for (Module module : modules) {
+      module.setDriveSupplyCurrentLimit(amps);
+    }
+  }
+
   @AutoLogOutput(key = "Drive/EffectiveSpeedLimit")
   public double getEffectiveSpeedLimit() {
     return Math.min(operatorSpeedLimit, goalSpeedLimit);

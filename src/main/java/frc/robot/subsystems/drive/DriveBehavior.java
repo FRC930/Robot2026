@@ -36,5 +36,19 @@ public class DriveBehavior extends SubsystemBehavior {
             Commands.startEnd(
                 () -> drive.setGoalSpeedLimit(shootingSpeedLimit.get()),
                 () -> drive.setGoalSpeedLimit(NO_SPEED_LIMIT)));
+
+    // Power management: throttle drive supply current based on active power profile
+    events
+        .power()
+        .isNormalProfileTrigger()
+        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(60.0)));
+    events
+        .power()
+        .isShootingProfileTrigger()
+        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(40.0)));
+    events
+        .power()
+        .isLowVoltageProfileTrigger()
+        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(30.0)));
   }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.hood;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
@@ -19,5 +20,19 @@ public class HoodBehavior extends SubsystemBehavior {
     //     .whileTrue(hood.aimCommand());
     // TODO if idle hood set idle command on false or while false hood aiming command
     events.goals().isShootingTrigger().whileTrue(hood.aimCommand()).whileFalse(hood.aimCommand());
+
+    // Power management
+    events
+        .power()
+        .isNormalProfileTrigger()
+        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(40.0)));
+    events
+        .power()
+        .isShootingProfileTrigger()
+        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(40.0)));
+    events
+        .power()
+        .isLowVoltageProfileTrigger()
+        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(25.0)));
   }
 }

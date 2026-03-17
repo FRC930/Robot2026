@@ -52,4 +52,10 @@ public interface IntakeIO {
 
   public default void setExtenderInitialPosition(Angle position) {}
   ;
+
+  public default void setRollerSupplyCurrentLimit(double amps) {}
+  ;
+
+  public default void setExtenderSupplyCurrentLimit(double amps) {}
+  ;
 }

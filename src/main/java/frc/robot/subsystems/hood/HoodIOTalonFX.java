@@ -3,6 +3,7 @@ package frc.robot.subsystems.hood;
 import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -78,6 +79,16 @@ public class HoodIOTalonFX implements HoodIO {
     input.hoodVoltage.mut_replace(motor.getMotorVoltage().getValue());
     input.hoodSupplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
     input.hoodTorqueCurrent.mut_replace(motor.getTorqueCurrent().getValue());
+  }
+
+  @Override
+  public void setSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 80.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(limits));
   }
 
   @Override

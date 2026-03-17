@@ -88,6 +88,11 @@ public class Module {
     io.setTurnPosition(Rotation2d.kZero);
   }
 
+  /** Sets the supply current limit for the drive motor. */
+  public void setDriveSupplyCurrentLimit(double amps) {
+    io.setDriveSupplyCurrentLimit(amps);
+  }
+
   /** Disables all outputs to motors. */
   public void stop() {
     io.setDriveOpenLoop(0.0);

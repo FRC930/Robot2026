@@ -47,6 +47,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
+import frc.robot.power.PowerMonitor;
 import frc.robot.state.MatchState;
 import frc.robot.subsystems.climber.ClimberBehavior;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -135,6 +136,7 @@ public class RobotContainer {
   private final HoodSubsystem hood;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
+  private final PowerMonitor powerMonitor;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -357,6 +359,8 @@ public class RobotContainer {
           .start();
     }
 
+    powerMonitor = new PowerMonitor(robotGoals::getCurrentGoal);
+
     autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());
 
     // Create goal behaviors (wires operator intent → robot goals)
@@ -399,7 +403,8 @@ public class RobotContainer {
               climber,
               hood,
               driveZoneTracker,
-              aimingService);
+              aimingService,
+              powerMonitor);
 
       SubsystemBehavior.configureAll(robotEvents);
       robotGoals

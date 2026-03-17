@@ -29,4 +29,7 @@ public interface ShooterIO {
 
   public default void setGains(Gains gains) {}
   ;
+
+  public default void setSupplyCurrentLimit(double amps) {}
+  ;
 }

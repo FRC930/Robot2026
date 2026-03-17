@@ -65,6 +65,10 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     m_IO.stop();
   }
 
+  public void setSupplyCurrentLimit(double amps) {
+    m_IO.setSupplyCurrentLimit(amps);
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(logged);

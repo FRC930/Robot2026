@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -145,6 +146,27 @@ public class IntakeIOTalonFX implements IntakeIO {
       intakeExtenderSetPoint = target;
       firstTime = false;
     }
+  }
+
+  @Override
+  public void setRollerSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 80.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(limits));
+    PhoenixUtil.tryUntilOk(5, () -> followIntakeMotor.getConfigurator().apply(limits));
+  }
+
+  @Override
+  public void setExtenderSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 80.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> intakeExtenderMotor.getConfigurator().apply(limits));
   }
 
   @Override

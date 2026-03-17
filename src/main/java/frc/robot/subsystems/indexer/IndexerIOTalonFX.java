@@ -3,6 +3,7 @@ package frc.robot.subsystems.indexer;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -102,6 +103,26 @@ public class IndexerIOTalonFX implements IndexerIO {
     inputs.feederSetPoint.mut_replace(feederSetPoint);
     inputs.feederVoltage.mut_replace(feederMotor.getMotorVoltage().getValue());
     inputs.feederTorqueCurrent.mut_replace(feederMotor.getTorqueCurrent().getValue());
+  }
+
+  @Override
+  public void setIndexerSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 200.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(limits));
+  }
+
+  @Override
+  public void setFeederSupplyCurrentLimit(double amps) {
+    CurrentLimitsConfigs limits = new CurrentLimitsConfigs();
+    limits.SupplyCurrentLimit = amps;
+    limits.SupplyCurrentLimitEnable = true;
+    limits.StatorCurrentLimit = 80.0;
+    limits.StatorCurrentLimitEnable = true;
+    PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(limits));
   }
 
   public void setIndexerGains(Gains gains) {

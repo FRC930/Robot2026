@@ -78,6 +78,14 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_IO.stop();
   }
 
+  public void setIndexerSupplyCurrentLimit(double amps) {
+    m_IO.setIndexerSupplyCurrentLimit(amps);
+  }
+
+  public void setFeederSupplyCurrentLimit(double amps) {
+    m_IO.setFeederSupplyCurrentLimit(amps);
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(m_logged);

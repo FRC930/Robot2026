@@ -45,4 +45,7 @@ public interface TurretIO {
     return Degrees.of(0.0);
   }
   ;
+
+  public default void setSupplyCurrentLimit(double amps) {}
+  ;
 }
