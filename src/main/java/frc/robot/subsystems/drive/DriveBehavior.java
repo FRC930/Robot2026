@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.power.PowerProfile;
 import frc.robot.util.AllEvents;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.SubsystemBehavior;
@@ -41,14 +42,20 @@ public class DriveBehavior extends SubsystemBehavior {
     events
         .power()
         .isNormalProfileTrigger()
-        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(60.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> drive.setDriveSupplyCurrentLimit(PowerProfile.NORMAL.driveSupplyLimit)));
     events
         .power()
         .isShootingProfileTrigger()
-        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(40.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> drive.setDriveSupplyCurrentLimit(PowerProfile.SHOOTING.driveSupplyLimit)));
     events
         .power()
         .isLowVoltageProfileTrigger()
-        .onTrue(Commands.runOnce(() -> drive.setDriveSupplyCurrentLimit(30.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> drive.setDriveSupplyCurrentLimit(PowerProfile.LOW_VOLTAGE.driveSupplyLimit)));
   }
 }

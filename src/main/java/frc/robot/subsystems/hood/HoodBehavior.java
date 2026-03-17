@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hood;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.power.PowerProfile;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
@@ -25,14 +26,20 @@ public class HoodBehavior extends SubsystemBehavior {
     events
         .power()
         .isNormalProfileTrigger()
-        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(40.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> hood.setSupplyCurrentLimit(PowerProfile.NORMAL.hoodSupplyLimit)));
     events
         .power()
         .isShootingProfileTrigger()
-        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(40.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> hood.setSupplyCurrentLimit(PowerProfile.SHOOTING.hoodSupplyLimit)));
     events
         .power()
         .isLowVoltageProfileTrigger()
-        .onTrue(Commands.runOnce(() -> hood.setSupplyCurrentLimit(25.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> hood.setSupplyCurrentLimit(PowerProfile.LOW_VOLTAGE.hoodSupplyLimit)));
   }
 }

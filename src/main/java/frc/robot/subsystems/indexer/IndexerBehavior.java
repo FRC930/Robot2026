@@ -1,6 +1,7 @@
 package frc.robot.subsystems.indexer;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.power.PowerProfile;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
@@ -31,8 +32,8 @@ public class IndexerBehavior extends SubsystemBehavior {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  indexer.setIndexerSupplyCurrentLimit(22.0);
-                  indexer.setFeederSupplyCurrentLimit(40.0);
+                  indexer.setIndexerSupplyCurrentLimit(PowerProfile.NORMAL.indexerSupplyLimit);
+                  indexer.setFeederSupplyCurrentLimit(PowerProfile.NORMAL.feederSupplyLimit);
                 }));
     events
         .power()
@@ -40,8 +41,8 @@ public class IndexerBehavior extends SubsystemBehavior {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  indexer.setIndexerSupplyCurrentLimit(22.0);
-                  indexer.setFeederSupplyCurrentLimit(40.0);
+                  indexer.setIndexerSupplyCurrentLimit(PowerProfile.SHOOTING.indexerSupplyLimit);
+                  indexer.setFeederSupplyCurrentLimit(PowerProfile.SHOOTING.feederSupplyLimit);
                 }));
     events
         .power()
@@ -49,8 +50,8 @@ public class IndexerBehavior extends SubsystemBehavior {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  indexer.setIndexerSupplyCurrentLimit(15.0);
-                  indexer.setFeederSupplyCurrentLimit(25.0);
+                  indexer.setIndexerSupplyCurrentLimit(PowerProfile.LOW_VOLTAGE.indexerSupplyLimit);
+                  indexer.setFeederSupplyCurrentLimit(PowerProfile.LOW_VOLTAGE.feederSupplyLimit);
                 }));
   }
 }

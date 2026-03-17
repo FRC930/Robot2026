@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.power.PowerProfile;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
@@ -19,14 +20,20 @@ public class TurretBehavior extends SubsystemBehavior {
     events
         .power()
         .isNormalProfileTrigger()
-        .onTrue(Commands.runOnce(() -> turret.setSupplyCurrentLimit(40.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> turret.setSupplyCurrentLimit(PowerProfile.NORMAL.turretSupplyLimit)));
     events
         .power()
         .isShootingProfileTrigger()
-        .onTrue(Commands.runOnce(() -> turret.setSupplyCurrentLimit(40.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> turret.setSupplyCurrentLimit(PowerProfile.SHOOTING.turretSupplyLimit)));
     events
         .power()
         .isLowVoltageProfileTrigger()
-        .onTrue(Commands.runOnce(() -> turret.setSupplyCurrentLimit(25.0)));
+        .onTrue(
+            Commands.runOnce(
+                () -> turret.setSupplyCurrentLimit(PowerProfile.LOW_VOLTAGE.turretSupplyLimit)));
   }
 }
