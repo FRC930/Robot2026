@@ -81,11 +81,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.turret.TurretBehavior;
-import frc.robot.subsystems.turret.TurretIO;
-import frc.robot.subsystems.turret.TurretIOSim;
-import frc.robot.subsystems.turret.TurretIOTalonFX;
-import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -131,7 +126,6 @@ public class RobotContainer {
   private final IndexerSubsystem indexer;
   private final ClimberSubsystem climber;
   private final ShooterSubsystem shooter;
-  private final TurretSubsystem turret;
   private final HoodSubsystem hood;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
@@ -203,9 +197,6 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         // indexer = new IndexerSubsystem(new IndexerIO() {});
 
-        turret =
-            new TurretSubsystem(
-                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
         // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =
@@ -281,7 +272,6 @@ public class RobotContainer {
                         true,
                         Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
         break;
 
@@ -307,7 +297,6 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
         break;
     }
@@ -317,17 +306,6 @@ public class RobotContainer {
       double freq = AimingConstants.AIMING_FREQUENCY;
 
       new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
-
-      new HighFrequencyLoop(
-              "TurretThread",
-              freq,
-              () -> {
-                if (turret.shouldThreadCommand()) {
-                  double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0, 180.0);
-                  turret.getIO().setTarget(angle);
-                }
-              })
-          .start();
 
       new HighFrequencyLoop(
               "ShooterThread",
@@ -367,7 +345,6 @@ public class RobotContainer {
     new ShooterBehavior(shooter);
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
-    new TurretBehavior(turret);
     new AimingBehavior(aimingService);
 
     // Configure all behaviors
@@ -394,7 +371,6 @@ public class RobotContainer {
               matchState,
               indexer,
               shooter,
-              turret,
               intake,
               climber,
               hood,
@@ -477,7 +453,6 @@ public class RobotContainer {
     intake.setTestingState();
     shooter.setTestingState();
     indexer.setTestingState();
-    turret.setTestingState();
     climber.setTestingState();
     hood.setTestingState();
     // testController
