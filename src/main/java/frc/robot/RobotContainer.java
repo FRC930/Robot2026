@@ -433,6 +433,15 @@ public class RobotContainer {
                 () -> drive.setOperatorSpeedLimit(SLOW_DRIVE_SPEED),
                 () -> drive.setOperatorSpeedLimit(REG_DRIVE_SPEED)));
 
+    controller
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  DriveCommands.m_snakeModeOn = !DriveCommands.m_snakeModeOn;
+                  Logger.recordOutput("Drive/snakeModeOn", DriveCommands.m_snakeModeOn);
+                }));
+
     // Maple-Sim Button Bindings
     // // Spawns Fuel
     // controller

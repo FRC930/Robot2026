@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.goals.RobotGoals;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.LoggedTunableNumber;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -42,6 +43,7 @@ public class DriveCommands {
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  public static boolean m_snakeModeOn = false;
 
   private DriveCommands() {}
 
@@ -75,7 +77,9 @@ public class DriveCommands {
             0.0,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
-    SlewRateLimiter filter = new SlewRateLimiter(10);
+
+    LoggedTunableNumber slewRate = new LoggedTunableNumber("slewRate", 20);
+    SlewRateLimiter filter = new SlewRateLimiter(slewRate.getAsDouble());
     angleController.enableContinuousInput(-Math.PI, Math.PI);
     return Commands.run(
             () -> {
@@ -88,7 +92,7 @@ public class DriveCommands {
                   getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
               double omega;
               boolean useSnake = robotGoals.isIntakingTrigger().getAsBoolean();
-              if (useSnake) {
+              if (m_snakeModeOn && useSnake) {
                 double controllerAngle =
                     (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
 
