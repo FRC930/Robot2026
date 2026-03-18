@@ -78,7 +78,7 @@ public class OperatorIntent implements OperatorIntentEvents {
   // unused, need to get rid of (shooting does the same thing as passing)
   @Override
   public Trigger wantsToPass() {
-    return driver.start();
+    return driver.back();
   }
 
   @Override
