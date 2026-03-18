@@ -147,8 +147,6 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
   final LoggedTunableNumber setFeederVelocity =
       new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
-  final LoggedTunableNumber setTurretAngle =
-      new LoggedTunableNumber("RobotTesting/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =
       new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
@@ -196,8 +194,6 @@ public class RobotContainer {
 
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         // indexer = new IndexerSubsystem(new IndexerIO() {});
-
-        // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
@@ -464,10 +460,6 @@ public class RobotContainer {
     //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
     //     .whileFalse(new InstantCommand(() -> indexer.stop()));
     // testController
-    //     .x()
-    //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-    //     .whileFalse(turret.getNewSetTurretAngleCommand(() -> 0.0));
-    // testController
     //     .b()
     //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
     //     .whileFalse(new InstantCommand(() -> shooter.stop()));
@@ -488,28 +480,6 @@ public class RobotContainer {
     //     .povDown()
     //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
     //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .x()
-    //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-    //     .whileFalse(new InstantCommand(() -> turret.stop()));
-    // testController
-    //     .leftBumper()
-    //     .whileTrue(
-    //         new RepeatCommand(
-    //             new InstantCommand(
-    //                 () -> {
-    //                   if (new Vector2(testController.getRightX(), testController.getRightY())
-    //                           .getMagnitudeSquared()
-    //                       >= 0.25) {
-    //                     double ROT_CONST = 0.5;
-    //                     turret.setPosition(
-    //                         Math.toDegrees(
-    //                                 Math.atan2(
-    //                                     -testController.getRightX(),
-    // -testController.getRightY()))
-    //                             * ROT_CONST);
-    //                   }
-    //                 })));
     // testController
     //     .b()
     //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))

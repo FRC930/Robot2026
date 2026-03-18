@@ -22,8 +22,6 @@ import org.littletonrobotics.junction.Logger;
 public class RobotVisualization extends VirtualSubsystem {
   private static RobotVisualization instance;
 
-  private MutAngle turretTwist = Degrees.mutable(0);
-
   private MutAngle extenderTwist = Degrees.mutable(0);
 
   private final Mechanism2d primaryMechanism2d;
@@ -51,18 +49,6 @@ public class RobotVisualization extends VirtualSubsystem {
 
   }
 
-  public Angle getTurretTwist() {
-    return turretTwist;
-  }
-
-  public void setTurretTwist(Angle turretTwist) {
-    this.turretTwist.mut_replace(turretTwist);
-  }
-
-  public void setTurretSource(MutAngle turretTwist) {
-    this.turretTwist = turretTwist;
-  }
-
   public Angle getExtenderTwist() {
     return extenderTwist;
   }
@@ -83,13 +69,6 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   private void visualize() {
-    Pose3d turretPose =
-        new Pose3d(TURRET_ATTACH_OFFSET.getTranslation(), TURRET_ATTACH_OFFSET.getRotation())
-            .transformBy(
-                new Transform3d(
-                    new Translation3d(0, 0, 0),
-                    new Rotation3d(0, this.turretTwist.in(Radians), 0)));
-
     Pose3d extenderPose =
         new Pose3d(EXTENDER_ATTACH_OFFSET.getTranslation(), EXTENDER_ATTACH_OFFSET.getRotation())
             .transformBy(
@@ -97,15 +76,8 @@ public class RobotVisualization extends VirtualSubsystem {
                     new Translation3d(0, 0, 0),
                     new Rotation3d(-this.extenderTwist.in(Radians), 0, 0)));
 
-    Logger.recordOutput("RobotState/Turret/" + key, turretPose);
-
     Logger.recordOutput("RobotState/Extender/" + key, extenderPose);
   }
-
-  private static final Pose3d TURRET_ATTACH_OFFSET =
-      new Pose3d(
-          new Translation3d(Meters.of(0.092506), Inches.of(0), Inches.of(0)),
-          new Rotation3d(Degrees.of(90), Degrees.of(0), Degrees.of(90)));
 
   private static final Pose3d EXTENDER_ATTACH_OFFSET =
       new Pose3d(

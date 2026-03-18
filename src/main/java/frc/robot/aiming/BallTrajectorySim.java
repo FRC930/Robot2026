@@ -32,21 +32,15 @@ public class BallTrajectorySim {
   /**
    * Called every cycle. Spawns a new ball at intervals and updates all active balls.
    *
-   * @param turretFieldPos 2D position of turret pivot in field frame (meters)
-   * @param turretYawRad field-frame yaw the turret is pointing (radians)
    * @param launchAngleRad elevation angle (radians from horizontal)
    * @param ballSpeed total ball exit speed (m/s)
-   * @param turretVelocity velocity of turret pivot in field frame (m/s), inherited by ball
    */
   public void simulate(
-      Translation2d turretFieldPos,
-      double turretYawRad,
       double launchAngleRad,
-      double ballSpeed,
-      Translation2d turretVelocity) {
+      double ballSpeed) {
     if (spawnFuelOnGround == true) {
       // Spawn a new ball at regular intervals
-      spawnBall(turretFieldPos, turretYawRad, launchAngleRad, ballSpeed, turretVelocity);
+      spawnBall(launchAngleRad, ballSpeed);
     }
 
     // Advance all active balls by one physics step
@@ -57,21 +51,18 @@ public class BallTrajectorySim {
   }
 
   private void spawnBall(
-      Translation2d turretFieldPos,
-      double turretYawRad,
       double launchAngleRad,
-      double ballSpeed,
-      Translation2d turretVelocity) {
+      double ballSpeed) {
 
     // Compute initial velocity in field frame
     double vHorizontal = ballSpeed * Math.cos(launchAngleRad);
     double vVertical = ballSpeed * Math.sin(launchAngleRad);
-    double vxLaunch = vHorizontal * Math.cos(turretYawRad);
-    double vyLaunch = vHorizontal * Math.sin(turretYawRad);
+    double vxLaunch = vHorizontal;
+    double vyLaunch = vHorizontal;
 
     // Ball inherits turret base velocity
-    double vx = vxLaunch + turretVelocity.getX();
-    double vy = vyLaunch + turretVelocity.getY();
+    double vx = vxLaunch;
+    double vy = vyLaunch;
     double vz = vVertical;
 
     // Cap at max balls (remove oldest)
@@ -81,9 +72,9 @@ public class BallTrajectorySim {
 
     activeBalls.add(
         new Projectile(
-            turretFieldPos.getX(),
-            turretFieldPos.getY(),
-            AimingConstants.TURRET_PIVOT_HEIGHT_METERS,
+            0,
+            0,
+            0,
             vx,
             vy,
             vz));
