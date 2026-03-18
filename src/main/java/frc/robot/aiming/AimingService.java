@@ -20,8 +20,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * Central aiming service that computes hood angle, and shooter RPM. Computation runs
- * at 250Hz via AimingThread; logging and visualization run at 50Hz via periodic().
+ * Central aiming service that computes hood angle, and shooter RPM. Computation runs at 250Hz via
+ * AimingThread; logging and visualization run at 50Hz via periodic().
  */
 public class AimingService extends VirtualSubsystem implements AimingEvents {
 
@@ -121,9 +121,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
       PoseSnapshot snapshot = snapshotSupplier.get();
       if (solutionValid) {
         Rotation2d heading = snapshot.heading();
-        trajectorySim.simulate(
-            cachedLauncherAngleRad,
-            cachedLauncherSpeed);
+        trajectorySim.simulate(cachedLauncherAngleRad, cachedLauncherSpeed);
       } else {
         trajectorySim.publishEmpty();
       }
@@ -258,8 +256,6 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
         return isRed ? FieldConstants.Hub.oppTopCenterPoint : FieldConstants.Hub.topCenterPoint;
     }
   }
-
-
 
   private void logOutputs() {
     Logger.recordOutput("Aiming/HoodAngleDeg", hoodAngleDeg);

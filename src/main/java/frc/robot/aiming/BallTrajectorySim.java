@@ -1,6 +1,5 @@
 package frc.robot.aiming;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import java.util.ArrayList;
@@ -35,9 +34,7 @@ public class BallTrajectorySim {
    * @param launchAngleRad elevation angle (radians from horizontal)
    * @param ballSpeed total ball exit speed (m/s)
    */
-  public void simulate(
-      double launchAngleRad,
-      double ballSpeed) {
+  public void simulate(double launchAngleRad, double ballSpeed) {
     if (spawnFuelOnGround == true) {
       // Spawn a new ball at regular intervals
       spawnBall(launchAngleRad, ballSpeed);
@@ -50,9 +47,7 @@ public class BallTrajectorySim {
     logPositions();
   }
 
-  private void spawnBall(
-      double launchAngleRad,
-      double ballSpeed) {
+  private void spawnBall(double launchAngleRad, double ballSpeed) {
 
     // Compute initial velocity in field frame
     double vHorizontal = ballSpeed * Math.cos(launchAngleRad);
@@ -70,14 +65,7 @@ public class BallTrajectorySim {
       activeBalls.remove(0);
     }
 
-    activeBalls.add(
-        new Projectile(
-            0,
-            0,
-            0,
-            vx,
-            vy,
-            vz));
+    activeBalls.add(new Projectile(0, 0, 0, vx, vy, vz));
   }
 
   private void updateAll() {
