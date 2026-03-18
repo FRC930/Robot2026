@@ -25,7 +25,6 @@ import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamer
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -81,11 +80,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.turret.TurretBehavior;
-import frc.robot.subsystems.turret.TurretIO;
-import frc.robot.subsystems.turret.TurretIOSim;
-import frc.robot.subsystems.turret.TurretIOTalonFX;
-import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -131,7 +125,6 @@ public class RobotContainer {
   private final IndexerSubsystem indexer;
   private final ClimberSubsystem climber;
   private final ShooterSubsystem shooter;
-  private final TurretSubsystem turret;
   private final HoodSubsystem hood;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
@@ -153,8 +146,6 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
   final LoggedTunableNumber setFeederVelocity =
       new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
-  final LoggedTunableNumber setTurretAngle =
-      new LoggedTunableNumber("RobotTesting/Turret/setAngle", 45.0);
   final LoggedTunableNumber setShooterSpeed =
       new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
@@ -202,11 +193,6 @@ public class RobotContainer {
 
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
         // indexer = new IndexerSubsystem(new IndexerIO() {});
-
-        turret =
-            new TurretSubsystem(
-                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
-        // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
@@ -281,7 +267,6 @@ public class RobotContainer {
                         true,
                         Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
         break;
 
@@ -307,7 +292,6 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
         break;
     }
@@ -317,17 +301,6 @@ public class RobotContainer {
       double freq = AimingConstants.AIMING_FREQUENCY;
 
       new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
-
-      new HighFrequencyLoop(
-              "TurretThread",
-              freq,
-              () -> {
-                if (turret.shouldThreadCommand()) {
-                  double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0, 180.0);
-                  turret.getIO().setTarget(angle);
-                }
-              })
-          .start();
 
       new HighFrequencyLoop(
               "ShooterThread",
@@ -367,7 +340,6 @@ public class RobotContainer {
     new ShooterBehavior(shooter);
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
-    new TurretBehavior(turret);
     new AimingBehavior(aimingService);
 
     // Configure all behaviors
@@ -394,7 +366,6 @@ public class RobotContainer {
               matchState,
               indexer,
               shooter,
-              turret,
               intake,
               climber,
               hood,
@@ -477,7 +448,6 @@ public class RobotContainer {
     intake.setTestingState();
     shooter.setTestingState();
     indexer.setTestingState();
-    turret.setTestingState();
     climber.setTestingState();
     hood.setTestingState();
     // testController
@@ -488,10 +458,6 @@ public class RobotContainer {
     //     .b()
     //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
     //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .x()
-    //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-    //     .whileFalse(turret.getNewSetTurretAngleCommand(() -> 0.0));
     // testController
     //     .b()
     //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
@@ -513,28 +479,6 @@ public class RobotContainer {
     //     .povDown()
     //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
     //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .x()
-    //     .whileTrue(turret.getNewSetTurretAngleCommand(setTurretAngle))
-    //     .whileFalse(new InstantCommand(() -> turret.stop()));
-    // testController
-    //     .leftBumper()
-    //     .whileTrue(
-    //         new RepeatCommand(
-    //             new InstantCommand(
-    //                 () -> {
-    //                   if (new Vector2(testController.getRightX(), testController.getRightY())
-    //                           .getMagnitudeSquared()
-    //                       >= 0.25) {
-    //                     double ROT_CONST = 0.5;
-    //                     turret.setPosition(
-    //                         Math.toDegrees(
-    //                                 Math.atan2(
-    //                                     -testController.getRightX(),
-    // -testController.getRightY()))
-    //                             * ROT_CONST);
-    //                   }
-    //                 })));
     // testController
     //     .b()
     //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))

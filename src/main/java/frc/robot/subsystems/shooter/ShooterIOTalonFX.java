@@ -18,6 +18,7 @@ import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
 
 public class ShooterIOTalonFX implements ShooterIO {
+  // Still don't know how many motors keeping 4 for now
   TalonFX shooterMotor;
   TalonFX follower1;
   TalonFX follower2;
