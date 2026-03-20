@@ -191,7 +191,7 @@ public class RobotContainer {
                 new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
         // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
 
-        indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
+        indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, upperCanbus));
         // indexer = new IndexerSubsystem(new IndexerIO() {});
 
         hood =

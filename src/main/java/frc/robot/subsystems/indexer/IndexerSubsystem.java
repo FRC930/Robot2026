@@ -24,10 +24,6 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   private final IndexerInputsAutoLogged m_logged = new IndexerInputsAutoLogged();
 
-  private final LoggedTunableGainsBuilder m_feederTunableGains =
-      new LoggedTunableGainsBuilder(
-          "Gains/Feeder/", 0.25, 0.0, 0.0, 0.25, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
   private final LoggedTunableGainsBuilder m_indexerTunableGains =
       new LoggedTunableGainsBuilder(
           "Gains/Indexer/", 2.5, 0.0, 0.0, 0.3, 0.0, 2.75, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -60,20 +56,12 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     m_logged.indexerVelocity = RPM.mutable(0);
     m_logged.indexerSetPoint = RPM.mutable(0);
     m_IO.setIndexerGains(m_indexerTunableGains.build());
-
-    m_logged.feederVoltage = Volts.mutable(0);
-    m_logged.feederSupplyCurrent = Amps.mutable(0);
-    m_logged.feederTorqueCurrent = Amps.mutable(0);
-    m_logged.feederVelocity = RPM.mutable(0);
-    m_logged.feederSetPoint = RPM.mutable(0);
-    m_IO.setFeederGains(m_feederTunableGains.build());
   }
 
   public void setTestingState() {
     m_state.set(IndexerState.TESTING);
   }
 
-  // TODO should we make a seperate stop for feeder
   public void stop() {
     m_IO.stop();
   }
@@ -93,7 +81,6 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         checkForJam();
         state = m_state.get();
         m_IO.setIndexerTarget(state.indexerVelocity());
-        m_IO.setFeederTarget(state.feederVelocity());
         break;
       case REVERSING:
         if (m_isAutoReversing && m_autoReverseTimer.hasElapsed(m_autoReverseTimeSec.get())) {
@@ -103,7 +90,6 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
           state = IndexerState.FEEDING;
         }
         m_IO.setIndexerTarget(state.indexerVelocity());
-        m_IO.setFeederTarget(state.feederVelocity());
         break;
       default:
         break;
@@ -113,7 +99,6 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     Logger.recordOutput("Indexer/IsStalling", m_isStalling);
     Logger.recordOutput("Indexer/JamRetryCount", m_jamRetryCount);
 
-    m_feederTunableGains.ifGainsHaveChanged((gains) -> m_IO.setFeederGains(gains));
     m_indexerTunableGains.ifGainsHaveChanged((gains) -> m_IO.setIndexerGains(gains));
   }
 
@@ -180,14 +165,6 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     return new InstantCommand(
         () -> {
           m_IO.setIndexerTarget(RPM.of(velocity.getAsDouble()));
-        },
-        this);
-  }
-
-  public Command getNewSetFeederVelocityCommand(DoubleSupplier velocity) {
-    return new InstantCommand(
-        () -> {
-          m_IO.setFeederTarget(RPM.of(velocity.getAsDouble()));
         },
         this);
   }
