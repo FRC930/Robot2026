@@ -60,6 +60,11 @@ import frc.robot.subsystems.drive.GyroIOSim;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.feeder.FeederBehavior;
+import frc.robot.subsystems.feeder.FeederIO;
+import frc.robot.subsystems.feeder.FeederIOSim;
+import frc.robot.subsystems.feeder.FeederIOTalonFX;
+import frc.robot.subsystems.feeder.FeederSubsystem;
 import frc.robot.subsystems.hood.HoodBehavior;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
@@ -123,6 +128,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
+  private final FeederSubsystem feeder;
   private final ClimberSubsystem climber;
   private final ShooterSubsystem shooter;
   private final HoodSubsystem hood;
@@ -194,6 +200,8 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, upperCanbus));
         // indexer = new IndexerSubsystem(new IndexerIO() {});
 
+        feeder = new FeederSubsystem(new FeederIOTalonFX(9, upperCanbus));
+
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
@@ -252,6 +260,7 @@ public class RobotContainer {
         driveZoneTracker = new DriveZoneTracker(drive::getPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
         indexer = new IndexerSubsystem(new IndexerIOSim());
+        feeder = new FeederSubsystem(new FeederIOSim());
         climber =
             new ClimberSubsystem(
                 new ClimberIOSim(
@@ -290,6 +299,7 @@ public class RobotContainer {
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
+        feeder = new FeederSubsystem(new FeederIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
@@ -336,6 +346,7 @@ public class RobotContainer {
     new RobotGoalsBehavior(robotGoals);
     new DriveBehavior(drive);
     new IndexerBehavior(indexer);
+    new FeederBehavior(feeder);
     new IntakeBehavior(intake);
     new ShooterBehavior(shooter);
     new ClimberBehavior(climber);
@@ -365,6 +376,7 @@ public class RobotContainer {
               robotGoals,
               matchState,
               indexer,
+              feeder,
               shooter,
               intake,
               climber,
@@ -448,6 +460,7 @@ public class RobotContainer {
     intake.setTestingState();
     shooter.setTestingState();
     indexer.setTestingState();
+    feeder.setTestingState();
     climber.setTestingState();
     hood.setTestingState();
     // testController
