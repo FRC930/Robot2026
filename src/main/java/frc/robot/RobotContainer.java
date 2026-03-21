@@ -385,6 +385,7 @@ public class RobotContainer {
       robotGoals
           .isShootingTrigger()
           .and(robotEvents.drive().isNotMoving())
+          .and(matchState.isTeleopEnabledTrigger())
           .whileTrue(Commands.runOnce(drive::stopWithX, drive));
     }
     // Reset gyro / odometry

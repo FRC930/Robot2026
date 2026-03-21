@@ -64,8 +64,6 @@ public class AutoCommandManager {
   }
 
   private void configureNamedCommands(Drive drive, RobotGoals goals) {
-    NamedCommands.registerCommand(
-        "Shooting", goals.setGoalCommand(RobotGoal.SHOOTING).andThen(new WaitCommand(5.0)));
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
     NamedCommands.registerCommand("Shooting", goals.setGoalCommand(RobotGoal.SHOOTING));
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
