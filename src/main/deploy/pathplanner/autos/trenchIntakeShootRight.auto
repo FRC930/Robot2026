@@ -3,7 +3,74 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootRight.6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        }
+      ]
     }
   },
   "resetOdom": true,

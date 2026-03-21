@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.740349397590362,
+        "y": 0.5490602409638552
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.740349397590362,
+        "y": 0.549060240963855
+      },
+      "isLocked": false,
+      "linkedName": "trenchIntakeShootRight.3"
+    },
+    {
+      "anchor": {
+        "x": 6.044804496112411,
+        "y": 3.527346604315664
+      },
+      "prevControl": {
+        "x": 6.077587628642531,
+        "y": 0.5659369657614475
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "trenchIntakeShootRight.4"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6448132780082944,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.6203473945409315,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "TrenchIntakeShootRight",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}
