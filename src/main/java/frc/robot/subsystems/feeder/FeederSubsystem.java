@@ -130,7 +130,7 @@ public class FeederSubsystem extends SubsystemBase implements FeederEvents {
   }
 
   @Override
-  public Trigger isIndexingTrigger() {
+  public Trigger isFeedingTrigger() {
     return m_state.is(FeederState.FEEDING);
   }
 
