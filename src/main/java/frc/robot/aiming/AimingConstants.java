@@ -11,6 +11,18 @@ public final class AimingConstants {
 
   private AimingConstants() {}
 
+  // ===== TURRET GEOMETRY (measured) =====
+  // Offset of turret pivot from robot center, robot-frame (x=forward, y=left)
+  public static final Translation2d TURRET_OFFSET_FROM_CENTER =
+      new Translation2d(Units.inchesToMeters(1.375), 0.0);
+
+  // Height of the turret pivot above the ground
+  public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
+
+  // Turret angular limits (degrees) - full [-180, 180] coverage, not continuous rotation
+  public static final double TURRET_MIN_DEG = -180.0;
+  public static final double TURRET_MAX_DEG = 180.0;
+
   // ===== BALL PHYSICS (tunable for field calibration) =====
   public static final LoggedTunableNumber BALL_MASS_KG =
       new LoggedTunableNumber("Aiming/ballMassKg", 0.27);

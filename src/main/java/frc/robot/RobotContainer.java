@@ -401,7 +401,8 @@ public class RobotContainer {
             drive,
             () -> -controller.getLeftY() * drive.getEffectiveSpeedLimit(),
             () -> -controller.getLeftX() * drive.getEffectiveSpeedLimit(),
-            () -> -controller.getRightX() * REG_ANGULAR_SPEED));
+            () -> -controller.getRightX() * REG_ANGULAR_SPEED,
+            aimingService));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

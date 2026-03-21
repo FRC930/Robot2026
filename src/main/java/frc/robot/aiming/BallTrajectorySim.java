@@ -2,7 +2,6 @@ package frc.robot.aiming;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,14 +32,21 @@ public class BallTrajectorySim {
   /**
    * Called every cycle. Spawns a new ball at intervals and updates all active balls.
    *
-   * @param robotPos robot position on the field
+   * @param turretFieldPos 2D position of turret pivot in field frame (meters)
+   * @param turretYawRad field-frame yaw the turret is pointing (radians)
    * @param launchAngleRad elevation angle (radians from horizontal)
    * @param ballSpeed total ball exit speed (m/s)
+   * @param turretVelocity velocity of turret pivot in field frame (m/s), inherited by ball
    */
-  public void simulate(Translation2d robotPos, double launchAngleRad, double ballSpeed) {
+  public void simulate(
+      Translation2d turretFieldPos,
+      double turretYawRad,
+      double launchAngleRad,
+      double ballSpeed,
+      Translation2d turretVelocity) {
     if (spawnFuelOnGround == true) {
       // Spawn a new ball at regular intervals
-      spawnBall(robotPos, launchAngleRad, ballSpeed);
+      spawnBall(turretFieldPos, turretYawRad, launchAngleRad, ballSpeed, turretVelocity);
     }
 
     // Advance all active balls by one physics step
@@ -50,17 +56,22 @@ public class BallTrajectorySim {
     logPositions();
   }
 
-  private void spawnBall(Translation2d robotPos, double launchAngleRad, double ballSpeed) {
+  private void spawnBall(
+      Translation2d turretFieldPos,
+      double turretYawRad,
+      double launchAngleRad,
+      double ballSpeed,
+      Translation2d turretVelocity) {
 
     // Compute initial velocity in field frame
     double vHorizontal = ballSpeed * Math.cos(launchAngleRad);
     double vVertical = ballSpeed * Math.sin(launchAngleRad);
-    double vxLaunch = vHorizontal;
-    double vyLaunch = vHorizontal;
+    double vxLaunch = vHorizontal * Math.cos(turretYawRad);
+    double vyLaunch = vHorizontal * Math.sin(turretYawRad);
 
     // Ball inherits turret base velocity
-    double vx = vxLaunch;
-    double vy = vyLaunch;
+    double vx = vxLaunch + turretVelocity.getX();
+    double vy = vyLaunch + turretVelocity.getY();
     double vz = vVertical;
 
     // Cap at max balls (remove oldest)
@@ -69,7 +80,13 @@ public class BallTrajectorySim {
     }
 
     activeBalls.add(
-        new Projectile(robotPos.getX(), robotPos.getY(), Units.inchesToMeters(24.0), vx, vy, vz));
+        new Projectile(
+            turretFieldPos.getX(),
+            turretFieldPos.getY(),
+            AimingConstants.TURRET_PIVOT_HEIGHT_METERS,
+            vx,
+            vy,
+            vz));
   }
 
   private void updateAll() {

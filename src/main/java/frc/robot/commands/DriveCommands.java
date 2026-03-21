@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.aiming.AimingService;
 import frc.robot.goals.RobotGoals;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.LoggedTunableNumber;
@@ -63,12 +64,15 @@ public class DriveCommands {
 
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
+   *
+   * @param aimingService
    */
   public static Command joystickDrive(
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier) {
+      DoubleSupplier omegaSupplier,
+      AimingService aimingService) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -94,20 +98,22 @@ public class DriveCommands {
               boolean useSnake = robotGoals.isIntakingTrigger().getAsBoolean();
               if (m_snakeModeOn && useSnake) {
                 double controllerAngle =
-                    (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
+                    // (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
+                    Math.toRadians(aimingService.getTurretAngleDeg());
 
                 if (MathUtil.applyDeadband(ySupplier.getAsDouble(), DEADBAND) == 0.0
                     && MathUtil.applyDeadband(xSupplier.getAsDouble(), DEADBAND) == 0.0) {
                   omega = 0.0;
                 } else {
                   // Calculate angular speed
-                  if (!isFlipped) {
-                    controllerAngle += Math.PI;
-                  }
+                  // if (!isFlipped) {
+                  //   controllerAngle += Math.PI;
+                  // }
                   omega =
                       angleController.calculate(
                           drive.getRotation().getRadians(), filter.calculate(controllerAngle));
                 }
+
               } else {
                 // Apply rotation deadband
                 omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
