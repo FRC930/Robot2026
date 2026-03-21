@@ -6,4 +6,6 @@ public interface IndexerEvents {
   public Trigger isIdleTrigger();
 
   public Trigger isIndexingTrigger();
+
+  public Trigger isIntakingTrigger();
 }

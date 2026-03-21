@@ -21,5 +21,11 @@ public class IndexerBehavior extends SubsystemBehavior {
         .isShootingTrigger()
         .whileTrue(indexer.indexingCommand())
         .whileFalse(indexer.idleCommand());
+
+    events
+        .goals()
+        .isIntakingTrigger()
+        .whileTrue(indexer.intakingCommand())
+        .whileFalse(indexer.idleCommand());
   }
 }
