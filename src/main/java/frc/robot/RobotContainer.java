@@ -145,6 +145,7 @@ public class RobotContainer {
   private final OperatorIntent operatorIntent;
   private final MatchState matchState;
   private final RobotGoals robotGoals;
+  private AllEvents robotEvents;
 
   private boolean m_teleopInitialized = false;
   private AutoCommandManager autoCommandManager;
@@ -388,7 +389,7 @@ public class RobotContainer {
     if (isTesting) {
       configureTestButtonBindings();
     } else {
-      AllEvents robotEvents =
+      robotEvents =
           new AllEvents(
               robotGoals,
               matchState,
@@ -400,11 +401,11 @@ public class RobotContainer {
               hood,
               driveZoneTracker,
               aimingService);
-
       SubsystemBehavior.configureAll(robotEvents);
       robotGoals
           .isShootingTrigger()
           .and(robotEvents.drive().isNotMoving())
+          .and(matchState.isTeleopEnabledTrigger())
           .whileTrue(Commands.runOnce(drive::stopWithX, drive));
     }
     // Reset gyro / odometry

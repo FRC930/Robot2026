@@ -7,7 +7,6 @@ import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.goals.RobotGoal;
 import frc.robot.goals.RobotGoals;
 import frc.robot.subsystems.drive.Drive;
@@ -64,8 +63,6 @@ public class AutoCommandManager {
   }
 
   private void configureNamedCommands(Drive drive, RobotGoals goals) {
-    NamedCommands.registerCommand(
-        "Shooting", goals.setGoalCommand(RobotGoal.SHOOTING).andThen(new WaitCommand(5.0)));
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
     NamedCommands.registerCommand("Shooting", goals.setGoalCommand(RobotGoal.SHOOTING));
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
