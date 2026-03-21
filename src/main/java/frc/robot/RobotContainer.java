@@ -1,6 +1,6 @@
 // Copyright (c) 2021-2026 Littleton Robotics
 // http://github.com/Mechanical-Advantage
-//
+
 // Use of this source code is governed by a BSD
 // license that can be found in the LICENSE file
 // at the root directory of this project.
@@ -171,7 +171,7 @@ public class RobotContainer {
     robotGoals = RobotGoals.getInstance();
 
     CANBus rioCanbus = new CANBus("rio");
-    CANBus upperCanbus = new CANBus("upperCanbus");
+    CANBus upperCanbus = new CANBus("Superstructure");
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
