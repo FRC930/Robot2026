@@ -11,7 +11,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutDistance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -53,8 +52,7 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   public Angle getExtenderTwist() {
-    // return extenderTwist;
-    return Degrees.of(Math.sin(Timer.getTimestamp() * 10.0) * 41.5 + 41.5); // Testing articulation
+    return extenderTwist;
   }
 
   public void setExtenderTwist(Angle extenderTwist) {
@@ -62,12 +60,11 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   public void setExtenderTwistSource(MutAngle extenderTwist) {
-    // this.extenderTwist = extenderTwist;
+    this.extenderTwist = extenderTwist;
   }
 
   public Distance getCompactorExtension() {
-    // return compactorExtension;
-    return Meters.of(Math.abs(Math.sin(Timer.getTimestamp() * 5.0) * 0.3)); // Testing articulation
+    return compactorExtension;
   }
 
   public void setCompactorExtension(Distance compactorExtension) {
@@ -79,9 +76,7 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   public Angle getHoodAngle() {
-    // return hoodAngle;
-    return Degrees.of(
-        Math.abs(Math.sin(Timer.getTimestamp() * 15.0) * 40.0)); // Testing articulation
+    return hoodAngle;
   }
 
   public void setHoodAngle(Angle hoodAngle) {
