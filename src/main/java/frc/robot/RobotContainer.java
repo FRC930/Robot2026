@@ -13,15 +13,9 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
-import static frc.robot.subsystems.vision.VisionConstants.backLeftCamera;
-import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
-import static frc.robot.subsystems.vision.VisionConstants.frontLeftForwardCamera;
-import static frc.robot.subsystems.vision.VisionConstants.frontRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.frontCamera;
 import static frc.robot.subsystems.vision.VisionConstants.questCamName;
-import static frc.robot.subsystems.vision.VisionConstants.robotToBackLeftCamera;
-import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftCamera;
-import static frc.robot.subsystems.vision.VisionConstants.robotToFrontLeftForwardCamera;
-import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToFrontCamera;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
@@ -227,10 +221,7 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOLimelight(frontLeftCamera, drive::getRotation),
-                new VisionIOLimelight(frontRightCamera, drive::getRotation),
-                new VisionIOLimelight(frontLeftForwardCamera, drive::getRotation),
-                new VisionIOLimelight(backLeftCamera, drive::getRotation),
+                new VisionIOLimelight(frontCamera, drive::getRotation),
                 new VisionIOQuest(drive::getAutoAlignPose, questCamName));
         break;
 
@@ -249,13 +240,7 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOPhotonVisionSim(
-                    frontLeftCamera, robotToFrontLeftCamera, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    frontRightCamera, robotToFrontRightCamera, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    frontLeftForwardCamera, robotToFrontLeftForwardCamera, drive::getPose),
-                new VisionIOPhotonVisionSim(backLeftCamera, robotToBackLeftCamera, drive::getPose));
+                new VisionIOPhotonVisionSim(frontCamera, robotToFrontCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
