@@ -15,18 +15,9 @@ public interface IndexerIO {
     public MutVoltage indexerVoltage;
     public MutCurrent indexerSupplyCurrent;
     public MutCurrent indexerTorqueCurrent;
-
-    public MutAngularVelocity feederVelocity;
-    public MutAngularVelocity feederSetPoint;
-    public MutVoltage feederVoltage;
-    public MutCurrent feederSupplyCurrent;
-    public MutCurrent feederTorqueCurrent;
   }
 
   public default void setIndexerTarget(AngularVelocity velocity) {}
-  ;
-
-  public default void setFeederTarget(AngularVelocity velocity) {}
   ;
 
   public default void stop() {}
@@ -36,8 +27,5 @@ public interface IndexerIO {
   ;
 
   public default void setIndexerGains(Gains gains) {}
-  ;
-
-  public default void setFeederGains(Gains gains) {}
   ;
 }
