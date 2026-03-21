@@ -34,6 +34,7 @@ public class VisionIOQuest implements VisionIO {
   private QuestNav questNav = new QuestNav();
   private boolean m_initialPoseSet = false;
   private boolean m_firstQuestPose = false;
+  // TODO: find the pose for quest and rotation
   private final Transform3d ROBOT_TO_QUEST =
       new Transform3d(
           Units.inchesToMeters(-10.5),

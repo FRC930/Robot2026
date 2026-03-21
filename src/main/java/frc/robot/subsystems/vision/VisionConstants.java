@@ -19,10 +19,7 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String frontLeftCamera = "limelight-frontl";
-  public static String frontRightCamera = "limelight-frontr";
-  public static String frontLeftForwardCamera = "limelight-frontlf";
-  public static String backLeftCamera = "limelight-backl";
+  public static String frontCamera = "limelight-front";
   public static String questCamName = "Quest";
   /*
    * CAMERA POSITIONS ON ROBOT (looking down from above, with front of robot at top of page)
@@ -32,51 +29,15 @@ public class VisionConstants {
    *
    * Back Left (x,y)   Back Right (x,y)
    * -/+               -/-
-   *
-   * NOTE: Limelight right (LL Right) is reversed in code vs on the actual limelight (if its - in code, its + on limelight, and vice versa)
-   * NOTE: Limelight pitch (LL Pitch) is reversed in code vs on the actual limelight (if its - in code, its + on limelight, and vice versa)
    */
 
-  // Robot to camera transforms
-  // (Not used by Limelight, configure in web UI instead)
-  // front cam values on robot,
-  // LL Forward 0.391, LL Right 0.0, LL up 0.198, LL Roll 0.0, LL Pitch 0.0, LL Yaw 0.0.
-
-  // LL Forward 0.235966, LL Right -0.405384(Positive in code), LL up 0.592836, LL Roll 0.0, LL
-  // Pitch 0.0, LL Yaw 90.0.
-  public static Transform3d robotToFrontLeftCamera =
+  // TODO: Find position and rotation of camera
+  public static Transform3d robotToFrontCamera =
       new Transform3d(
           Units.inchesToMeters(9.29),
           Units.inchesToMeters(15.96),
           Units.inchesToMeters(23.34),
           new Rotation3d(0.0, 0.0, Units.degreesToRadians(90.0)));
-
-  // LL Forward 0.235966, LL Right 0.405384(Negitive in code), LL up 0.592836, LL Roll 0.0, LL Pitch
-  // 0.0, LL Yaw -90.0.
-  public static Transform3d robotToFrontRightCamera =
-      new Transform3d(
-          Units.inchesToMeters(9.29),
-          Units.inchesToMeters(-15.96),
-          Units.inchesToMeters(23.34),
-          new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
-
-  // LL Forward 0.318008, LL Right -0.3302(Negitive in code), LL up 0.592836, LL Roll 0.0, LL Pitch
-  // 0.0, LL Yaw 0.0.
-  public static Transform3d robotToFrontLeftForwardCamera =
-      new Transform3d(
-          Units.inchesToMeters(12.52),
-          Units.inchesToMeters(13.0),
-          Units.inchesToMeters(23.34),
-          new Rotation3d(0.0, 0.0, Units.degreesToRadians(0)));
-
-  // LL Forward -0.327406, LL Right -0.2159(Positive in code), LL up 0.592836, LL Roll 0.0, LL Pitch
-  // 0.0, LL Yaw 180.0.
-  public static Transform3d robotToBackLeftCamera =
-      new Transform3d(
-          Units.inchesToMeters(-12.89),
-          Units.inchesToMeters(8.5),
-          Units.inchesToMeters(23.34),
-          new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
@@ -92,9 +53,6 @@ public class VisionConstants {
   public static double[] cameraStdDevFactors =
       new double[] {
         1.0, // Camera 0
-        1.0, // Camera 1
-        1.0, // Camera 2
-        1.0 // Camera 3
       };
 
   // Multipliers to apply for MegaTag 2 observations
