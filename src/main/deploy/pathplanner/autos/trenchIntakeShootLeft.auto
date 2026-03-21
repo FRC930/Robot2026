@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
