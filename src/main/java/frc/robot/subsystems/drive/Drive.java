@@ -80,19 +80,6 @@ public class Drive extends SubsystemBase {
   private static final double ROBOT_MASS_KG = 61.235; // 135 lbs in kg estimate
   private static final double ROBOT_MOI = 6.883;
   private static final double WHEEL_COF = 1.2;
-  private static final RobotConfig PP_CONFIG =
-      new RobotConfig(
-          ROBOT_MASS_KG,
-          ROBOT_MOI,
-          new ModuleConfig(
-              TunerConstants.FrontLeft.WheelRadius,
-              TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
-              WHEEL_COF,
-              DCMotor.getKrakenX60Foc(1)
-                  .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
-              TunerConstants.FrontLeft.SlipCurrent,
-              1),
-          getModuleTranslations());
 
   // TODO FINAL ROBOT CONFIGURATION FOR MAPLE-SIM
   public static final DriveTrainSimulationConfig mapleSimConfig =
@@ -165,6 +152,29 @@ public class Drive extends SubsystemBase {
     // Start odometry thread
     PhoenixOdometryThread.getInstance().start();
 
+    RobotConfig robotConfig;
+
+    try {
+      // loads the config from path planer
+      robotConfig = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      e.printStackTrace();
+      // backup
+      robotConfig =
+          new RobotConfig(
+              ROBOT_MASS_KG,
+              ROBOT_MOI,
+              new ModuleConfig(
+                  TunerConstants.FrontLeft.WheelRadius,
+                  TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+                  WHEEL_COF,
+                  DCMotor.getKrakenX60Foc(1)
+                      .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
+                  TunerConstants.FrontLeft.SlipCurrent,
+                  1),
+              getModuleTranslations());
+    }
+
     // Configure AutoBuilder for PathPlanner
     SmartDashboard.putData("pp_field", ppField2d);
     SmartDashboard.putData("robot_field", robotField2d);
@@ -175,7 +185,7 @@ public class Drive extends SubsystemBase {
         this::runVelocity,
         new PPHolonomicDriveController(
             new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
-        PP_CONFIG,
+        robotConfig,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this);
     Pathfinding.setPathfinder(new LocalADStarAK());
