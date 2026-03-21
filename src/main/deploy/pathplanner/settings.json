@@ -3,10 +3,10 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "DepotFirstShoot",
-    "IntakeDepotShootLef",
     "IntakeShootLeftLine",
     "IntakeShootRightLine",
+    "DepotFirstShoot",
+    "IntakeDepotShootLeft",
     "RunningStartLeft",
     "RunningStartLeftMore"
   ],
