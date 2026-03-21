@@ -40,7 +40,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           / IntakeIOTalonFX.GEAR_RATIO_ROLLERS;
 
   private LoggedTunableNumber intakeTargetRPM =
-      new LoggedTunableNumber("Intake/intakeTargetRPM", 3000);
+  //original zalue for gear ratio 2:1 = 3000
+      new LoggedTunableNumber("Intake/intakeTargetRPM", 4500);
   private LoggedTunableNumber intakeExtenderTargetAngleUp =
       new LoggedTunableNumber("Intake/intakeExtenderTargetAngleUp", INTAKE_EXTENDER_ANGLE_UP);
   private LoggedTunableNumber intakeExtenderTargetAngleDown =
@@ -67,7 +68,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
 
   public LoggedTunableGainsBuilder rollerGains =
       new LoggedTunableGainsBuilder(
-          "Gains/IntakeSubsystem/", 1.0, 0, 0.1, 0.33, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        // old kD for 2:1 gear ratio = 0.1
+          "Gains/IntakeSubsystem/", 1.0, 0, 0.0, 0.33, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   public LoggedTunableGainsBuilder extenderGains =
       new LoggedTunableGainsBuilder(
           "Gains/ExtenderSubsystem/", 200.0, 0, 0.0, 0.0, 0.425, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
