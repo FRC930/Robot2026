@@ -32,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   /** Creates a new ExampleSubsystem. */
   private IntakeIO m_IO;
 
-  public static final double INTAKE_EXTENDER_ANGLE_UP = 105.0;
+  public static final double INTAKE_EXTENDER_ANGLE_UP = 83.0;
 
   private double rpm =
       (11.0 / 12.0)
