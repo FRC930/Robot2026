@@ -145,7 +145,6 @@ public class RobotContainer {
   private final OperatorIntent operatorIntent;
   private final MatchState matchState;
   private final RobotGoals robotGoals;
-  private AllEvents robotEvents;
 
   private boolean m_teleopInitialized = false;
   private AutoCommandManager autoCommandManager;
@@ -389,7 +388,7 @@ public class RobotContainer {
     if (isTesting) {
       configureTestButtonBindings();
     } else {
-      robotEvents =
+      AllEvents robotEvents =
           new AllEvents(
               robotGoals,
               matchState,
