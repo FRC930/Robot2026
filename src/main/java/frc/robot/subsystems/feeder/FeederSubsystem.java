@@ -138,7 +138,7 @@ public class FeederSubsystem extends SubsystemBase implements FeederEvents {
     return runOnce(() -> m_state.set(FeederState.IDLE));
   }
 
-  public Command indexingCommand() {
+  public Command feedingCommand() {
     return runOnce(
         () -> {
           m_state.set(FeederState.FEEDING);
