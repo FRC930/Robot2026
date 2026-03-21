@@ -29,15 +29,7 @@ public class VisionConstants {
    *
    * Back Left (x,y)   Back Right (x,y)
    * -/+               -/-
-   *
-   * NOTE: Limelight right (LL Right) is reversed in code vs on the actual limelight (if its - in code, its + on limelight, and vice versa)
-   * NOTE: Limelight pitch (LL Pitch) is reversed in code vs on the actual limelight (if its - in code, its + on limelight, and vice versa)
    */
-
-  // Robot to camera transforms
-  // (Not used by Limelight, configure in web UI instead)
-  // front cam values on robot,
-  // LL Forward 0.391, LL Right 0.0, LL up 0.198, LL Roll 0.0, LL Pitch 0.0, LL Yaw 0.0.
 
   // TODO: Find position and rotation of camera
   public static Transform3d robotToFrontCamera =
