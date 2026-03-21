@@ -91,7 +91,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     m_IO.setRollerGains(rollerGains.build());
     logged.numberFuelHave = 0;
     m_IO.setExtenderGains(extenderGains.build());
-    RobotVisualization.instance().setExenderSource(logged.extenderAngle);
+    RobotVisualization.instance().setExtenderTwistSource(logged.extenderAngle);
   }
 
   /**

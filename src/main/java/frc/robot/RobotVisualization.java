@@ -1,15 +1,16 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -21,7 +22,9 @@ import org.littletonrobotics.junction.Logger;
 public class RobotVisualization extends VirtualSubsystem {
   private static RobotVisualization instance;
 
-  private MutAngle extenderTwist = Degrees.mutable(0);
+  private MutDistance compactorExtension = Inches.mutable(0.0);
+  private MutAngle extenderTwist = Degrees.mutable(0.0);
+  private MutAngle hoodAngle = Degrees.mutable(0.0);
 
   private final Mechanism2d primaryMechanism2d;
 
@@ -56,8 +59,32 @@ public class RobotVisualization extends VirtualSubsystem {
     this.extenderTwist.mut_replace(extenderTwist);
   }
 
-  public void setExenderSource(MutAngle extenderTwist) {
+  public void setExtenderTwistSource(MutAngle extenderTwist) {
     this.extenderTwist = extenderTwist;
+  }
+
+  public Distance getCompactorExtension() {
+    return compactorExtension;
+  }
+
+  public void setCompactorExtension(Distance compactorExtension) {
+    this.compactorExtension.mut_replace(compactorExtension);
+  }
+
+  public void setCompactorExtensionSource(MutDistance compactorExtension) {
+    this.compactorExtension = compactorExtension;
+  }
+
+  public Angle getHoodAngle() {
+    return hoodAngle;
+  }
+
+  public void setHoodAngle(Angle hoodAngle) {
+    this.hoodAngle.mut_replace(hoodAngle);
+  }
+
+  public void setHoodAngleSource(MutAngle hoodAngle) {
+    this.hoodAngle = hoodAngle;
   }
 
   public static RobotVisualization instance() {
@@ -68,18 +95,29 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   private void visualize() {
+    Pose3d compactorPose =
+        new Pose3d(
+            new Translation3d(Inches.zero(), Inches.zero(), this.getCompactorExtension()),
+            Rotation3d.kZero);
+
     Pose3d extenderPose =
-        new Pose3d(EXTENDER_ATTACH_OFFSET.getTranslation(), EXTENDER_ATTACH_OFFSET.getRotation())
-            .transformBy(
-                new Transform3d(
-                    new Translation3d(0, 0, 0),
-                    new Rotation3d(-this.extenderTwist.in(Radians), 0, 0)));
+        new Pose3d(
+            new Translation3d(
+                Meters.of(0.16426),
+                Meters.zero(),
+                Meters.of(0.090045)), // constant value for attachment offset
+            new Rotation3d(Degrees.zero(), this.getExtenderTwist().unaryMinus(), Degrees.zero()));
 
+    Pose3d hoodPose =
+        new Pose3d(
+            new Translation3d(
+                Meters.of(-0.2667),
+                Meters.zero(),
+                Meters.of(0.4807)), // constant value for attachment offset
+            new Rotation3d(Degrees.zero(), this.getHoodAngle().unaryMinus(), Degrees.zero()));
+
+    Logger.recordOutput("RobotState/Compactor/" + key, compactorPose);
     Logger.recordOutput("RobotState/Extender/" + key, extenderPose);
+    Logger.recordOutput("RobotState/Hood/" + key, hoodPose);
   }
-
-  private static final Pose3d EXTENDER_ATTACH_OFFSET =
-      new Pose3d(
-          new Translation3d(Meters.of(0.025107), Meters.of(0.), Meters.of(0.147639)),
-          new Rotation3d(Degrees.of(90), Degrees.of(0), Degrees.of(90)));
 }
