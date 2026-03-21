@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.PoseSnapshot;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableNumber;
@@ -121,7 +122,9 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
       PoseSnapshot snapshot = snapshotSupplier.get();
       if (solutionValid) {
         Rotation2d heading = snapshot.heading();
-        trajectorySim.simulate(cachedLauncherAngleRad, cachedLauncherSpeed);
+        Pose2d robotPos = RobotContainer.driveSimulation.getSimulatedDriveTrainPose();
+        Translation2d translation = robotPos.getTranslation();
+        trajectorySim.simulate(translation, cachedLauncherAngleRad, cachedLauncherSpeed);
       } else {
         trajectorySim.publishEmpty();
       }
