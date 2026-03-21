@@ -3,13 +3,17 @@ package frc.robot.subsystems.compactor;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -28,8 +32,19 @@ public class CompactorIOSim implements CompactorIO {
   private Distance target = Inches.of(0);
   private MutVoltage appliedVoltage = Volts.mutable(0.0);
 
-  public CompactorIOSim(ElevatorSim compactorSim) {
-    sim = compactorSim;
+  public CompactorIOSim() {
+    sim =
+        new ElevatorSim(
+            LinearSystemId.createElevatorSystem(
+                DCMotor.getKrakenX60Foc(2),
+                Pounds.of(45).in(Kilograms),
+                Inches.of(CompactorSubsystem.SPOOL_RADIUS).in(Meters),
+                CompactorSubsystem.REDUCTION),
+            DCMotor.getKrakenX60Foc(2),
+            Inches.of(0).in(Meters),
+            Inches.of(32).in(Meters),
+            true,
+            Inches.of(0).in(Meters));
   }
 
   private void runVolts(Voltage volts) {
@@ -61,5 +76,11 @@ public class CompactorIOSim implements CompactorIO {
     input.voltageSetPoint.mut_replace(appliedVoltage);
 
     updateVoltageSetpoint();
+  }
+
+  @Override
+  public void setCompactorHeight(Distance target) {
+    this.target = target;
+    controller.setGoal(target.in(Inches));
   }
 }

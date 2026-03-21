@@ -66,6 +66,7 @@ public class CompactorSubsystem extends SubsystemBase implements CompactorEvents
       case BOTTOM:
         setCompactorHeight(Inches.of(0.0));
     }
+    tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }
 
   public Command idleCommand() {

@@ -45,6 +45,11 @@ import frc.robot.subsystems.climber.ClimberBehavior;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.compactor.CompactorBehavior;
+import frc.robot.subsystems.compactor.CompactorIO;
+import frc.robot.subsystems.compactor.CompactorIOSim;
+import frc.robot.subsystems.compactor.CompactorIOTalonFX;
+import frc.robot.subsystems.compactor.CompactorSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveBehavior;
 import frc.robot.subsystems.drive.DriveZoneTracker;
@@ -126,6 +131,7 @@ public class RobotContainer {
   private final ClimberSubsystem climber;
   private final ShooterSubsystem shooter;
   private final HoodSubsystem hood;
+  private final CompactorSubsystem compactor;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
 
@@ -198,6 +204,8 @@ public class RobotContainer {
 
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        compactor =
+            new CompactorSubsystem(new CompactorIOTalonFX(84, upperCanbus)); // TODO add actual ID
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -262,6 +270,7 @@ public class RobotContainer {
                         Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
+        compactor = new CompactorSubsystem(new CompactorIOSim());
         break;
 
       default:
@@ -288,6 +297,7 @@ public class RobotContainer {
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
+        compactor = new CompactorSubsystem(new CompactorIO() {});
         break;
     }
 
@@ -337,6 +347,7 @@ public class RobotContainer {
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
     new AimingBehavior(aimingService);
+    new CompactorBehavior(compactor);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
@@ -366,6 +377,7 @@ public class RobotContainer {
               intake,
               climber,
               hood,
+              compactor,
               driveZoneTracker,
               aimingService);
 
