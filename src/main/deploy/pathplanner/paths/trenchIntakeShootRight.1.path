@@ -3,37 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.700699001426534,
-        "y": 5.510240963855422
+        "x": 7.778253012048193,
+        "y": 3.499542168674699
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.700699001426534,
-        "y": 5.510240963855422
+        "x": 7.297433734939758,
+        "y": 2.341204819277109
       },
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.0"
+      "linkedName": "trenchIntakeShootRight.0"
     },
     {
       "anchor": {
-        "x": 3.2869638554216865,
-        "y": 5.510240963855422
+        "x": 2.8498554216867467,
+        "y": 2.5488313253012054
       },
       "prevControl": {
-        "x": 4.286963855421686,
-        "y": 5.510240963855422
+        "x": 7.11166265060241,
+        "y": 2.5488313253012054
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.1"
+      "linkedName": "trenchIntakeShootRight.1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6730290456431481,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.837272113436866,
-      "maxWaypointRelativePos": 0.5158676569885202,
+      "minWaypointRelativePos": 0.9042183622828787,
+      "maxWaypointRelativePos": 0.6342431761786598,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -59,10 +64,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "IntakeDepotShootLef",
+  "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": false
 }

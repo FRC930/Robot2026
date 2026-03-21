@@ -3,56 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2869638554216865,
-        "y": 5.510240963855422
+        "x": 4.215819277108434,
+        "y": 7.389807228915663
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4018192771084337,
-        "y": 5.980132530120482
-      },
-      "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.1"
-    },
-    {
-      "anchor": {
-        "x": 1.5713132530120486,
-        "y": 5.958277108433736
-      },
-      "prevControl": {
-        "x": 2.0739879518072293,
-        "y": 5.936421686746989
-      },
-      "nextControl": {
-        "x": 1.1597693852241282,
-        "y": 5.9761703200766885
+        "x": 8.215819277108434,
+        "y": 7.389807228915663
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7785164051355205,
-        "y": 5.958277108433736
+        "x": 7.78605816191407,
+        "y": 4.544038998049692
       },
       "prevControl": {
-        "x": 1.4341790557379301,
-        "y": 5.925493975903614
+        "x": 7.78605816191407,
+        "y": 7.544038998049692
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "intakeDepotShootLeft.2"
+      "linkedName": "trenchIntakeShootLeft.0"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 180.0
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.32059553349875347,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
@@ -63,10 +59,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.1185960034179
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "IntakeDepotShootLef",
+  "folder": "TrenchIntakeShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

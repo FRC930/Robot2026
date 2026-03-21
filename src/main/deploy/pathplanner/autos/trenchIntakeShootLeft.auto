@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intaking"
+            "pathName": "trenchIntakeShootLeft.0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depotFirstShoot.0"
+            "pathName": "trenchIntakeShootLeft.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.2"
           }
         },
         {
@@ -25,31 +31,43 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 5.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depotFirstShoot.1"
+            "pathName": "trenchIntakeShootLeft.3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depotFirstShoot.2"
+            "pathName": "trenchIntakeShootLeft.4"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 9.0
+            "pathName": "trenchIntakeShootLeft.5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchIntakeShootLeft.6"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Idle"
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
           }
         }
       ]

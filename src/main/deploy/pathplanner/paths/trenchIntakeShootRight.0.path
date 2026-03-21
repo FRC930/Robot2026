@@ -3,54 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 5.5
+        "x": 4.1939638554216865,
+        "y": 0.680192771084337
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.25,
-        "y": 5.5
+        "x": 7.756397590361445,
+        "y": 0.691120481927711
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 6.0
+        "x": 7.778253012048193,
+        "y": 3.499542168674699
       },
       "prevControl": {
-        "x": 1.0,
-        "y": 6.0
+        "x": 7.778253012048193,
+        "y": 0.549060240963855
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depotFirstShoot.0.end"
+      "linkedName": "trenchIntakeShootRight.0"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [
+  "rotationTargets": [
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7130317353139796,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
+      "waypointRelativePos": 0.6730290456431451,
+      "rotationDegrees": 90.0
     }
   ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Intaking",
-      "waypointRelativePos": 0.05941931127615275,
+      "waypointRelativePos": 0.1955334987593045,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -62,14 +58,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 0.0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "DepotFirstShoot",
+  "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

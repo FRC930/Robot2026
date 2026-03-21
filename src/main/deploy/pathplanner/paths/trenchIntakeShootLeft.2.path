@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6,
-        "y": 5.5
+        "x": 2.980987951801619,
+        "y": 5.586734939762856
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.35,
-        "y": 5.5
+        "x": 3.230987951801619,
+        "y": 5.586734939762856
       },
       "isLocked": false,
-      "linkedName": "runningStartLeft.0.start"
+      "linkedName": "trenchIntakeShootLeft.1"
     },
     {
       "anchor": {
-        "x": 3.25,
-        "y": 5.5
+        "x": 2.980987951801619,
+        "y": 5.586734939762856
       },
       "prevControl": {
-        "x": 3.5,
-        "y": 5.5
+        "x": 2.730987951801619,
+        "y": 5.586734939762856
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "runningStartLeft.0.end"
+      "linkedName": "trenchIntakeShootLeft.2"
     }
   ],
   "rotationTargets": [],
@@ -41,11 +41,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 135.0
   },
   "reversed": false,
-  "folder": "RunningStartLeftMore",
+  "folder": "TrenchIntakeShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
