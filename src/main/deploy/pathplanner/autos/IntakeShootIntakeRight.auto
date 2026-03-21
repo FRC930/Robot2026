@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "IntakeShootIntakeRight.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "IntakeShootIntakeRight.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "IntakeShootIntakeRight.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "IntakeShootIntakeRight.3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
