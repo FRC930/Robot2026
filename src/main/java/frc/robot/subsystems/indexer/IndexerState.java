@@ -9,8 +9,9 @@ import java.util.function.DoubleSupplier;
 public enum IndexerState {
   TESTING(() -> 0.0),
   IDLE(() -> 0.0),
-  FEEDING(new LoggedTunableNumber("Indexer/setIndexerPoint", 160)),
-  REVERSING(new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50));
+  FEEDING(new LoggedTunableNumber("Indexer/setIndexerPointShooting", 160)),
+  REVERSING(new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50)),
+  INTAKING(new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 50));
 
   private DoubleSupplier m_indexerVelocity;
 

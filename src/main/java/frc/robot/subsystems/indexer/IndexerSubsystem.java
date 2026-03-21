@@ -91,6 +91,9 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         }
         m_IO.setIndexerTarget(state.indexerVelocity());
         break;
+      case INTAKING:
+        m_IO.setIndexerTarget(state.indexerVelocity());
+        break;
       default:
         break;
     }
@@ -145,6 +148,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
     return m_state.is(IndexerState.FEEDING);
   }
 
+  @Override
+  public Trigger isIntakingTrigger() {
+    return m_state.is(IndexerState.INTAKING);
+  }
+
   public Command idleCommand() {
     return runOnce(() -> m_state.set(IndexerState.IDLE));
   }
@@ -159,6 +167,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   public Command reverseCommand() {
     return runOnce(() -> m_state.set(IndexerState.REVERSING));
+  }
+
+  public Command intakingCommand() {
+    return runOnce(() -> m_state.set(IndexerState.INTAKING));
   }
 
   public Command getNewSetIndexerVelocityCommand(DoubleSupplier velocity) {
