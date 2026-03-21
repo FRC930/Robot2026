@@ -6,13 +6,13 @@ import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableGainsBuilder;
+import org.littletonrobotics.junction.Logger;
 
 public class CompactorSubsystem extends SubsystemBase implements CompactorEvents {
   private CompactorIO m_IO;
@@ -22,6 +22,14 @@ public class CompactorSubsystem extends SubsystemBase implements CompactorEvents
 
   private CompactorInputsAutoLogged logged = new CompactorInputsAutoLogged();
 
+  public static final double SPOOL_RADIUS = 1.751 / 2.0;
+
+  public static final double INCHES_PER_ROT = (2.0 * Math.PI * SPOOL_RADIUS);
+
+  public static final double REDUCTION = (4.0 / 1.0);
+
+  public LoggedTunableGainsBuilder tunableGains =
+      new LoggedTunableGainsBuilder("Gains/Compactor/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public CompactorSubsystem(CompactorIO IO) {
     m_IO = IO;

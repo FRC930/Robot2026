@@ -5,6 +5,7 @@ import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
+import frc.robot.util.Gains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CompactorIO {
@@ -22,6 +23,12 @@ public interface CompactorIO {
   public default void setCompactorHeight(Distance target) {}
   ;
 
+  public default void stop() {}
+  ;
+
   public default void updateInputs(CompactorInputs input) {}
+  ;
+
+  public default void setGains(Gains gains) {}
   ;
 }
