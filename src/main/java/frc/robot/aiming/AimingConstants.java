@@ -89,7 +89,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber RPM_DISTANCE_SCALE =
       new LoggedTunableNumber("Aiming/rpmDistanceScale", 0.01);
   public static final LoggedTunableNumber RPM_REF_DISTANCE_M =
-      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 5.0);
+      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 3.5);
 
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)
