@@ -96,23 +96,32 @@ public class DriveCommands {
                   getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
               double omega;
               boolean useSnake = robotGoals.isIntakingTrigger().getAsBoolean();
+              boolean useAiming = robotGoals.isShootingTrigger().getAsBoolean();
+
               if (m_snakeModeOn && useSnake) {
                 double controllerAngle =
-                    // (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
-                    Math.toRadians(aimingService.getTurretAngleDeg());
+                    (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
 
                 if (MathUtil.applyDeadband(ySupplier.getAsDouble(), DEADBAND) == 0.0
                     && MathUtil.applyDeadband(xSupplier.getAsDouble(), DEADBAND) == 0.0) {
                   omega = 0.0;
                 } else {
                   // Calculate angular speed
-                  // if (!isFlipped) {
-                  //   controllerAngle += Math.PI;
-                  // }
+                  if (!isFlipped) {
+                    controllerAngle += Math.PI;
+                  }
                   omega =
                       angleController.calculate(
                           drive.getRotation().getRadians(), filter.calculate(controllerAngle));
                 }
+              } else if (useAiming) {
+                double controllerAngle =
+                    // (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
+                    Math.toRadians(aimingService.getTurretAngleDeg());
+
+                omega =
+                    angleController.calculate(
+                        drive.getRotation().getRadians(), filter.calculate(controllerAngle));
 
               } else {
                 // Apply rotation deadband
