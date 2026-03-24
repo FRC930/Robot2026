@@ -20,7 +20,7 @@ public final class AimingConstants {
   public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
 
   // Turret angular limits (degrees) - full [-180, 180] coverage, not continuous rotation
-  // TODO ask gregory what to do for this 
+  // TODO ask gregory what to do for this
   public static final double TURRET_MIN_DEG = -180.0;
   public static final double TURRET_MAX_DEG = 180.0;
   // TODO ask gregory what to do for this ^
