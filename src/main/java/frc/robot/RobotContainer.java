@@ -335,7 +335,7 @@ public class RobotContainer {
           .start();
     }
 
-    autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());
+    autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance(), aimingService);
 
     // Create goal behaviors (wires operator intent → robot goals)
     new RobotGoalsBehavior(robotGoals);

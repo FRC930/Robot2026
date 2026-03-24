@@ -45,6 +45,7 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   public static boolean m_snakeModeOn = false;
+  public static boolean aimingLinedUp = false;
 
   private DriveCommands() {}
 
@@ -63,6 +64,36 @@ public class DriveCommands {
   }
 
   /**
+   * Used for auto to force auto aim, no joystick control
+   *
+   * @param drive
+   * @param aimingService
+   * @return
+   */
+  public static Command joystickDrive(Drive drive, AimingService aimingService) {
+    return joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0, aimingService, true);
+  }
+
+  /**
+   * Used by the controller during teleop or driver control
+   *
+   * @param drive
+   * @param xSupplier
+   * @param ySupplier
+   * @param omegaSupplier
+   * @param aimingService
+   * @return
+   */
+  public static Command joystickDrive(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier,
+      AimingService aimingService) {
+    return joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, aimingService, false);
+  }
+
+  /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    *
    * @param aimingService
@@ -72,7 +103,8 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
-      AimingService aimingService) {
+      AimingService aimingService,
+      boolean forceAutoAim) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -87,6 +119,8 @@ public class DriveCommands {
     angleController.enableContinuousInput(-Math.PI, Math.PI);
     return Commands.run(
             () -> {
+              aimingLinedUp = false;
+
               RobotGoals robotGoals = RobotGoals.getInstance();
               boolean isFlipped =
                   DriverStation.getAlliance().isPresent()
@@ -98,10 +132,13 @@ public class DriveCommands {
               boolean useSnake = robotGoals.isIntakingTrigger().getAsBoolean();
               boolean useAiming = robotGoals.isShootingTrigger().getAsBoolean();
 
-              if (m_snakeModeOn && useSnake) {
+              if (!forceAutoAim && m_snakeModeOn && useSnake) {
+                // Gets the controller angle as a double so we can use it to spin the robot using
+                // just one joystick
                 double controllerAngle =
                     (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
-
+                // If we are not trying to move the robot don't move the robot, it was having
+                // problems...
                 if (MathUtil.applyDeadband(ySupplier.getAsDouble(), DEADBAND) == 0.0
                     && MathUtil.applyDeadband(xSupplier.getAsDouble(), DEADBAND) == 0.0) {
                   omega = 0.0;
@@ -110,11 +147,14 @@ public class DriveCommands {
                   if (!isFlipped) {
                     controllerAngle += Math.PI;
                   }
+                  // Move the robot
                   omega =
                       angleController.calculate(
                           drive.getRotation().getRadians(), filter.calculate(controllerAngle));
                 }
-              } else if (useAiming) {
+              } else if (forceAutoAim || useAiming) {
+                // sets the controllerAngle variable to what the aiming code says
+                // the turret should be so when we set the robot to that angle, it aims correctly
                 double controllerAngle =
                     // (Math.atan2(-ySupplier.getAsDouble(), -xSupplier.getAsDouble()));
                     Math.toRadians(aimingService.getTurretAngleDeg());
@@ -122,7 +162,11 @@ public class DriveCommands {
                 omega =
                     angleController.calculate(
                         drive.getRotation().getRadians(), filter.calculate(controllerAngle));
-
+                // If we are forcing the auto aim — auto — and we are close to the angle we want to
+                // be we stop rotating/auto aiming
+                if (forceAutoAim && MathUtil.isNear(omega, 0.0, 0.01)) {
+                  aimingLinedUp = true;
+                }
               } else {
                 // Apply rotation deadband
                 omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
@@ -145,6 +189,8 @@ public class DriveCommands {
                           : drive.getRotation()));
             },
             drive)
+        // this is where we actually stop the aiming
+        .until(() -> aimingLinedUp)
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
