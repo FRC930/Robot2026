@@ -1,0 +1,122 @@
+package frc.robot.subsystems.extender;
+
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Volts;
+
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.util.EnumState;
+import frc.robot.util.LoggedTunableGainsBuilder;
+import org.littletonrobotics.junction.Logger;
+
+public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
+  private ExtenderIO m_IO;
+
+  private final EnumState<ExtenderState> m_state =
+      new EnumState<>("Extender/States", ExtenderState.IDLE);
+
+  private ExtenderInputsAutoLogged logged = new ExtenderInputsAutoLogged();
+
+  public static final double SPOOL_RADIUS = 1.751 / 2.0;
+
+  public static final double INCHES_PER_ROT = (2.0 * Math.PI * SPOOL_RADIUS);
+
+  public static final double REDUCTION = (4.0 / 1.0);
+
+  public LoggedTunableGainsBuilder tunableGains =
+      new LoggedTunableGainsBuilder("Gains/Extender/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public ExtenderSubsystem(ExtenderIO IO) {
+    m_IO = IO;
+
+    logged.distance = Inches.mutable(0);
+    logged.velocity = InchesPerSecond.mutable(0);
+    logged.setPoint = Meters.mutable(0);
+    logged.supplyCurrent = Amps.mutable(0);
+    logged.torqueCurrent = Amps.mutable(0);
+    logged.voltageSetPoint = Volts.mutable(0);
+    logged.voltage = Volts.mutable(0);
+
+    // RobotVisualization.instance().setExtenderExtensionSource(logged.distance);
+  }
+
+  /**
+   * @param target
+   */
+  public void setExtenderHeight(Distance target) {
+    m_IO.setExtenderHeight(target);
+  }
+
+  public void setTestingState() {
+    m_state.set(ExtenderState.TESTING);
+  }
+
+  public void periodic() {
+    m_IO.updateInputs(logged);
+    Logger.processInputs("RobotState/Extender", logged);
+    switch (m_state.get()) {
+      case IDLE:
+        break;
+    }
+    tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+  }
+
+  public Command idleCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.IDLE));
+  }
+
+  public Command intakeCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.INTAKING));
+  }
+
+  public Command outtakeCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.OUTTAKING));
+  }
+
+  public Command shootingCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.SHOOTING));
+  }
+
+  public Command raisedCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.RAISED));
+  }
+
+  public Command agitateCommand() {
+    return runOnce(() -> m_state.set(ExtenderState.AGITATING));
+  }
+
+  @Override
+  public Trigger idleTrigger() {
+    return m_state.is(ExtenderState.IDLE);
+  }
+
+  @Override
+  public Trigger intakingTrigger() {
+    return m_state.is(ExtenderState.INTAKING);
+  }
+
+  @Override
+  public Trigger outtakingTrigger() {
+    return m_state.is(ExtenderState.OUTTAKING);
+  }
+
+  @Override
+  public Trigger shootingTrigger() {
+    return m_state.is(ExtenderState.SHOOTING);
+  }
+
+  @Override
+  public Trigger raisedTrigger() {
+    return m_state.is(ExtenderState.RAISED);
+  }
+
+  @Override
+  public Trigger agitatingTrigger() {
+    return m_state.is(ExtenderState.AGITATING);
+  }
+}

@@ -59,6 +59,7 @@ import frc.robot.subsystems.drive.GyroIOSim;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.extender.ExtenderSubsystem;
 import frc.robot.subsystems.feeder.FeederBehavior;
 import frc.robot.subsystems.feeder.FeederIO;
 import frc.robot.subsystems.feeder.FeederIOSim;
@@ -134,6 +135,7 @@ public class RobotContainer {
   private final CompactorSubsystem compactor;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
+  private final ExtenderSubsystem extender;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -234,6 +236,7 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIOLimelight(frontCamera, drive::getRotation),
                 new VisionIOQuest(drive::getAutoAlignPose, questCamName));
+                
         break;
 
       case SIM:
