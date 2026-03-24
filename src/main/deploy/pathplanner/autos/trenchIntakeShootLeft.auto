@@ -25,6 +25,12 @@
         {
           "type": "named",
           "data": {
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shooting"
           }
         },
@@ -32,6 +38,12 @@
           "type": "wait",
           "data": {
             "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
           }
         },
         {
@@ -61,6 +73,12 @@
         {
           "type": "named",
           "data": {
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shooting"
           }
         },
@@ -68,6 +86,12 @@
           "type": "wait",
           "data": {
             "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
           }
         }
       ]

@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9189765458422227,
+      "waypointRelativePos": 0.7739872068230348,
       "rotationDegrees": 0.0
     }
   ],
@@ -50,21 +50,9 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Shooting",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shooting"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -73,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.18770074729399
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": "IntakeShootLeftLine",
@@ -81,5 +69,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

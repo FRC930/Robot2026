@@ -70,7 +70,8 @@ public class AutoCommandManager {
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
     // TODO: Make only the intake retract
     NamedCommands.registerCommand("Idle", goals.setGoalCommand(RobotGoal.IDLE));
-    NamedCommands.registerCommand("AutoAim", DriveCommands.joystickDrive(drive, AimingService));
+    NamedCommands.registerCommand(
+        "AutoAim", DriveCommands.joystickDrive(drive, AimingService).withTimeout(1.0));
   }
 
   public Command getAutoWithCurrentPose() {
