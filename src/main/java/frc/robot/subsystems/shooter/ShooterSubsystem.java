@@ -18,6 +18,10 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private final ShooterIO m_IO;
   private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
+  private final LoggedTunableNumber spunUpThreshold =
+      new LoggedTunableNumber("Shooter/spunUpPercent", 0.80);
+  private final LoggedTunableNumber spunUpDebounce =
+      new LoggedTunableNumber("Shooter/spunUpDebounce", 0.08);
   private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<ShooterState> m_state =
@@ -125,5 +129,14 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
           setShooterSpeed(RPM.of(speed.getAsDouble()));
         },
         this);
+  }
+
+  @Override
+  public Trigger isSpunUp() {
+    return new Trigger(
+            () ->
+                logged.shooterAngularVelocity.gte(
+                    logged.shooterSetpoint.times(spunUpThreshold.get())))
+        .debounce(spunUpDebounce.get());
   }
 }

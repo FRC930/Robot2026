@@ -101,7 +101,7 @@ public class IntakeIOSim implements IntakeIO {
             // The intake is mounted on the back side of the chassis
             IntakeSimulation.IntakeSide.FRONT,
             // The intake can hold up to 67 gamepiece
-            67);
+            100);
   }
 
   public void setRunning(boolean runIntake) {
