@@ -7,6 +7,8 @@ import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.aiming.AimingService;
+import frc.robot.commands.DriveCommands;
 import frc.robot.goals.RobotGoal;
 import frc.robot.goals.RobotGoals;
 import frc.robot.subsystems.drive.Drive;
@@ -26,8 +28,8 @@ public class AutoCommandManager {
   private final LoggedDashboardChooser<Command> autoChooser;
   private Drive m_drive;
 
-  public AutoCommandManager(Drive drive, RobotGoals goals) {
-    configureNamedCommands(drive, goals);
+  public AutoCommandManager(Drive drive, RobotGoals goals, AimingService aimingService) {
+    configureNamedCommands(drive, goals, aimingService);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -62,12 +64,14 @@ public class AutoCommandManager {
     return getAutoWithCurrentPose();
   }
 
-  private void configureNamedCommands(Drive drive, RobotGoals goals) {
+  private void configureNamedCommands(Drive drive, RobotGoals goals, AimingService AimingService) {
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
     NamedCommands.registerCommand("Shooting", goals.setGoalCommand(RobotGoal.SHOOTING));
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
     // TODO: Make only the intake retract
     NamedCommands.registerCommand("Idle", goals.setGoalCommand(RobotGoal.IDLE));
+    NamedCommands.registerCommand(
+        "AutoAim", DriveCommands.joystickDrive(drive, AimingService).withTimeout(1.0));
   }
 
   public Command getAutoWithCurrentPose() {

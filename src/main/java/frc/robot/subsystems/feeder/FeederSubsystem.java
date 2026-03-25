@@ -80,6 +80,9 @@ public class FeederSubsystem extends SubsystemBase implements FeederEvents {
         state = m_state.get();
         m_IO.setFeederTarget(state.feederVelocity());
         break;
+      case INTAKING:
+        m_IO.setFeederTarget(state.feederVelocity());
+        break;
       default:
         break;
     }
@@ -142,6 +145,13 @@ public class FeederSubsystem extends SubsystemBase implements FeederEvents {
     return runOnce(
         () -> {
           m_state.set(FeederState.FEEDING);
+        });
+  }
+
+  public Command intakingCommand() {
+    return runOnce(
+        () -> {
+          m_state.set(FeederState.INTAKING);
         });
   }
 

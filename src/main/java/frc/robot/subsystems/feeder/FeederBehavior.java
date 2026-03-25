@@ -19,5 +19,10 @@ public class FeederBehavior extends SubsystemBehavior {
         .isShootingTrigger()
         .whileTrue(feeder.feedingCommand())
         .whileFalse(feeder.idleCommand());
+    events
+        .goals()
+        .isIntakingTrigger()
+        .whileTrue(feeder.intakingCommand())
+        .whileFalse(feeder.idleCommand());
   }
 }
