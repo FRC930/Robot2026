@@ -29,6 +29,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "IntakeShootIntakeRight.2"

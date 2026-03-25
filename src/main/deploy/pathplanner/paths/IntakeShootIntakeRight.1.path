@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 7.9,
-        "y": 1.2812168674722226
+        "y": 1.6736947218230878
       },
       "prevControl": {
         "x": 7.9,
-        "y": -0.21878313252777648
+        "y": 0.17369472182308865
       },
       "nextControl": {
         "x": 7.9,
-        "y": 2.0674059997506813
+        "y": 2.459883854101547
       },
       "isLocked": false,
       "linkedName": null
@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 3.25,
+        "x": 2.3751008903229542,
         "y": 2.4614096385565607
       },
       "prevControl": {
-        "x": 3.5,
+        "x": 2.6251008903229542,
         "y": 2.4614096385565607
       },
       "nextControl": null,
@@ -114,7 +114,7 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 0.880162491536891,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -126,7 +126,7 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 4.0,
+      "minWaypointRelativePos": 3.8320920785375927,
       "maxWaypointRelativePos": 4.5,
       "constraints": {
         "maxVelocity": 2.0,
@@ -187,7 +187,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "IntakeShootIntakeRight",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
