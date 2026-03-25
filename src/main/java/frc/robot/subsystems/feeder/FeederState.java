@@ -10,7 +10,8 @@ public enum FeederState {
   TESTING(() -> 0.0),
   IDLE(() -> 0.0),
   FEEDING(new LoggedTunableNumber("Indexer/setFeederPoint", 4000)),
-  REVERSING(new LoggedTunableNumber("Indexer/setFeederPointReverse", -2000));
+  REVERSING(new LoggedTunableNumber("Indexer/setFeederPointReverse", -2000)),
+  INTAKING(new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 2000));
 
   private DoubleSupplier m_feederVelocity;
 

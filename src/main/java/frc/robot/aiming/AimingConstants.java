@@ -13,8 +13,7 @@ public final class AimingConstants {
 
   // ===== TURRET GEOMETRY (measured) =====
   // Offset of turret pivot from robot center, robot-frame (x=forward, y=left)
-  public static final Translation2d TURRET_OFFSET_FROM_CENTER =
-      new Translation2d(Units.inchesToMeters(1.375), 0.0);
+  public static final Translation2d TURRET_OFFSET_FROM_CENTER = new Translation2d(0.0, 0.0);
 
   // Height of the turret pivot above the ground
   public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
