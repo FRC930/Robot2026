@@ -14,7 +14,7 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase implements HoodEvents {
-  // Implementation goes here † ₀ ᴥ ₀ †
+  // Implementation goes here​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​ † ​₀ ​​​​​​​​​​​ᴥ ₀​​ †
 
   private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
   private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);
@@ -72,14 +72,14 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Hood", logged);
     HoodState state = currentGoal.get();
-    // TODO find out why state is not being set to aiming
+    // TODO find ​out​ ​​why​ state​​​ ​​​is​​ not​​ being​ ​​​​​​set to​ aiming​
     shouldThreadCommand = (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
         // m_IO.stop();
         break;
       case AIMING:
-        break; // 250Hz thread handles motor commands
+        break; // ​250Hz ​​thread​ handles​​ ​​​​motor​ commands
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
   }
