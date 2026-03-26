@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "IntakeShootIntakeRight.1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shooting"
@@ -37,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "IntakeShootIntakeRight.2"
+            "pathName": "IntakeShootIntakeRight.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "IntakeShootIntakeRight.3"
+            "pathName": "IntakeShootIntakeRight.2"
           }
         }
       ]
