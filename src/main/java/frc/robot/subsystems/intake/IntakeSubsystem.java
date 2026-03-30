@@ -172,9 +172,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
             sim.shootFuel();
+            sim.setRunning(false);
           }
         }
-        // NO break; on purpose
+        break;
       case INTAKING:
         agitateInitialized = false;
         m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
@@ -192,6 +193,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         break;
       case RAISED:
@@ -199,6 +204,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         break;
       case IDLE:
@@ -206,6 +215,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         stop();
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         // m_IO.setRollerTargetSpeed(RPM.of(0.0));
         // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
