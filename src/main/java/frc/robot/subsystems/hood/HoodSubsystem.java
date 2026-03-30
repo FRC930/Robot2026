@@ -14,7 +14,8 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase implements HoodEvents {
-  // Implementation goes here​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​ † ​₀ ​​​​​​​​​​​ᴥ ₀​​ †
+  // Implementation goes here​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​ † ​₀
+  // ​​​​​​​​​​​ᴥ ₀​​ †
 
   private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
   private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);

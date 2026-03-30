@@ -7,19 +7,31 @@ import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
 public enum IndexerState {
-  TESTING(() -> 0.0),
-  IDLE(() -> 0.0),
-  FEEDING(new LoggedTunableNumber("Indexer/setIndexerPointShooting", 160)),
-  REVERSING(new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50)),
-  INTAKING(new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 50));
+  TESTING(() -> 0.0, () -> 0.0),
+  IDLE(() -> 0.0, () -> 0.0),
+  FEEDING(
+      new LoggedTunableNumber("Indexer/setIndexerPointShooting", 160),
+      new LoggedTunableNumber("Indexer/setKickerPointShooting", 160)),
+  REVERSING(
+      new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50),
+      new LoggedTunableNumber("Indexer/setKickerPointReverse", -50)),
+  INTAKING(
+      new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 50),
+      new LoggedTunableNumber("Indexer/setKickerPointIntaking", 50));
 
   private DoubleSupplier m_indexerVelocity;
+  private DoubleSupplier m_kickerVelocity;
 
-  private IndexerState(DoubleSupplier indexerVelocity) {
+  private IndexerState(DoubleSupplier indexerVelocity, DoubleSupplier kickerVelocity) {
     m_indexerVelocity = indexerVelocity;
+    m_kickerVelocity = kickerVelocity;
   }
 
   public AngularVelocity indexerVelocity() {
     return RPM.of(m_indexerVelocity.getAsDouble());
+  }
+
+  public AngularVelocity kickerVelocity() {
+    return RPM.of(m_kickerVelocity.getAsDouble());
   }
 }

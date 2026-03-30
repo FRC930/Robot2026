@@ -18,16 +18,22 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   private VelocityVoltage indexerRequest;
   private TalonFX indexerMotor;
+  private VelocityVoltage kickLukeRequest;
+  private TalonFX kickLukeMotor;
 
   private AngularVelocity indexerSetPoint = RPM.of(0);
+  private AngularVelocity kickerSetPoint = RPM.of(0);
 
   private static final double SENSOR_MECH_INDEXER = 24;
 
   private final NeutralOut m_neutralOut = new NeutralOut();
 
-  public IndexerIOTalonFX(int indexerMotorCAN, CANBus canbus) {
+  public IndexerIOTalonFX(int indexerMotorCAN, CANBus canbus, int kickLukeMotorCAN) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
+    kickLukeMotor = new TalonFX(kickLukeMotorCAN, canbus);
     indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    kickLukeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+
     configureTalons();
   }
 
@@ -45,6 +51,19 @@ public class IndexerIOTalonFX implements IndexerIO {
     PhoenixUtil.tryUntilOk(
         5, () -> indexerMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(configIndexer));
+
+    TalonFXConfiguration configKicker = new TalonFXConfiguration();
+    configKicker.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configKicker.CurrentLimits.StatorCurrentLimit = 200.0;
+    configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
+    configKicker.CurrentLimits.StatorCurrentLimit = 22.0;
+    configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
+    configKicker.Voltage.PeakForwardVoltage = 12.0;
+    configKicker.Voltage.PeakReverseVoltage = -12.0;
+    configKicker.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    PhoenixUtil.tryUntilOk(
+        5, () -> kickLukeMotor.getConfigurator().apply(new TalonFXConfiguration()));
+    PhoenixUtil.tryUntilOk(5, () -> kickLukeMotor.getConfigurator().apply(configKicker));
   }
 
   @Override
@@ -52,6 +71,14 @@ public class IndexerIOTalonFX implements IndexerIO {
     if (velocity.in(RPM) != indexerSetPoint.in(RPM)) {
       indexerMotor.setControl(indexerRequest.withVelocity(velocity));
       indexerSetPoint = velocity;
+    }
+  }
+
+  @Override
+  public void setKickerTarget(AngularVelocity velocity) {
+    if (velocity.in(RPM) != kickerSetPoint.in(RPM)) {
+      kickLukeMotor.setControl(kickLukeRequest.withVelocity(velocity));
+      kickerSetPoint = velocity;
     }
   }
 
@@ -88,5 +115,16 @@ public class IndexerIOTalonFX implements IndexerIO {
     // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
     // PhoenixUtil.tryUntilOk(5, () ->
     //   indexerMotor.getConfigurator().apply(motionMagicConfigs));
+  }
+
+  public void setKickerGains(Gains gains) {
+    Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.kP = gains.kP;
+    slot0Configs.kI = gains.kI;
+    slot0Configs.kD = gains.kD;
+    slot0Configs.kS = gains.kS;
+    slot0Configs.kV = gains.kV;
+    slot0Configs.kA = gains.kA;
+    PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(slot0Configs));
   }
 }
