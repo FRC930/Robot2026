@@ -4,9 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "DepotFirstShoot",
-    "IntakeDepotShootLef",
+    "IntakeDepotShootLeft",
+    "IntakeShootIntakeRight",
     "IntakeShootLeftLine",
     "IntakeShootRightLine",
+    "IntakeShootIntakeLeft",
     "RunningStartLeft",
     "RunningStartLeftMore"
   ],

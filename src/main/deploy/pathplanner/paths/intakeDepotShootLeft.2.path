@@ -66,7 +66,7 @@
     "rotation": 179.1185960034179
   },
   "reversed": false,
-  "folder": "IntakeDepotShootLef",
+  "folder": "IntakeDepotShootLeft",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
