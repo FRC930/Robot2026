@@ -227,6 +227,13 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       case AGITATING:
         m_IO.stop();
         updateAgitation();
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.shootFuel();
+            sim.setRunning(false);
+          }
+        }
         break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));
