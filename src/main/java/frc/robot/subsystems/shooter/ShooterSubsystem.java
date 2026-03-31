@@ -18,6 +18,8 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private final ShooterIO m_IO;
   private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
+  private final LoggedTunableNumber tolerancePercent =
+      new LoggedTunableNumber("Shooter/TolerancePercent", 0.5);
   private volatile boolean shouldThreadCommand = false;
 
   private final EnumState<ShooterState> m_state =
@@ -117,6 +119,20 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   @Override
   public Trigger isShootingTrigger() {
     return m_state.is(ShooterState.SHOOTING);
+  }
+
+  @Override
+  public Trigger isInToleranceTrigger() {
+    return new Trigger(() -> isShooterInTolerance());
+  }
+
+  private boolean isShooterInTolerance() {
+    double currentRPM = logged.shooterAngularVelocity.in(RPM);
+    double setpointRPM = logged.shooterSetpoint.in(RPM);
+    if (setpointRPM <= 0) {
+      return false;
+    }
+    return currentRPM >= setpointRPM * tolerancePercent.getAsDouble();
   }
 
   public Command getNewSetShooterSpeedCommand(DoubleSupplier speed) {
