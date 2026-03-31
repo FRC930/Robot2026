@@ -5,10 +5,11 @@
   "pathFolders": [
     "DepotFirstShoot",
     "IntakeDepotShootLeft",
+    "IntakeShootIntakeLeft",
     "IntakeShootIntakeRight",
     "IntakeShootLeftLine",
     "IntakeShootRightLine",
-    "IntakeShootIntakeLeft",
+    "IntakeShootIntakeShootRight",
     "RunningStartLeft",
     "RunningStartLeftMore"
   ],
