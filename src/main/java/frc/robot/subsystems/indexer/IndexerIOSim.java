@@ -47,6 +47,7 @@ public class IndexerIOSim implements IndexerIO {
   @Override
   public void stop() {
     this.indexerAppliedVelocity = RPM.zero();
+    this.kickerAppliedVelocity = RPM.zero();
   }
 
   @Override

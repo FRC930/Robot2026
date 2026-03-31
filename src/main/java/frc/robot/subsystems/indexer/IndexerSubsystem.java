@@ -86,6 +86,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
         checkForJam();
         state = m_state.get();
         m_IO.setIndexerTarget(state.indexerVelocity());
+        m_IO.setKickerTarget(state.kickerVelocity());
         break;
       case REVERSING:
         if (m_isAutoReversing && m_autoReverseTimer.hasElapsed(m_autoReverseTimeSec.get())) {
@@ -95,9 +96,11 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
           state = IndexerState.FEEDING;
         }
         m_IO.setIndexerTarget(state.indexerVelocity());
+        m_IO.setKickerTarget(state.kickerVelocity());
         break;
       case INTAKING:
         m_IO.setIndexerTarget(state.indexerVelocity());
+        m_IO.setKickerTarget(state.kickerVelocity());
         break;
       default:
         break;
