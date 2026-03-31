@@ -103,11 +103,11 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToRaiseCompactor() {
-    return driver.rightTrigger();
+    return driver.leftTrigger();
   }
 
   @Override
   public Trigger wantsToLowerCompactor() {
-    return driver.leftTrigger();
+    return driver.rightTrigger();
   }
 }

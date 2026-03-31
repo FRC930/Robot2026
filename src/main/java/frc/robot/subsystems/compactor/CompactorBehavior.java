@@ -19,18 +19,13 @@ public class CompactorBehavior extends SubsystemBehavior {
         .onFalse(compactor.idleCommand());
     events
         .goals()
-        .isIntakingTrigger()
+        .isRaisingCompactorTrigger()
         .whileTrue(compactor.goToTopCommand())
         .onFalse(compactor.idleCommand());
     events
         .goals()
-        .isRaisingCompactorTrigger()
-        .whileTrue(compactor.raiseCompactorCommand())
-        .onFalse(compactor.idleCommand());
-    events
-        .goals()
         .isLoweringCompactorTrigger()
-        .whileTrue(compactor.lowerComactorCommand())
+        .whileTrue(compactor.goToBottomCommand())
         .onFalse(compactor.idleCommand());
   }
 }

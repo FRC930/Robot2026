@@ -71,7 +71,13 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .or(intent.wantsToPass())
         .negate()
         .whileTrue(goals.setGoalCommand(RobotGoal.IDLE));
-    intent.wantsToRaiseCompactor().whileTrue(goals.setGoalCommand(RobotGoal.RAISING_COMPACTOR));
-    intent.wantsToLowerCompactor().whileTrue(goals.setGoalCommand(RobotGoal.LOWERING_COMPACTOR));
+    intent
+        .wantsToRaiseCompactor()
+        .whileTrue(goals.setGoalCommand(RobotGoal.RAISING_COMPACTOR))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
+    intent
+        .wantsToLowerCompactor()
+        .whileTrue(goals.setGoalCommand(RobotGoal.LOWERING_COMPACTOR))
+        .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }
