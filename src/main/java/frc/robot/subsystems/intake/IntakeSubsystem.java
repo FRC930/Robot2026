@@ -192,6 +192,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         break;
       case RAISED:
@@ -199,6 +203,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         break;
       case IDLE:
@@ -206,6 +214,10 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         stop();
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.setRunning(false);
+          }
         }
         // m_IO.setRollerTargetSpeed(RPM.of(0.0));
         // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
@@ -214,6 +226,13 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       case AGITATING:
         m_IO.stop();
         updateAgitation();
+        if (Constants.currentMode == Constants.Mode.SIM) {
+          if (m_IO instanceof IntakeIOSim) {
+            IntakeIOSim sim = (IntakeIOSim) m_IO;
+            sim.shootFuel();
+            sim.setRunning(false);
+          }
+        }
         break;
     }
     rollerGains.ifGainsHaveChanged((gains) -> this.m_IO.setRollerGains(gains));
