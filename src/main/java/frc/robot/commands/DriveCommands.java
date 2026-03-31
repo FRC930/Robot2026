@@ -114,7 +114,7 @@ public class DriveCommands {
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
 
-    LoggedTunableNumber slewRate = new LoggedTunableNumber("slewRate", 20);
+    LoggedTunableNumber slewRate = new LoggedTunableNumber("SlewRateDriveCommands", 20);
     SlewRateLimiter filter = new SlewRateLimiter(slewRate.getAsDouble());
     angleController.enableContinuousInput(-Math.PI, Math.PI);
     return Commands.run(
