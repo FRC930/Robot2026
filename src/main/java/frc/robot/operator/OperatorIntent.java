@@ -93,11 +93,21 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToRevIndexer() {
-    return driver.rightTrigger();
+    return driver.povDown();
   }
 
   @Override
   public Trigger wantsToRaiseIntake() {
-    return driver.povUp();
+    return driver.povLeft();
+  }
+
+  @Override
+  public Trigger wantsToRaiseCompactor() {
+    return driver.rightTrigger();
+  }
+
+  @Override
+  public Trigger wantsToLowerCompactor() {
+    return driver.leftTrigger();
   }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.compactor;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutDistance;
@@ -21,6 +22,9 @@ public interface CompactorIO {
   }
 
   public default void setCompactorHeight(Distance target) {}
+  ;
+
+  public default void setCompactorVelocity(AngularVelocity veloctiy) {}
   ;
 
   public default void stop() {}

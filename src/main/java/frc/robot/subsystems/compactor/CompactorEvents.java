@@ -8,4 +8,8 @@ public interface CompactorEvents {
   public Trigger goToBottomTrigger();
 
   public Trigger goToTopTrigger();
+
+  public Trigger raiseCompactorTrigger();
+
+  public Trigger lowerCompactorTrigger();
 }

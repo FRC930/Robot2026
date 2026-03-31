@@ -10,7 +10,9 @@ public enum CompactorState {
   TESTING(() -> 0.0),
   IDLE(() -> 0.0),
   TOP(new LoggedTunableNumber("Compactor/setCompactorTopPoint", 10)),
-  BOTTOM(new LoggedTunableNumber("Compactor/setCompactorBottomPoint", 0));
+  BOTTOM(new LoggedTunableNumber("Compactor/setCompactorBottomPoint", 0)),
+  MOVING_UP(new LoggedTunableNumber("Compactor/setUpVelocity", 10)),
+  MOVING_DOWN(new LoggedTunableNumber("Compactor/setDownVelocity", -10));
 
   private DoubleSupplier m_compactorHeight;
 

@@ -84,6 +84,14 @@ public class CompactorSubsystem extends SubsystemBase implements CompactorEvents
     return runOnce(() -> m_state.set(CompactorState.BOTTOM));
   }
 
+  public Command raiseCompactorCommand() {
+    return runOnce(() -> m_state.set(CompactorState.MOVING_UP));
+  }
+
+  public Command lowerComactorCommand() {
+    return runOnce(() -> m_state.set(CompactorState.MOVING_DOWN));
+  }
+
   @Override
   public Trigger idleTrigger() {
     return m_state.is(CompactorState.IDLE);
@@ -97,5 +105,15 @@ public class CompactorSubsystem extends SubsystemBase implements CompactorEvents
   @Override
   public Trigger goToBottomTrigger() {
     return m_state.is(CompactorState.BOTTOM);
+  }
+
+  @Override
+  public Trigger raiseCompactorTrigger() {
+    return m_state.is(CompactorState.MOVING_UP);
+  }
+
+  @Override
+  public Trigger lowerCompactorTrigger() {
+    return m_state.is(CompactorState.MOVING_DOWN);
   }
 }
