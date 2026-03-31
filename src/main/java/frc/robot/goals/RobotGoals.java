@@ -99,4 +99,14 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   public Trigger isRaisedIntakeTrigger() {
     return currentGoal.is(RobotGoal.RAISED_INTAKE);
   }
+
+  @Override
+  public Trigger isRaisingCompactorTrigger() {
+    return currentGoal.is(RobotGoal.RAISING_COMPACTOR);
+  }
+
+  @Override
+  public Trigger isLoweringCompactorTrigger() {
+    return currentGoal.is(RobotGoal.LOWERING_COMPACTOR);
+  }
 }

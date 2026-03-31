@@ -411,12 +411,6 @@ public class RobotContainer {
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Slow button sets operator speed limit directly
-    controller
-        .leftTrigger()
-        .whileTrue(
-            Commands.startEnd(
-                () -> drive.setOperatorSpeedLimit(SLOW_DRIVE_SPEED),
-                () -> drive.setOperatorSpeedLimit(REG_DRIVE_SPEED)));
 
     controller
         .start()
