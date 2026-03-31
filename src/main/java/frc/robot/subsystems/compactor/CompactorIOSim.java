@@ -7,7 +7,6 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,7 +15,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -30,8 +28,6 @@ public class CompactorIOSim implements CompactorIO {
       new ProfiledPIDController(5.0, 0.0, 0.0, new Constraints(90, 120));
 
   private final ElevatorSim sim;
-
-  private AngularVelocity compactorAppliedVelocity = RPM.mutable(0.0);
 
   private Distance target = Inches.of(0);
   private MutVoltage appliedVoltage = Volts.mutable(0.0);
@@ -86,10 +82,5 @@ public class CompactorIOSim implements CompactorIO {
   public void setCompactorHeight(Distance target) {
     this.target = target;
     controller.setGoal(target.in(Inches));
-  }
-
-  @Override
-  public void setCompactorVelocity(AngularVelocity velocity) {
-    this.compactorAppliedVelocity = velocity;
   }
 }
