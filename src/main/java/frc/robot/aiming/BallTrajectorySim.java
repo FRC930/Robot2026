@@ -1,10 +1,17 @@
 package frc.robot.aiming;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -79,14 +86,16 @@ public class BallTrajectorySim {
       activeBalls.remove(0);
     }
 
-    activeBalls.add(
-        new Projectile(
-            turretFieldPos.getX(),
-            turretFieldPos.getY(),
-            AimingConstants.TURRET_PIVOT_HEIGHT_METERS,
-            vx,
-            vy,
-            vz));
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, 0),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(((Math.PI) - launchAngleRad))));
   }
 
   private void updateAll() {
