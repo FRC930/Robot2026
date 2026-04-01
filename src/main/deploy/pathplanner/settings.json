@@ -7,9 +7,10 @@
     "IntakeDepotShootLeft",
     "IntakeShootIntakeLeft",
     "IntakeShootIntakeRight",
+    "IntakeShootIntakeShootRight",
     "IntakeShootLeftLine",
     "IntakeShootRightLine",
-    "IntakeShootIntakeShootRight",
+    "IntakeShootIntakeShootLeft",
     "RunningStartLeft",
     "RunningStartLeftMore"
   ],
