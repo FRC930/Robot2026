@@ -294,7 +294,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
 
   private Translation2d computeTurretFieldPosition(Pose2d robotPose, Rotation2d heading) {
     Translation2d rotatedOffset = AimingConstants.TURRET_OFFSET_FROM_CENTER.rotateBy(heading);
-    return robotPose.getTranslation();
+    return robotPose.getTranslation().plus(rotatedOffset);
   }
 
   private Translation2d computeTurretVelocity(ChassisSpeeds speeds, Rotation2d heading) {

@@ -86,11 +86,36 @@ public class BallTrajectorySim {
       activeBalls.remove(0);
     }
 
+    // Launching Ball 1
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, -.15),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(((Math.PI) - launchAngleRad))));
+
+    // Launching Ball 2
     SimulatedArena.getInstance()
         .addGamePieceProjectile(
             new RebuiltFuelOnFly(
                 RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
                 new Translation2d(-.15, 0),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(((Math.PI) - launchAngleRad))));
+
+    // Launching Ball 3
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, .15),
                 RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                 RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
                 Inches.of(20),
