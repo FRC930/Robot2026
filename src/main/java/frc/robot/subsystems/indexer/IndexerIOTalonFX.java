@@ -131,7 +131,4 @@ public class IndexerIOTalonFX implements IndexerIO {
   }
 }
 
-
-
-
 // UwU

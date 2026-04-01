@@ -253,7 +253,10 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIOPhotonVisionSim(frontCamera, robotToFrontCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
-        driveZoneTracker = new DriveZoneTracker(drive::getPose, drive::getChassisSpeeds);
+        driveZoneTracker =
+            new DriveZoneTracker(
+                driveSimulation::getSimulatedDriveTrainPose,
+                driveSimulation::getDriveTrainSimulatedChassisSpeedsRobotRelative);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
         indexer = new IndexerSubsystem(new IndexerIOSim());
         feeder = new FeederSubsystem(new FeederIOSim());
