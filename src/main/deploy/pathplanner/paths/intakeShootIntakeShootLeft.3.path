@@ -98,7 +98,7 @@
     {
       "name": "Intaking",
       "minWaypointRelativePos": 1.069547602970962,
-      "maxWaypointRelativePos": 4.0,
+      "maxWaypointRelativePos": 3.6515867656988363,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 3.5,
@@ -130,6 +130,17 @@
         "type": "named",
         "data": {
           "name": "Intaking"
+        }
+      }
+    },
+    {
+      "name": "Shooting",
+      "waypointRelativePos": 4.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooting"
         }
       }
     }

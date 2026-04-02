@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4175858819865317,
-        "y": 5.4993132530120485
+        "x": 2.771069900145427,
+        "y": 5.76231098430813
       },
       "isLocked": false,
       "linkedName": "intakeShootIntakeShootLeft.0"
@@ -45,7 +45,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 0.75,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

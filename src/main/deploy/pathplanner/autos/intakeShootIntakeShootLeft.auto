@@ -7,25 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "intakeShootIntakeLeft.0"
+            "pathName": "intakeShootIntakeShootLeft.0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "intakeShootIntakeLeft.1"
+            "pathName": "intakeShootIntakeShootLeft.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "intakeShootIntakeLeft.2"
+            "pathName": "intakeShootIntakeShootLeft.2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "intakeShootIntakeLeft.3"
+            "pathName": "intakeShootIntakeShootLeft.3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
           }
         }
       ]
