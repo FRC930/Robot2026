@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "intakeShootIntakeShootLeft.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "intakeShootIntakeShootLeft.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "intakeShootIntakeShootLeft.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "intakeShootIntakeShootLeft.3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

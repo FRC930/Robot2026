@@ -1,0 +1,180 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.055720399429386,
+        "y": 2.4614096385565607
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.1480599144079875,
+        "y": 2.4758915834522113
+      },
+      "isLocked": false,
+      "linkedName": "intakeShootIntakeShootRight.0"
+    },
+    {
+      "anchor": {
+        "x": 6.106313253012048,
+        "y": 2.887590361445783
+      },
+      "prevControl": {
+        "x": 6.128168674698796,
+        "y": 2.2974939759036133
+      },
+      "nextControl": {
+        "x": 6.071104952280651,
+        "y": 3.8382144811934538
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.002011412268189,
+        "y": 4.132039942938659
+      },
+      "prevControl": {
+        "x": 6.093409984257115,
+        "y": 4.123218569851174
+      },
+      "nextControl": {
+        "x": 8.127565629135661,
+        "y": 4.142967653782033
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.769115549215405,
+        "y": 2.4614096385565607
+      },
+      "prevControl": {
+        "x": 7.739514978601996,
+        "y": 2.4111982881597713
+      },
+      "nextControl": {
+        "x": 6.0708829911784035,
+        "y": 2.4975382661797285
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.9522111269614832,
+        "y": 2.4614096385565607
+      },
+      "prevControl": {
+        "x": 4.039058487874465,
+        "y": 2.398259629101284
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.25,
+      "rotationDegrees": 75.0
+    },
+    {
+      "waypointRelativePos": 1.97014925373135,
+      "rotationDegrees": -14.999999999999998
+    },
+    {
+      "waypointRelativePos": 2.55,
+      "rotationDegrees": -105.00000000000001
+    },
+    {
+      "waypointRelativePos": 3.0959488272921063,
+      "rotationDegrees": 165.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intaking",
+      "minWaypointRelativePos": 0.4645509790682092,
+      "maxWaypointRelativePos": 2.9817690749493257,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 3.0681971640783257,
+      "maxWaypointRelativePos": 3.9000675219446235,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0.3997299122214752,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
+    },
+    {
+      "name": "Idle",
+      "waypointRelativePos": 3.100607697501679,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Idle"
+        }
+      }
+    },
+    {
+      "name": "Shooting",
+      "waypointRelativePos": 3.954085077650252,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooting"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "IntakeShootIntakeShootRight",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": false
+}
