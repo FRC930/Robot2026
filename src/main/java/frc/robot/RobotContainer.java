@@ -206,7 +206,7 @@ public class RobotContainer {
 
         turret =
             new TurretSubsystem(
-                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
+                new TurretIOTalonFX(7, upperCanbus), aimingService::getTurretAngleDeg);
         // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =
