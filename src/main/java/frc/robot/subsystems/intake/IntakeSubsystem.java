@@ -153,7 +153,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public Command agitateCommand() {
     return runOnce(
         () -> {
-          currentGoal.set(IntakeState.AGITATING);
+          currentGoal.set(IntakeState.IDLE);
         });
   }
 

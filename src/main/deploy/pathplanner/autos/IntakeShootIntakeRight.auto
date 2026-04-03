@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "IntakeShootIntakeRight.0"
+            "pathName": "intakeShootIntakeRight.0"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "IntakeShootIntakeRight.1"
+            "pathName": "intakeShootIntakeRight.1"
           }
         },
         {
