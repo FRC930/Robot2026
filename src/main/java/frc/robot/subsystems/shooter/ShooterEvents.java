@@ -7,4 +7,6 @@ public interface ShooterEvents {
   public Trigger isIdleTrigger();
 
   public Trigger isShootingTrigger();
+
+  public Trigger isInToleranceTrigger();
 }
