@@ -17,8 +17,6 @@ public interface TurretIO {
     public MutAngularVelocity turretAngularVelocity;
     public MutAngle turretAngle;
     public MutAngle turretSetAngle;
-    public MutAngle canCoderAngle1;
-    public MutAngle canCoderAngle2;
     public MutVoltage turretVoltage;
     public MutCurrent turretSupplyCurrent;
     public MutCurrent turretTorqueCurrent;

@@ -35,10 +35,6 @@ public class TurretIOTalonFX implements TurretIO {
   private double encoder1ratio;
   private double encoder2ratio;
 
-  private CANcoder canCoder1;
-
-  private CANcoder canCoder2;
-
   private final double KCANTIMEOUT = 0.010;
 
   // Gear tooth counts: main turret gear and two encoder gears (must be co-prime)
@@ -53,10 +49,8 @@ public class TurretIOTalonFX implements TurretIO {
   private static final int CRT_COEFF2 = ENC1_TEETH * 8; // 136
   private static final int CRT_MODULUS = ENC1_TEETH * ENC2_TEETH; // 255
 
-  public TurretIOTalonFX(int motorID, int canCoder1ID, int canCoder2ID, CANBus canbus) {
+  public TurretIOTalonFX(int motorID, CANBus canbus) {
     motor = new TalonFX(motorID, canbus);
-    canCoder1 = new CANcoder(canCoder1ID, canbus);
-    canCoder2 = new CANcoder(canCoder2ID, canbus);
     m_setAngle = Degrees.of(0.0);
     request = new PositionVoltage(Degrees.of(0)).withSlot(0);
 
@@ -129,22 +123,6 @@ public class TurretIOTalonFX implements TurretIO {
     motor.optimizeBusUtilization();
   }
 
-  public void configureCANCoders() {
-    // Configure CANcoder 1
-    PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(new CANcoderConfiguration()));
-    CANcoderConfiguration cfg1 = new CANcoderConfiguration();
-    cfg1.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg1.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°)
-    PhoenixUtil.tryUntilOk(5, () -> canCoder1.getConfigurator().apply(cfg1));
-
-    // Configure CANcoder 2
-    PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(new CANcoderConfiguration()));
-    CANcoderConfiguration cfg2 = new CANcoderConfiguration();
-    cfg2.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    cfg2.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; // 180°)
-    PhoenixUtil.tryUntilOk(5, () -> canCoder2.getConfigurator().apply(cfg2));
-  }
-
   @Override
   public void setTarget(double angle) {
     if (angle != m_setAngle.in(Degrees)) {
@@ -168,8 +146,6 @@ public class TurretIOTalonFX implements TurretIO {
     inputs.turretAngle.mut_replace(motor.getPosition().getValue());
     inputs.turretAngularVelocity.mut_replace(motor.getVelocity().getValue());
     inputs.turretSetAngle.mut_replace(m_setAngle);
-    inputs.canCoderAngle1.mut_replace(canCoder1.getAbsolutePosition().getValue());
-    inputs.canCoderAngle2.mut_replace(canCoder2.getAbsolutePosition().getValue());
     inputs.turretVoltage.mut_replace(motor.getMotorVoltage().getValue());
     inputs.turretSupplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
     inputs.turretTorqueCurrent.mut_replace(motor.getTorqueCurrent().getValue());
@@ -187,15 +163,5 @@ public class TurretIOTalonFX implements TurretIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
-  }
-
-  @Override
-  public Angle getCanCoderAngle1() {
-    return canCoder1.getAbsolutePosition().getValue();
-  }
-
-  @Override
-  public Angle getCanCoderAngle2() {
-    return canCoder2.getAbsolutePosition().getValue();
   }
 }
