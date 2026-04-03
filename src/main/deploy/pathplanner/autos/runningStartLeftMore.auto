@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
+            "pathName": "runningStartLeft.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "runningStartLeftMore.0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "runningStartLeftMore.1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "runningStartLeftMore.2"
+            "pathName": "runningStartLeft.3"
           }
         },
         {
