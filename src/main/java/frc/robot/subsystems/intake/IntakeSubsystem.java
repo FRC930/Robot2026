@@ -153,7 +153,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   public Command agitateCommand() {
     return runOnce(
         () -> {
-          currentGoal.set(IntakeState.IDLE);
+          currentGoal.set(IntakeState.AGITATING);
         });
   }
 
@@ -237,7 +237,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         // TODO add a up state for when not intaking and not outtaking
         break;
       case AGITATING:
-        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        // m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        m_IO.stop();
         updateAgitation();
         if (Constants.currentMode == Constants.Mode.SIM) {
           if (m_IO instanceof IntakeIOSim) {
