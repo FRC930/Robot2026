@@ -55,10 +55,10 @@ public class RobotGoalsBehavior extends GoalBehavior {
 
     intent
         .wantsToScoreTrigger()
-        .and(intent.wantsToRevIndexer().negate())
+        // .and(intent.wantsToRevIndexer().negate())
         .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
 
-    intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
+    // intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
 
     intent
         .wantsToRaiseIntake()
@@ -67,9 +67,14 @@ public class RobotGoalsBehavior extends GoalBehavior {
 
     intent
         .wantsToScoreTrigger()
-        .or(intent.wantsToRevIndexer())
+        // .or(intent.wantsToRevIndexer())
         .or(intent.wantsToPass())
         .negate()
         .whileTrue(goals.setGoalCommand(RobotGoal.IDLE));
+
+    intent
+        .wantsToShootNoTolerance()
+        .whileTrue(goals.setGoalCommand(RobotGoal.IGNORE_TOLERANCE))
+        .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.Fahrenheit;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -47,6 +48,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
       new LoggedTunableNumber("Intake/intakeExtenderTargetAngleDown", -5);
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
+  private static final LoggedTunableNumber ToleranceAngle =
+      new LoggedTunableNumber("Intake/atPosToleranceAngle", 7.5);
 
   // Agitation tunables
   private static final LoggedTunableNumber agitateDownAngle =
@@ -162,6 +165,15 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     m_IO.stop();
   }
 
+  public void rollIfAtTarget() {
+    System.out.println("RunCheck");
+    if (isIntakeAtPosition()) {
+      m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+    } else {
+      m_IO.stop();
+    }
+  }
+
   @Override
   public void periodic() {
     m_IO.updateInputs(logged);
@@ -177,8 +189,9 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         // NO break; on purpose
       case INTAKING:
         agitateInitialized = false;
-        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        rollIfAtTarget();
+
         if (Constants.currentMode == Constants.Mode.SIM) {
           if (m_IO instanceof IntakeIOSim) {
             IntakeIOSim sim = (IntakeIOSim) m_IO;
@@ -188,8 +201,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         break;
       case OUTTAKING:
         agitateInitialized = false;
-        m_IO.setRollerTargetSpeed(RPM.of(-intakeTargetRPM.get()));
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleDown.get()));
+        rollIfAtTarget();
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
           if (m_IO instanceof IntakeIOSim) {
@@ -199,7 +212,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         }
         break;
       case RAISED:
-        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
+        m_IO.stop();
         m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
         if (Constants.currentMode == Constants.Mode.SIM) {
           AimingService.trajectorySim.setSpawnFuelOnGround(false);
@@ -224,7 +237,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
         // TODO add a up state for when not intaking and not outtaking
         break;
       case AGITATING:
-        m_IO.stop();
+        m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         updateAgitation();
         if (Constants.currentMode == Constants.Mode.SIM) {
           if (m_IO instanceof IntakeIOSim) {
@@ -291,6 +304,18 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   @Override
   public Trigger isRaisedTrigger() {
     return currentGoal.is(IntakeState.RAISED);
+  }
+
+  public boolean isIntakeAtPosition() {
+    return MathUtil.isNear(
+        logged.extenderAngleSetPoint.in(Degrees),
+        logged.extenderAngle.in(Degrees),
+        ToleranceAngle.getAsDouble());
+  }
+
+  @Override
+  public Trigger isIntakeAtPositionTrigger() {
+    return new Trigger(() -> isIntakeAtPosition());
   }
 
   public Command getNewSetIntakeVelocityCommand(DoubleSupplier rpm) {

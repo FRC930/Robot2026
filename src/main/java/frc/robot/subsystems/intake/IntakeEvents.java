@@ -12,4 +12,6 @@ public interface IntakeEvents {
   public Trigger isShootingTrigger();
 
   public Trigger isRaisedTrigger();
+
+  public Trigger isIntakeAtPositionTrigger();
 }

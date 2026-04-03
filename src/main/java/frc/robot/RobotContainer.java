@@ -125,7 +125,7 @@ public class RobotContainer {
   private final double REG_DRIVE_SPEED = 0.9;
   private final double REG_ANGULAR_SPEED = 0.75;
 
-  private final double SLOW_DRIVE_SPEED = 0.5;
+  private final double SLOW_DRIVE_SPEED = 0.7;
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
