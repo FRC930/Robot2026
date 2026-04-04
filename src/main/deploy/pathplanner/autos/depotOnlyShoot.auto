@@ -5,39 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "depotFirstShoot.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depotOnlyShoot.1"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shooting"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 6.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Idle"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Idle"
           }
         }
       ]
