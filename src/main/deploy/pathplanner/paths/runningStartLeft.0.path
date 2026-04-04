@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6,
+        "x": 3.5,
         "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.35,
+        "x": 3.25,
         "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "runningStartLeft.0.start"
+      "linkedName": "preBumpLeft"
     },
     {
       "anchor": {
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "RunningStart",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
