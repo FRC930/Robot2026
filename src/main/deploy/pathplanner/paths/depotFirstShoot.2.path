@@ -20,36 +20,31 @@
         "y": 5.53
       },
       "prevControl": {
-        "x": 3.5727744087052766,
-        "y": 5.458111395724167
+        "x": 3.5833333333333366,
+        "y": 5.53
       },
       "nextControl": {
-        "x": 2.344094151212553,
-        "y": 5.82700427960057
+        "x": 3.0833333333333335,
+        "y": 5.53
       },
       "isLocked": false,
       "linkedName": "depotFirstShoot.1.wp1"
     },
     {
       "anchor": {
-        "x": 2.1111982881597715,
-        "y": 3.99
+        "x": 2.532951807228916,
+        "y": 5.379108433734939
       },
       "prevControl": {
-        "x": 1.8611982881597715,
-        "y": 3.99
+        "x": 2.532951807228916,
+        "y": 5.629108433734939
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "leftCenterShooting"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.4413646055437104,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -91,7 +86,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
