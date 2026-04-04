@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.700699001426534,
+        "x": 8.750819277108434,
         "y": 5.510240963855422
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.700699001426534,
+        "x": 7.750819277108434,
         "y": 5.510240963855422
       },
       "isLocked": false,
@@ -28,15 +28,20 @@
       "linkedName": "intakeDepotShootLeft.1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9767634854771643,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.837272113436866,
-      "maxWaypointRelativePos": 0.5158676569885202,
+      "minWaypointRelativePos": 0.05260545905707893,
+      "maxWaypointRelativePos": 0.8843672456575673,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 3.0,
+        "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -57.724355685422246
   },
   "reversed": false,
   "folder": "IntakeDepotShootLeft",
