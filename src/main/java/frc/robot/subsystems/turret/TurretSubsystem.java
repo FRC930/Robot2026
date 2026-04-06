@@ -41,8 +41,6 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     m_IO = IO;
     this.m_IO.setGains(tunableGains.build());
     logged.turretAngle = Degrees.mutable(0);
-    logged.canCoderAngle1 = Degrees.mutable(0);
-    logged.canCoderAngle2 = Degrees.mutable(0);
     logged.turretSetAngle = Degrees.mutable(0);
     logged.turretAngularVelocity = RPM.mutable(0);
     logged.turretVoltage = Volts.mutable(0);

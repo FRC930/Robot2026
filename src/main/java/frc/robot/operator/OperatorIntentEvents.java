@@ -27,7 +27,9 @@ public interface OperatorIntentEvents {
 
   Trigger wantsToIntake();
 
-  Trigger wantsToRevIndexer();
+  // Trigger wantsToRevIndexer();
 
   Trigger wantsToRaiseIntake();
+
+  Trigger wantsToShootNoTolerance();
 }

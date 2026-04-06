@@ -42,7 +42,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
       new LoggedTunableNumber("Aiming/speedTransferRatio", 0.63);
   public static final double SHOOTER_MIN_RPM = 1000.0;
-  public static final double SHOOTER_MAX_RPM = 6000.0;
+  public static final double SHOOTER_MAX_RPM = 3500.0;
 
   // ===== HOOD PARAMETERS =====
   // Hood measures from vertical (0° = straight up), but the aiming algorithm uses
@@ -65,7 +65,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 71.0);
   public static final LoggedTunableNumber TARGET_FAR_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 65.0);
+      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 64.0);
   public static final LoggedTunableNumber FAR_DISTANCE_THRESHOLD_M =
       new LoggedTunableNumber("Aiming/farDistanceThresholdM", 3.5);
   public static final LoggedTunableNumber FAR_DISTANCE_HYSTERESIS_M =

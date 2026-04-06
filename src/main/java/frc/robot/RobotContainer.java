@@ -125,7 +125,7 @@ public class RobotContainer {
   private final double REG_DRIVE_SPEED = 0.9;
   private final double REG_ANGULAR_SPEED = 0.75;
 
-  private final double SLOW_DRIVE_SPEED = 0.5;
+  private final double SLOW_DRIVE_SPEED = 0.7;
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
@@ -206,7 +206,7 @@ public class RobotContainer {
 
         turret =
             new TurretSubsystem(
-                new TurretIOTalonFX(7, 1, 2, upperCanbus), aimingService::getTurretAngleDeg);
+                new TurretIOTalonFX(7, upperCanbus), aimingService::getTurretAngleDeg);
         // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =

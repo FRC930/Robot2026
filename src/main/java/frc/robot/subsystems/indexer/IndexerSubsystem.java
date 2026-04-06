@@ -34,7 +34,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   // Jam detection tunable thresholds
   private final LoggedTunableNumber m_jamVelocityThreshold =
-      new LoggedTunableNumber("Indexer/JamVelocityThresholdRPM", 10.0);
+      new LoggedTunableNumber("Indexer/JamVelocityThresholdRPM", 40.0);
   private final LoggedTunableNumber m_jamCurrentThreshold =
       new LoggedTunableNumber("Indexer/JamCurrentThresholdAmps", 150.0);
   private final LoggedTunableNumber m_jamDetectionTimeSec =

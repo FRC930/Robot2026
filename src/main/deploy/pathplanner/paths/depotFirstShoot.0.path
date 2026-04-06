@@ -8,31 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.25,
-        "y": 5.5
+        "x": 3.5,
+        "y": 5.75
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "preBumpLeft"
     },
     {
       "anchor": {
-        "x": 0.75,
+        "x": 0.58,
         "y": 6.0
       },
       "prevControl": {
-        "x": 1.0,
+        "x": 1.58,
         "y": 6.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depotFirstShoot.0.end"
+      "linkedName": "inDepot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8333641626044561,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7130317353139796,
+      "minWaypointRelativePos": 0.6,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,
@@ -54,7 +59,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -63,13 +68,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 179.8549143122585
   },
   "reversed": false,
   "folder": "DepotFirstShoot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

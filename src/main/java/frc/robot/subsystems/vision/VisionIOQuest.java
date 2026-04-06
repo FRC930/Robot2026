@@ -71,7 +71,8 @@ public class VisionIOQuest implements VisionIO {
         && m_getPose.get() != null
         && m_getPose.get().getX() > 0.0
         && m_getPose.get().getY() > 0.0
-        && DriverStation.isEnabled()) {
+        && DriverStation.isEnabled()
+        && (DriverStation.isAutonomousEnabled() || DriverStation.isTeleopEnabled())) {
       // Clear out all unreadFrames() Assume bad given never setPose()
       questNav.getAllUnreadPoseFrames();
 

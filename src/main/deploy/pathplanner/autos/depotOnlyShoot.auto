@@ -17,39 +17,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "depotFirstShoot.1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "depotFirstShoot.2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 6.0
+            "pathName": "depotOnlyShoot.1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Idle"
+            "name": "Shooting"
           }
         }
       ]

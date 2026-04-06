@@ -40,7 +40,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1 = new TalonFX(followerMotor1CAN, canbus);
     follower2 = new TalonFX(followerMotor2CAN, canbus);
     follower3 = new TalonFX(followerMotor3CAN, canbus);
-    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
     configureTalons();
   }
 
@@ -54,7 +54,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     configshooter.Feedback.SensorToMechanismRatio = GEAR_RATIO;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     configshooter.Voltage.PeakForwardVoltage = 12.0;
-    configshooter.Voltage.PeakReverseVoltage = -12.0;
+    configshooter.Voltage.PeakReverseVoltage = 0.0;
     configshooter.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     // configshooter.MotionMagic.MotionMagicExpo_kA = 1.0;
     // configshooter.MotionMagic.MotionMagicExpo_kV = 1.0;
@@ -72,7 +72,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower1Configuration.Voltage.PeakForwardVoltage = 12.0;
-    follower1Configuration.Voltage.PeakReverseVoltage = -12.0;
+    follower1Configuration.Voltage.PeakReverseVoltage = 0.0;
     PhoenixUtil.tryUntilOk(5, () -> follower1.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> follower1.getConfigurator().apply(follower1Configuration));
     follower1.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Aligned));
@@ -85,7 +85,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower2Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower2Configuration.Voltage.PeakForwardVoltage = 12.0;
-    follower2Configuration.Voltage.PeakReverseVoltage = -12.0;
+    follower2Configuration.Voltage.PeakReverseVoltage = 0.0;
     PhoenixUtil.tryUntilOk(5, () -> follower2.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> follower2.getConfigurator().apply(follower2Configuration));
     follower2.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
@@ -98,7 +98,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower3Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower3Configuration.Voltage.PeakForwardVoltage = 12.0;
-    follower3Configuration.Voltage.PeakReverseVoltage = -12.0;
+    follower3Configuration.Voltage.PeakReverseVoltage = 0.0;
     PhoenixUtil.tryUntilOk(5, () -> follower3.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> follower3.getConfigurator().apply(follower3Configuration));
     follower3.setControl(new Follower(shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed));

@@ -100,7 +100,7 @@
       "minWaypointRelativePos": 0.4645509790682092,
       "maxWaypointRelativePos": 2.9817690749493257,
       "constraints": {
-        "maxVelocity": 1.5,
+        "maxVelocity": 1.1,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -174,7 +174,7 @@
   "folder": "IntakeShootIntakeShootRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
