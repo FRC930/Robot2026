@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "SyncOdometry"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AutoAim"
           }
         },
