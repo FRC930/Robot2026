@@ -6,12 +6,16 @@ import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotVisualization;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
+import frc.robot.util.LoggedTunableNumber;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
@@ -22,11 +26,28 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
 
   private ExtenderInputsAutoLogged logged = new ExtenderInputsAutoLogged();
 
-  public static final double SPOOL_RADIUS = 1.751 / 2.0;
+  public static final double INCHES_PER_ROT = 4.71;
 
-  public static final double INCHES_PER_ROT = (2.0 * Math.PI * SPOOL_RADIUS);
+  public static final double SPOOL_RADIUS = INCHES_PER_ROT / (2.0 * Math.PI);
 
-  public static final double REDUCTION = (4.0 / 1.0);
+  public static final double REDUCTION = (6.00 / 1.0);
+
+  // Agitation state
+  private TrapezoidProfile agitateProfile;
+  private TrapezoidProfile.State agitateCurrentState = new TrapezoidProfile.State(0, 0);
+  private double agitateGoalPosition;
+  private boolean agitateInitialized = false;
+
+  // Agitation tunables
+  private static final LoggedTunableNumber agitateDownHeight =
+      new LoggedTunableNumber("Intake/agitateDownHeight", 20.0);
+  private static final LoggedTunableNumber agitateUpHeight =
+      new LoggedTunableNumber("Intake/agitateUpHeight", 60.0);
+  private static final LoggedTunableNumber agitateMaxVelocity =
+      new LoggedTunableNumber("Intake/agitateMaxVelocityDegPerSec", 800.0);
+  private static final LoggedTunableNumber agitateMaxAcceleration =
+      new LoggedTunableNumber("Intake/agitateMaxAccelDegPerSec2", 1000.0);
+  private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder("Gains/Extender/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -42,7 +63,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     logged.voltageSetPoint = Volts.mutable(0);
     logged.voltage = Volts.mutable(0);
 
-    // RobotVisualization.instance().setExtenderExtensionSource(logged.distance);
+    RobotVisualization.instance().setExtenderExtensionSource(logged.distance);
   }
 
   /**
@@ -62,8 +83,52 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     switch (m_state.get()) {
       case IDLE:
         break;
+      case INTAKING:
+        m_IO.setExtenderHeight(Inches.of(12));
+        break;
+      case OUTTAKING:
+        m_IO.setExtenderHeight(Inches.of(12));
+        break;
+      case SHOOTING:
+        m_IO.setExtenderHeight(Inches.of(12));
+        break;
+      case RAISED:
+        m_IO.setExtenderHeight(Inches.of(0));
+        break;
+      case AGITATING:
+        updateAgitation();
+        break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+  }
+
+  private void updateAgitation() {
+    if (!agitateInitialized) {
+      agitateProfile =
+          new TrapezoidProfile(
+              new TrapezoidProfile.Constraints(
+                  agitateMaxVelocity.get(), agitateMaxAcceleration.get()));
+      agitateCurrentState = new TrapezoidProfile.State(logged.distance.in(Meters), 0);
+      agitateGoalPosition = agitateDownHeight.get();
+      agitateInitialized = true;
+    }
+
+    TrapezoidProfile.State goal = new TrapezoidProfile.State(agitateGoalPosition, 0);
+    agitateCurrentState = agitateProfile.calculate(0.020, agitateCurrentState, goal);
+
+    m_IO.setExtenderHeight(Meters.of(agitateCurrentState.position));
+
+    if (Math.abs(agitateCurrentState.position - agitateGoalPosition)
+        < AGITATE_POSITION_TOLERANCE_DEG) {
+      if (agitateGoalPosition == agitateDownHeight.get()) {
+        agitateGoalPosition = agitateUpHeight.get();
+      } else {
+        agitateGoalPosition = agitateDownHeight.get();
+      }
+    }
+
+    Logger.recordOutput("Extender/AgitateSetpoint", agitateCurrentState.position);
+    Logger.recordOutput("Extender/AgitateGoal", agitateGoalPosition);
   }
 
   public Command idleCommand() {

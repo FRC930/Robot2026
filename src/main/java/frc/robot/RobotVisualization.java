@@ -23,7 +23,7 @@ public class RobotVisualization extends VirtualSubsystem {
   private static RobotVisualization instance;
 
   private MutDistance compactorExtension = Inches.mutable(0.0);
-  private MutAngle extenderTwist = Degrees.mutable(0.0);
+  private MutDistance extenderExtension = Inches.mutable(0.0);
   private MutAngle hoodAngle = Degrees.mutable(0.0);
 
   private final Mechanism2d primaryMechanism2d;
@@ -51,16 +51,16 @@ public class RobotVisualization extends VirtualSubsystem {
 
   }
 
-  public Angle getExtenderTwist() {
-    return extenderTwist;
+  public Distance getExtenderExtension() {
+    return extenderExtension;
   }
 
-  public void setExtenderTwist(Angle extenderTwist) {
-    this.extenderTwist.mut_replace(extenderTwist);
+  public void setExtenderExtension(Distance extenderExtension) {
+    this.extenderExtension.mut_replace(extenderExtension);
   }
 
-  public void setExtenderTwistSource(MutAngle extenderTwist) {
-    this.extenderTwist = extenderTwist;
+  public void setExtenderExtensionSource(MutDistance extenderExtension) {
+    this.extenderExtension = extenderExtension;
   }
 
   public Distance getCompactorExtension() {
@@ -102,11 +102,8 @@ public class RobotVisualization extends VirtualSubsystem {
 
     Pose3d extenderPose =
         new Pose3d(
-            new Translation3d(
-                Meters.of(0.16426),
-                Meters.zero(),
-                Meters.of(0.090045)), // constant value for attachment offset
-            new Rotation3d(Degrees.zero(), this.getExtenderTwist().unaryMinus(), Degrees.zero()));
+            new Translation3d(Inches.zero(), Inches.zero(), this.getExtenderExtension()),
+            Rotation3d.kZero);
 
     Pose3d hoodPose =
         new Pose3d(
