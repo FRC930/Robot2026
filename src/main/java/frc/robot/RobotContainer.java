@@ -59,6 +59,7 @@ import frc.robot.subsystems.drive.GyroIOSim;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.extender.ExtenderBehavior;
 import frc.robot.subsystems.extender.ExtenderIO;
 import frc.robot.subsystems.extender.ExtenderIOSim;
 import frc.robot.subsystems.extender.ExtenderIOTalonFX;
@@ -359,6 +360,7 @@ public class RobotContainer {
     new IndexerBehavior(indexer);
     new FeederBehavior(feeder);
     new IntakeBehavior(intake);
+    new ExtenderBehavior(extender);
     new ShooterBehavior(shooter);
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
@@ -391,6 +393,7 @@ public class RobotContainer {
               feeder,
               shooter,
               intake,
+              extender,
               climber,
               hood,
               compactor,
@@ -467,6 +470,7 @@ public class RobotContainer {
 
   public void configureTestButtonBindings() {
     intake.setTestingState();
+    extender.setTestingState();
     shooter.setTestingState();
     indexer.setTestingState();
     feeder.setTestingState();
