@@ -3,7 +3,6 @@ package frc.robot.util;
 import frc.robot.aiming.AimingEvents;
 import frc.robot.goals.RobotEvents;
 import frc.robot.state.MatchEvents;
-import frc.robot.subsystems.climber.ClimberEvents;
 import frc.robot.subsystems.compactor.CompactorEvents;
 import frc.robot.subsystems.drive.DriveEvents;
 import frc.robot.subsystems.extender.ExtenderEvents;
@@ -22,7 +21,6 @@ public record AllEvents(
     ShooterEvents shooter,
     IntakeEvents intake,
     ExtenderEvents extender,
-    ClimberEvents climber,
     HoodEvents hood,
     CompactorEvents compactor,
     DriveEvents drive,
