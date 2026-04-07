@@ -1,8 +1,6 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutTemperature;
@@ -21,21 +19,10 @@ public interface IntakeIO {
     public MutTemperature leaderRollerTemp;
     public MutTemperature followerRollerTemp;
 
-    public MutVoltage extenderVoltage;
-    public MutAngle extenderAngle;
-    public MutAngle extenderAngleSetPoint;
-    public MutCurrent extenderSupplyCurrent;
-    public MutCurrent extenderTorqueCurrent;
-    // Emulated Angle/SetAngle (given extender using current limits)
-    public MutAngle extenderEmulatedAngle;
-    public MutAngle extenderEmulatedSetAngle;
     public int numberFuelHave;
   }
 
   public default void setRollerTargetSpeed(AngularVelocity target) {}
-  ;
-
-  public default void setExtenderTargetAngle(Angle angle) {}
   ;
 
   public default void stop() {}
@@ -45,11 +32,5 @@ public interface IntakeIO {
   ;
 
   public default void setRollerGains(Gains gains) {}
-  ;
-
-  public default void setExtenderGains(Gains gains) {}
-  ;
-
-  public default void setExtenderInitialPosition(Angle position) {}
   ;
 }

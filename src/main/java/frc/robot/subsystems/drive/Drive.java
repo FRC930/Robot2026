@@ -99,7 +99,7 @@ public class Drive extends SubsystemBase {
                   KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
                   WHEEL_COF))
           // Configures the bumper size (dimensions of the robot bumper)
-          .withBumperSize(Meters.of(0.864), Meters.of(1.016));
+          .withBumperSize(Meters.of(0.889), Meters.of(0.889));
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;

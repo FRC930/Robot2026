@@ -1,15 +1,16 @@
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.extender;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
+import frc.robot.util.Gains;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ClimberIO {
+public interface ExtenderIO {
   @AutoLog
-  public static class ClimberInputs {
+  public static class ExtenderInputs {
     public MutDistance distance;
     public MutLinearVelocity velocity;
     public MutDistance setPoint;
@@ -19,9 +20,15 @@ public interface ClimberIO {
     public MutCurrent torqueCurrent;
   }
 
-  public default void setClimberHeight(Distance target) {}
+  public default void setExtenderHeight(Distance target) {}
   ;
 
-  public default void updateInputs(ClimberInputs input) {}
+  public default void stop() {}
+  ;
+
+  public default void updateInputs(ExtenderInputs input) {}
+  ;
+
+  public default void setGains(Gains gains) {}
   ;
 }
