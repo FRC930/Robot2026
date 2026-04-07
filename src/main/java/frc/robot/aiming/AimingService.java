@@ -263,9 +263,15 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     hoodAngleDeg = smoothedHoodDeg;
     shooterRPM = smoothedRPM;
 
+    boolean isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
+
     // Cache launcher params for 50Hz trajectory visualization
     cachedLauncherSpeed = launcherSpeed;
-    cachedLauncherAngleRad = launcherAngleRad;
+    if (isBlue) {
+      cachedLauncherAngleRad = Math.PI - launcherAngleRad;
+    } else {
+      cachedLauncherAngleRad = launcherAngleRad;
+    }
   }
 
   private Translation3d getTargetPosition() {

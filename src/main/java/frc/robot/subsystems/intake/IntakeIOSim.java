@@ -236,8 +236,10 @@ public class IntakeIOSim implements IntakeIO {
 
   public void shootFuel() {
     counter++;
-    if (counter > 10) {
+    if (counter > 3.5) {
       if (intakeSim.getGamePiecesAmount() > 0) {
+        intakeSim.obtainGamePieceFromIntake();
+        intakeSim.obtainGamePieceFromIntake();
         intakeSim.obtainGamePieceFromIntake();
         AimingService.trajectorySim.setSpawnFuelOnGround(true);
       } else {

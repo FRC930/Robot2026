@@ -1,10 +1,19 @@
 package frc.robot.aiming;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -79,14 +88,49 @@ public class BallTrajectorySim {
       activeBalls.remove(0);
     }
 
-    activeBalls.add(
-        new Projectile(
-            turretFieldPos.getX(),
-            turretFieldPos.getY(),
-            AimingConstants.TURRET_PIVOT_HEIGHT_METERS,
-            vx,
-            vy,
-            vz));
+    double shooterLaunchAngle = 0.0;
+    boolean isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
+    if (isBlue) {
+      shooterLaunchAngle = launchAngleRad;
+    } else {
+      shooterLaunchAngle = ((Math.PI) - launchAngleRad);
+    }
+
+    // Launching Ball 1
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, -.15),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(shooterLaunchAngle)));
+
+    // Launching Ball 2
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, 0),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(shooterLaunchAngle)));
+
+    // Launching Ball 3
+    SimulatedArena.getInstance()
+        .addGamePieceProjectile(
+            new RebuiltFuelOnFly(
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(-.15, .15),
+                RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                RobotContainer.driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                Inches.of(20),
+                MetersPerSecond.of(ballSpeed),
+                Radians.of(shooterLaunchAngle)));
   }
 
   private void updateAll() {
