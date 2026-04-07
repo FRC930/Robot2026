@@ -19,7 +19,6 @@ public interface IntakeIO {
     public MutTemperature leaderRollerTemp;
     public MutTemperature followerRollerTemp;
 
-
     public int numberFuelHave;
   }
 

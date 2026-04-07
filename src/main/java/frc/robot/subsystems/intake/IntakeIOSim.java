@@ -56,8 +56,6 @@ public class IntakeIOSim implements IntakeIO {
             DCMotor.getKrakenX60Foc(1),
             0.01);
 
-
-
     // TODO: FINAL INTAKE SPACE CONFIGURATION FOR MAPLE-SIM
     // Here, create the intake simulation with respect to the intake on your real robot
     this.intakeSim =
@@ -131,7 +129,7 @@ public class IntakeIOSim implements IntakeIO {
     input.rollerVelocitySetPoint.mut_replace(m_rollerVelocitySetPoint);
     input.rollerSupplyCurrent.mut_replace(rollerFlyWheelSim.getCurrentDrawAmps(), Amps);
 
-        input.numberFuelHave = getGamePiecesAmount();
+    input.numberFuelHave = getGamePiecesAmount();
   }
 
   private void updateRollerPID() {

@@ -15,7 +15,6 @@ import frc.robot.RobotVisualization;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
-
 import org.littletonrobotics.junction.Logger;
 
 public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {

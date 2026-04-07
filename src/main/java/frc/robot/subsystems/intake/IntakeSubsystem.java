@@ -74,7 +74,6 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
     logged.followerRollerTemp = Fahrenheit.mutable(0);
     m_IO.setRollerGains(rollerGains.build());
     logged.numberFuelHave = 0;
-    
   }
 
   /**
