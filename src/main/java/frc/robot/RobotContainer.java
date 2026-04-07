@@ -59,6 +59,9 @@ import frc.robot.subsystems.drive.GyroIOSim;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.extender.ExtenderIO;
+import frc.robot.subsystems.extender.ExtenderIOSim;
+import frc.robot.subsystems.extender.ExtenderIOTalonFX;
 import frc.robot.subsystems.extender.ExtenderSubsystem;
 import frc.robot.subsystems.feeder.FeederBehavior;
 import frc.robot.subsystems.feeder.FeederIO;
@@ -191,7 +194,9 @@ public class RobotContainer {
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         // intake = new IntakeSubsystem(new IntakeIO() {});
-
+        extender =
+            new ExtenderSubsystem(
+                new ExtenderIOTalonFX(11, upperCanbus)); // TODO find extendermoterID
         climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
 
         shooter =
@@ -210,7 +215,7 @@ public class RobotContainer {
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
         compactor =
-            new CompactorSubsystem(new CompactorIOTalonFX(84, upperCanbus)); // TODO add actual ID
+            new CompactorSubsystem(new CompactorIOTalonFX(12, upperCanbus)); // TODO add actual ID
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -236,7 +241,7 @@ public class RobotContainer {
                 drive::addVisionMeasurementAutoAlign,
                 new VisionIOLimelight(frontCamera, drive::getRotation),
                 new VisionIOQuest(drive::getAutoAlignPose, questCamName));
-                
+
         break;
 
       case SIM:
@@ -261,6 +266,7 @@ public class RobotContainer {
                 driveSimulation::getSimulatedDriveTrainPose,
                 driveSimulation::getDriveTrainSimulatedChassisSpeedsRobotRelative);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
+        extender = new ExtenderSubsystem(new ExtenderIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
         feeder = new FeederSubsystem(new FeederIOSim());
         climber =
@@ -301,6 +307,7 @@ public class RobotContainer {
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIO() {});
+        extender = new ExtenderSubsystem(new ExtenderIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
         feeder = new FeederSubsystem(new FeederIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
