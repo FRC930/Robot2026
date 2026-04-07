@@ -420,11 +420,17 @@ public class Drive extends SubsystemBase {
     return getAutoAlignPose().getRotation();
   }
 
-  /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
+    setPose(pose, true);
+  }
+
+  /** Resets the current odometry pose. */
+  public void setPose(Pose2d pose, boolean alsoUpdateAutoAlignPose) {
     resetSimulationPoseCallBack.accept(pose);
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
-    poseEstimatorAutoAlign.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    if (alsoUpdateAutoAlignPose) {
+      poseEstimatorAutoAlign.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    }
   }
 
   /** Adds a new timestamped vision measurement. */

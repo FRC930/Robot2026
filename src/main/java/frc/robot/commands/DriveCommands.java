@@ -415,4 +415,11 @@ public class DriveCommands {
           drive.stop();
         });
   }
+
+  public static Command syncOdometry(Drive drive) {
+    return new InstantCommand(
+        () -> {
+          drive.setPose(drive.getAutoAlignPose(), false);
+        });
+  }
 }
