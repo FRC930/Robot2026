@@ -38,14 +38,14 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   private boolean agitateInitialized = false;
 
   // Agitation tunables
-  private static final LoggedTunableNumber agitateDownHeight =
-      new LoggedTunableNumber("Intake/agitateDownHeight", 20.0);
-  private static final LoggedTunableNumber agitateUpHeight =
-      new LoggedTunableNumber("Intake/agitateUpHeight", 60.0);
+  private static final LoggedTunableNumber agitateInDistance =
+      new LoggedTunableNumber("Intake/agitateInDistance", 3.0);
+  private static final LoggedTunableNumber agitateOutDistance =
+      new LoggedTunableNumber("Intake/agitateOutDistance", 8.0);
   private static final LoggedTunableNumber agitateMaxVelocity =
-      new LoggedTunableNumber("Intake/agitateMaxVelocityDegPerSec", 800.0);
+      new LoggedTunableNumber("Intake/agitateMaxVelocityInchPerSec", 20.0);
   private static final LoggedTunableNumber agitateMaxAcceleration =
-      new LoggedTunableNumber("Intake/agitateMaxAccelDegPerSec2", 1000.0);
+      new LoggedTunableNumber("Intake/agitateMaxAccelInchPerSec2", 25.0);
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
@@ -107,22 +107,22 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
           new TrapezoidProfile(
               new TrapezoidProfile.Constraints(
                   agitateMaxVelocity.get(), agitateMaxAcceleration.get()));
-      agitateCurrentState = new TrapezoidProfile.State(logged.distance.in(Meters), 0);
-      agitateGoalPosition = agitateDownHeight.get();
+      agitateCurrentState = new TrapezoidProfile.State(logged.distance.in(Inches), 0);
+      agitateGoalPosition = agitateInDistance.get();
       agitateInitialized = true;
     }
 
     TrapezoidProfile.State goal = new TrapezoidProfile.State(agitateGoalPosition, 0);
     agitateCurrentState = agitateProfile.calculate(0.020, agitateCurrentState, goal);
 
-    m_IO.setExtenderHeight(Meters.of(agitateCurrentState.position));
+    m_IO.setExtenderHeight(Inches.of(agitateCurrentState.position));
 
     if (Math.abs(agitateCurrentState.position - agitateGoalPosition)
         < AGITATE_POSITION_TOLERANCE_DEG) {
-      if (agitateGoalPosition == agitateDownHeight.get()) {
-        agitateGoalPosition = agitateUpHeight.get();
+      if (agitateGoalPosition == agitateInDistance.get()) {
+        agitateGoalPosition = agitateOutDistance.get();
       } else {
-        agitateGoalPosition = agitateDownHeight.get();
+        agitateGoalPosition = agitateInDistance.get();
       }
     }
 

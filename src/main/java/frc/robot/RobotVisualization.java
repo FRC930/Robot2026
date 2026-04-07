@@ -102,7 +102,7 @@ public class RobotVisualization extends VirtualSubsystem {
 
     Pose3d extenderPose =
         new Pose3d(
-            new Translation3d(Inches.zero(), Inches.zero(), this.getExtenderExtension()),
+            new Translation3d(this.getExtenderExtension(), Inches.zero(), Inches.zero()),
             Rotation3d.kZero);
 
     Pose3d hoodPose =
