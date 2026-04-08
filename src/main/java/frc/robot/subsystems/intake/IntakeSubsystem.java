@@ -166,7 +166,6 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   }
 
   public void rollIfAtTarget() {
-    System.out.println("RunCheck");
     if (isIntakeAtPosition()) {
       m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
     } else {
