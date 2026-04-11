@@ -46,9 +46,9 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
 
   // EMA smoothing — alpha in (0, 1]. Lower = smoother, 1.0 = no filtering.
   private static final LoggedTunableNumber rpmEmaAlpha =
-      new LoggedTunableNumber("Aiming/Smoothing/rpmEmaAlpha", 0.08);
+      new LoggedTunableNumber("Aiming/Smoothing/rpmEmaAlpha", 1);
   private static final LoggedTunableNumber turretEmaAlpha =
-      new LoggedTunableNumber("Aiming/Smoothing/turretEmaAlpha", 1.0);
+      new LoggedTunableNumber("Aiming/Smoothing/turretEmaAlpha", 0.1);
   private static final LoggedTunableNumber hoodEmaAlpha =
       new LoggedTunableNumber("Aiming/Smoothing/hoodEmaAlpha", 0.75);
 

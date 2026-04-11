@@ -60,7 +60,7 @@ public class TunerConstants {
 
   // The stator current at which the wheels start to slip;
   // This needs to be tuned to your individual robot
-  private static final Current kSlipCurrent = Amps.of(120);
+  private static final Current kSlipCurrent = Amps.of(40);
 
   // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
   // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
@@ -146,7 +146,7 @@ public class TunerConstants {
   private static final boolean kFrontLeftSteerMotorInverted = false;
   private static final boolean kFrontLeftEncoderInverted = false;
 
-  public static final Distance kFrontLeftXPos = Inches.of(10.518);
+  public static final Distance kFrontLeftXPos = Inches.of(.518);
   private static final Distance kFrontLeftYPos = Inches.of(13.5);
 
   // Front Right
