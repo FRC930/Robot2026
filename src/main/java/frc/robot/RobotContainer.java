@@ -9,8 +9,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
-import static frc.robot.subsystems.vision.VisionConstants.frontCamera;
-import static frc.robot.subsystems.vision.VisionConstants.robotToFrontCamera;
+import static frc.robot.subsystems.vision.VisionConstants.backCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToBackCamera;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
@@ -103,7 +103,7 @@ public class RobotContainer {
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = false;
+  private static final boolean ISTESTING = true;
 
   private final AprilTagVision vision;
 
@@ -150,10 +150,10 @@ public class RobotContainer {
       new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
-  final LoggedTunableNumber setIntakeExtenderUp =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 105.0);
-  final LoggedTunableNumber setIntakeExtenderDown =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 0.0);
+  final LoggedTunableNumber setExtenderOut =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceOut", 1.0);
+  final LoggedTunableNumber setExtenderIn =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 0.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
 
@@ -224,7 +224,7 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOLimelight(frontCamera, drive::getRotation)
+                new VisionIOLimelight(backCamera, drive::getRotation)
                 // ,new VisionIOQuest(drive::getAutoAlignPose, questCamName)
                 );
 
@@ -245,7 +245,7 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOPhotonVisionSim(frontCamera, robotToFrontCamera, drive::getPose));
+                new VisionIOPhotonVisionSim(backCamera, robotToBackCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker =
             new DriveZoneTracker(
@@ -464,22 +464,14 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
         .whileFalse(new InstantCommand(() -> shooter.stop()));
-    // testController
-    //     .a()
-    //     .whileTrue(
-    //         intake.getNewSetIntakeExtenderAngleCommand(
-    //             () -> Degrees.of(setIntakeExtenderUp.get()), false))
-    //     .whileFalse(
-    //         intake.getNewSetIntakeExtenderAngleCommand(
-    //             () -> Degrees.of(setIntakeExtenderDown.get()), false));
-    // testController
-    //     .y()
-    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-    //     .whileFalse(new InstantCommand(() -> intake.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-    //     .whileFalse(hood.getNewSetHoodAngleCommand(() -> 10.0));
+    testController
+        .a()
+        .whileTrue(extender.getNewDistanceCommand(setExtenderOut))
+        .whileFalse(extender.getNewDistanceCommand(setExtenderIn));
+    testController
+        .b()
+        .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
+        .whileFalse(new InstantCommand(() -> hood.stop()));
   }
 
   public void configureCharacterizationButtonBindings() {

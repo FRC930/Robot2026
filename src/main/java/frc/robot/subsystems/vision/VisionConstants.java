@@ -15,11 +15,13 @@ import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   // AprilTag layout
+  // We are filltering for tags 32,31,30,29,27,26,25,24,21,20,19,18,16,15,14,13,11,10,9,8,5,4,3,2 by
+  // using ID filters on the limelights
   public static AprilTagFieldLayout aprilTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String frontCamera = "limelight-front";
+  public static String backCamera = "limelight-back";
   public static String questCamName = "Quest";
   /*
    * CAMERA POSITIONS ON ROBOT (looking down from above, with front of robot at top of page)
@@ -32,8 +34,8 @@ public class VisionConstants {
    */
 
   // LL Forward-X: -0.332976, LL Right-Y: 0.038(Negitive in code), LL up-Z: 0.165524, LL Roll 0.0,
-  // LL Pitch 15.0, LL Yaw 0.0.
-  public static Transform3d robotToFrontCamera =
+  // LL Pitch 150.0, LL Yaw 0.0.
+  public static Transform3d robotToBackCamera =
       new Transform3d(
           Units.inchesToMeters(-13.10929),
           Units.inchesToMeters(-1.49063),
