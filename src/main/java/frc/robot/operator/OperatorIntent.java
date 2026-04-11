@@ -44,7 +44,10 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToScoreTrigger() {
-    return driver.rightBumper();
+    return new Trigger(
+        () -> {
+          return driver.getHID().getRightBumperButton();
+        }); // return driver.rightBumper();
   }
 
   public CommandXboxController getDriver() {
@@ -72,23 +75,35 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToOuttake() {
-    return driver.b();
+    return new Trigger(
+        () -> {
+          return driver.getHID().getBButton();
+        }); // return driver.b();
   }
 
   // unused, need to get rid of (shooting does the same thing as passing)
   @Override
   public Trigger wantsToPass() {
-    return driver.back();
+    return new Trigger(
+        () -> {
+          return driver.getHID().getBackButton();
+        }); // return driver.back();
   }
 
   @Override
   public Trigger wantsToAim() {
-    return driver.y();
+    return new Trigger(
+        () -> {
+          return driver.getHID().getYButton();
+        }); // return driver.y();
   }
 
   @Override
   public Trigger wantsToIntake() {
-    return driver.leftBumper();
+    return new Trigger(
+        () -> {
+          return driver.getHID().getLeftBumperButton();
+        }); // return driver.leftBumper();
   }
 
   // @Override
@@ -98,11 +113,25 @@ public class OperatorIntent implements OperatorIntentEvents {
 
   @Override
   public Trigger wantsToRaiseIntake() {
-    return driver.povUp();
+    return new Trigger(
+        () -> {
+          if (driver.getHID().getPOV() == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }); // return driver.povUp();
   }
 
   @Override
   public Trigger wantsToShootNoTolerance() {
-    return driver.rightTrigger();
+    return new Trigger(
+        () -> {
+          if (driver.getHID().getRightTriggerAxis() >= 0.5) {
+            return true;
+          } else {
+            return false;
+          }
+        }); // return driver.rightTrigger();
   }
 }
