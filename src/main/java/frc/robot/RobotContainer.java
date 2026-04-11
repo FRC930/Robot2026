@@ -8,10 +8,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Kilograms;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.vision.VisionConstants.backLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
@@ -28,12 +24,9 @@ import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -48,10 +41,6 @@ import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
 import frc.robot.state.MatchState;
-import frc.robot.subsystems.climber.ClimberBehavior;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveBehavior;
 import frc.robot.subsystems.drive.DriveZoneTracker;
@@ -129,7 +118,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intake;
   private final IndexerSubsystem indexer;
-  private final ClimberSubsystem climber;
+  // private final ClimberSubsystem climber;
   private final ShooterSubsystem shooter;
   private final TurretSubsystem turret;
   private final HoodSubsystem hood;
@@ -194,7 +183,7 @@ public class RobotContainer {
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
         // intake = new IntakeSubsystem(new IntakeIO() {});
 
-        climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
+        // climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
 
         shooter =
             new ShooterSubsystem(
@@ -267,20 +256,20 @@ public class RobotContainer {
         driveZoneTracker = new DriveZoneTracker(drive::getPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
         indexer = new IndexerSubsystem(new IndexerIOSim());
-        climber =
-            new ClimberSubsystem(
-                new ClimberIOSim(
-                    new ElevatorSim(
-                        LinearSystemId.createElevatorSystem(
-                            DCMotor.getKrakenX60Foc(2),
-                            Pounds.of(45).in(Kilograms),
-                            Inches.of(ClimberSubsystem.SPOOL_RADIUS).in(Meters),
-                            ClimberSubsystem.REDUCTION),
-                        DCMotor.getKrakenX60Foc(2),
-                        Inches.of(0).in(Meters),
-                        Inches.of(32).in(Meters),
-                        true,
-                        Inches.of(0).in(Meters))));
+        // climber =
+        //     new ClimberSubsystem(
+        //         new ClimberIOSim(
+        //             new ElevatorSim(
+        //                 LinearSystemId.createElevatorSystem(
+        //                     DCMotor.getKrakenX60Foc(2),
+        //                     Pounds.of(45).in(Kilograms),
+        //                     Inches.of(ClimberSubsystem.SPOOL_RADIUS).in(Meters),
+        //                     ClimberSubsystem.REDUCTION),
+        //                 DCMotor.getKrakenX60Foc(2),
+        //                 Inches.of(0).in(Meters),
+        //                 Inches.of(32).in(Meters),
+        //                 true,
+        //                 Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
         turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
@@ -306,7 +295,7 @@ public class RobotContainer {
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIO() {});
         indexer = new IndexerSubsystem(new IndexerIO() {});
-        climber = new ClimberSubsystem(new ClimberIO() {});
+        // climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
         turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
@@ -366,7 +355,7 @@ public class RobotContainer {
     new IndexerBehavior(indexer);
     new IntakeBehavior(intake);
     new ShooterBehavior(shooter);
-    new ClimberBehavior(climber);
+    // new ClimberBehavior(climber);
     new HoodBehavior(hood);
     new TurretBehavior(turret);
     new AimingBehavior(aimingService);
@@ -397,7 +386,7 @@ public class RobotContainer {
               shooter,
               turret,
               intake,
-              climber,
+              // climber,
               hood,
               driveZoneTracker,
               aimingService);
@@ -479,7 +468,7 @@ public class RobotContainer {
     shooter.setTestingState();
     indexer.setTestingState();
     turret.setTestingState();
-    climber.setTestingState();
+    // climber.setTestingState();
     hood.setTestingState();
     // testController
     //     .a()

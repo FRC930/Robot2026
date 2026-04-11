@@ -84,6 +84,7 @@ public class VisionIOLimelight implements VisionIO {
 
     inputs.cameraName = this.cameraName;
     // Update connection status based on whether an update has been seen in the last 500ms
+    // Changed from 250ms to 500ms
     inputs.connected =
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 500;
 
