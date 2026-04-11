@@ -33,11 +33,6 @@ import frc.robot.goals.RobotGoals;
 import frc.robot.goals.RobotGoalsBehavior;
 import frc.robot.operator.OperatorIntent;
 import frc.robot.state.MatchState;
-import frc.robot.subsystems.compactor.CompactorBehavior;
-import frc.robot.subsystems.compactor.CompactorIO;
-import frc.robot.subsystems.compactor.CompactorIOSim;
-import frc.robot.subsystems.compactor.CompactorIOTalonFX;
-import frc.robot.subsystems.compactor.CompactorSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveBehavior;
 import frc.robot.subsystems.drive.DriveZoneTracker;
@@ -103,7 +98,7 @@ public class RobotContainer {
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = true;
+  private static final boolean ISTESTING = false;
 
   private final AprilTagVision vision;
 
@@ -122,7 +117,7 @@ public class RobotContainer {
   private final FeederSubsystem feeder;
   private final ShooterSubsystem shooter;
   private final HoodSubsystem hood;
-  private final CompactorSubsystem compactor;
+  // private final CompactorSubsystem compactor;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
   private final ExtenderSubsystem extender;
@@ -199,8 +194,9 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIOTalonFX(8, upperCanbus));
 
         hood = new HoodSubsystem(new HoodIOTalonFX(5, upperCanbus), aimingService::getHoodAngleDeg);
-        compactor =
-            new CompactorSubsystem(new CompactorIOTalonFX(20, upperCanbus)); // TODO add actual ID
+        // compactor =
+        //     new CompactorSubsystem(new CompactorIOTalonFX(20, upperCanbus)); // TODO add actual
+        // ID
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -258,7 +254,7 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIOSim());
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
-        compactor = new CompactorSubsystem(new CompactorIOSim());
+        // compactor = new CompactorSubsystem(new CompactorIOSim());
         break;
 
       default:
@@ -285,7 +281,7 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
-        compactor = new CompactorSubsystem(new CompactorIO() {});
+        // compactor = new CompactorSubsystem(new CompactorIO() {});
         break;
     }
 
@@ -335,7 +331,7 @@ public class RobotContainer {
     new ShooterBehavior(shooter);
     new HoodBehavior(hood);
     new AimingBehavior(aimingService);
-    new CompactorBehavior(compactor);
+    // new CompactorBehavior(compactor);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
@@ -365,7 +361,7 @@ public class RobotContainer {
               intake,
               extender,
               hood,
-              compactor,
+              // compactor,
               driveZoneTracker,
               aimingService);
 
