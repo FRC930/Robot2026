@@ -25,7 +25,7 @@ public class ExtenderIOSim implements ExtenderIO {
   private final ElevatorFeedforward ff = new ElevatorFeedforward(0.0, 0.0, 0.0);
 
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(5.0, 0.0, 0.0, new Constraints(90, 120));
+      new ProfiledPIDController(8.5, 0.0, 0.13, new Constraints(25, 60));
 
   private final ElevatorSim sim;
 
