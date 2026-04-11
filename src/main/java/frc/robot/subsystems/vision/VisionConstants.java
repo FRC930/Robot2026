@@ -31,13 +31,14 @@ public class VisionConstants {
    * -/+               -/-
    */
 
-  // TODO: Find position and rotation of camera
+  // LL Forward-X: -0.332976, LL Right-Y: 0.038(Negitive in code), LL up-Z: 0.165524, LL Roll 0.0, LL
+  // Pitch 15.0, LL Yaw 0.0.
   public static Transform3d robotToFrontCamera =
       new Transform3d(
-          Units.inchesToMeters(9.29),
-          Units.inchesToMeters(15.96),
-          Units.inchesToMeters(23.34),
-          new Rotation3d(0.0, 0.0, Units.degreesToRadians(90.0)));
+          Units.inchesToMeters(-13.10929),
+          Units.inchesToMeters(-1.49063),
+          Units.inchesToMeters(6.516693),
+          new Rotation3d(0.0, Units.degreesToRadians(150.0), 0.0));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
