@@ -444,22 +444,22 @@ public class RobotContainer {
     indexer.setTestingState();
     feeder.setTestingState();
     hood.setTestingState();
-    // testController
-    //     .a()
-    //     .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .leftBumper()
         .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
         .whileFalse(new InstantCommand(() -> intake.stop()));
-    // testController
-    //     .leftBumper()
-    //     .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
-    //     .whileFalse(new InstantCommand(() -> feeder.stop()));
-    // testController
-    //     .leftBumper()
-    //     .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
-    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
+        .whileFalse(new InstantCommand(() -> feeder.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .rightBumper()
         .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
@@ -469,9 +469,9 @@ public class RobotContainer {
         .whileTrue(extender.getNewDistanceCommand(setExtenderOut))
         .whileFalse(extender.getNewDistanceCommand(setExtenderIn));
     testController
-        .b()
+        .rightBumper()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 0.0));
+        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 5.0));
   }
 
   public void configureCharacterizationButtonBindings() {

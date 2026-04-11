@@ -24,7 +24,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   private AngularVelocity intakeSetPoint = RPM.of(0);
   boolean firstTime = true;
   public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
-  public static double GEAR_RATIO_ROLLERS = 2.0;
+  public static double GEAR_RATIO_ROLLERS = 3.0;
 
   /* Keep a neutral out so we can disable the motor */
   private final NeutralOut m_brake = new NeutralOut();
@@ -46,7 +46,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.Voltage.PeakForwardVoltage = 12.0;
     leaderConfig.Voltage.PeakReverseVoltage = -12.0;
     leaderConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
-    leaderConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    leaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     PhoenixUtil.tryUntilOk(
         5, () -> leaderIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(leaderConfig));
@@ -60,7 +60,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
-    followConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    followConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     followConfig.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(
         5, () -> followIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
