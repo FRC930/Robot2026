@@ -40,7 +40,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
       new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
-      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.575);
+      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.555);
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 3500.0;
 
@@ -63,13 +63,13 @@ public final class AimingConstants {
   // Ball arrives descending as long as this is above the minimum-energy angle (~45° for level
   // targets).
   public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 71.0);
+      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 70.0);
   public static final LoggedTunableNumber TARGET_FAR_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 64.0);
+      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 66.0);
   public static final LoggedTunableNumber FAR_DISTANCE_THRESHOLD_M =
       new LoggedTunableNumber("Aiming/farDistanceThresholdM", 3.5);
   public static final LoggedTunableNumber FAR_DISTANCE_HYSTERESIS_M =
-      new LoggedTunableNumber("Aiming/farDistanceHysteresisM", 0.3);
+      new LoggedTunableNumber("Aiming/farDistanceHysteresisM", 0.2);
   public static final LoggedTunableNumber TARGET_PASS_LAUNCH_ANGLE_DEG =
       new LoggedTunableNumber("Aiming/targetPassLaunchAngleDeg", 61.0);
 
@@ -87,9 +87,9 @@ public final class AimingConstants {
   // Adjusts RPM based on distance: rpm *= 1.0 + rpmDistanceScale * (distance - rpmRefDistance)
   // Positive scale → far shots boosted, close shots reduced
   public static final LoggedTunableNumber RPM_DISTANCE_SCALE =
-      new LoggedTunableNumber("Aiming/rpmDistanceScale", 0.01);
+      new LoggedTunableNumber("Aiming/rpmDistanceScale", 0.0);
   public static final LoggedTunableNumber RPM_REF_DISTANCE_M =
-      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 3.5);
+      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 3);
 
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)
