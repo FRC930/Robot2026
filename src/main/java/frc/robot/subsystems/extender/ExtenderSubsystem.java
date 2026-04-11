@@ -51,10 +51,10 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
-      new LoggedTunableGainsBuilder("Gains/Extender/", 3.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/Extender/", 5.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public LoggedTunableGainsBuilder differentialTunableGains =
-      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 10.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public ExtenderSubsystem(ExtenderIO IO) {
     m_IO = IO;
@@ -105,7 +105,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
         updateAgitation();
         break;
       case TESTING:
-        setExtenderHeight(Inches.of(1.0));
+        setExtenderHeight(Inches.of(0.0));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

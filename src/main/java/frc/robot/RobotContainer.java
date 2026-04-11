@@ -155,7 +155,7 @@ public class RobotContainer {
   final LoggedTunableNumber setExtenderIn =
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 0.0);
   final LoggedTunableNumber setHoodAngle =
-      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
+      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 10.0);
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
@@ -450,16 +450,16 @@ public class RobotContainer {
     //     .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .leftBumper()
-        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
-    testController
-        .leftBumper()
-        .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
-        .whileFalse(new InstantCommand(() -> feeder.stop()));
-    testController
-        .leftBumper()
-        .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
+        .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+        .whileFalse(new InstantCommand(() -> intake.stop()));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
+    //     .whileFalse(new InstantCommand(() -> feeder.stop()));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
     testController
         .rightBumper()
         .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
@@ -471,7 +471,7 @@ public class RobotContainer {
     testController
         .b()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(extender.getNewStopCommand());
+        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 0.0));
   }
 
   public void configureCharacterizationButtonBindings() {

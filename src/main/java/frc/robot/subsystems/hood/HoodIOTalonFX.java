@@ -22,7 +22,7 @@ public class HoodIOTalonFX implements HoodIO {
 
   private Angle m_setAngle;
 
-  public static final double MINANGLE = 16.0;
+  public static final double MINANGLE = 2.0;
   public static final double MAXANGLE = 31.0;
 
   public HoodIOTalonFX(int motorID, CANBus canbus) {
@@ -40,10 +40,13 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.CurrentLimits.StatorCurrentLimitEnable = true;
     cfg.Voltage.PeakForwardVoltage = 12.0;
-    cfg.Voltage.PeakReverseVoltage = -12.0;
+    cfg.Voltage.PeakReverseVoltage = -3.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     cfg.Feedback.SensorToMechanismRatio =
-        51; // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio Pinion to
+        (32.0 / 11.0)
+            * (156.00000
+                / 10.0); // Combination of a 3:1 Ratio from the Motor Pinion to and a 15.4:1 Ratio
+    // Pinion to
     // Hood
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
