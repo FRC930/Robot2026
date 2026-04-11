@@ -181,9 +181,9 @@ public class RobotContainer {
                 (robotPose) -> {});
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
-        intake = new IntakeSubsystem(new IntakeIOTalonFX(10, 11, upperCanbus));
+        intake = new IntakeSubsystem(new IntakeIOTalonFX(10, 12, upperCanbus));
         // intake = new IntakeSubsystem(new IntakeIO() {});
-        extender = new ExtenderSubsystem(new ExtenderIOTalonFX(9, 12, upperCanbus));
+        extender = new ExtenderSubsystem(new ExtenderIOTalonFX(9, 11, upperCanbus));
 
         shooter =
             new ShooterSubsystem(
@@ -471,7 +471,7 @@ public class RobotContainer {
     testController
         .b()
         .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(new InstantCommand(() -> hood.stop()));
+        .whileFalse(extender.getNewStopCommand());
   }
 
   public void configureCharacterizationButtonBindings() {

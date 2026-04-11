@@ -31,7 +31,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
 
   public static final double SPOOL_RADIUS = INCHES_PER_ROT / (2.0 * Math.PI);
 
-  public static final double REDUCTION = (6.00 / 1.0);
+  public static final double REDUCTION = (2.0 / 3.0);
 
   // Agitation state
   private TrapezoidProfile agitateProfile;
@@ -51,10 +51,10 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
-      new LoggedTunableGainsBuilder("Gains/Extender/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/Extender/", 3.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public LoggedTunableGainsBuilder differentialTunableGains =
-      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 10.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public ExtenderSubsystem(ExtenderIO IO) {
     m_IO = IO;
@@ -103,6 +103,9 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
         break;
       case AGITATING:
         updateAgitation();
+        break;
+      case TESTING:
+        setExtenderHeight(Inches.of(1.0));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
@@ -197,6 +200,14 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     return new InstantCommand(
         () -> {
           m_IO.setExtenderHeight(Inches.of(distance.getAsDouble()));
+        },
+        this);
+  }
+
+  public Command getNewStopCommand() {
+    return new InstantCommand(
+        () -> {
+          m_IO.stop();
         },
         this);
   }

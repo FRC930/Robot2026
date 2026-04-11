@@ -46,12 +46,12 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     TalonFXConfiguration cfgExtender = new TalonFXConfiguration();
     cfgExtender.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     cfgExtender.Voltage.PeakForwardVoltage = 12;
-    cfgExtender.Voltage.PeakReverseVoltage = 12;
+    cfgExtender.Voltage.PeakReverseVoltage = -12;
     cfgExtender.CurrentLimits.StatorCurrentLimit = 80;
     cfgExtender.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgExtender.CurrentLimits.SupplyCurrentLimit = 30;
     cfgExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
-    cfgExtender.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    cfgExtender.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     cfgExtender.Feedback.SensorToMechanismRatio = ExtenderSubsystem.REDUCTION;
 
@@ -70,7 +70,7 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     TalonFXConfiguration cfgFollower = new TalonFXConfiguration();
     cfgFollower.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     cfgFollower.Voltage.PeakForwardVoltage = 12;
-    cfgFollower.Voltage.PeakReverseVoltage = 12;
+    cfgFollower.Voltage.PeakReverseVoltage = -12;
     cfgFollower.CurrentLimits.StatorCurrentLimit = 80;
     cfgFollower.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgFollower.CurrentLimits.SupplyCurrentLimit = 30;
@@ -80,8 +80,12 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     cfgFollower.Feedback.SensorToMechanismRatio = ExtenderSubsystem.REDUCTION;
 
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(cfgFollower));
+
+    followerMotor.setPosition(0.0);
     followerMotor.setControl(
         new DifferentialFollower(extenderMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+
+    extenderMotor.setPosition(0.0);
   }
 
   @Override
@@ -93,7 +97,7 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     inputs.followerDistance.mut_replace(
         Inches.of(followerRotations * ExtenderSubsystem.INCHES_PER_ROT));
 
-    double diffError = (rotations - followerRotations) * ExtenderSubsystem.INCHES_PER_ROT;
+    double diffError = inputs.distance.in(Inches) - inputs.followerDistance.in(Inches);
     inputs.differentialPositionError.mut_replace(Inches.of(diffError));
 
     inputs.velocity.mut_replace(
