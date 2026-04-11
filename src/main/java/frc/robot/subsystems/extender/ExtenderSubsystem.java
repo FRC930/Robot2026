@@ -9,12 +9,14 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotVisualization;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
@@ -29,7 +31,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
 
   public static final double SPOOL_RADIUS = INCHES_PER_ROT / (2.0 * Math.PI);
 
-  public static final double REDUCTION = (6.00 / 1.0);
+  public static final double REDUCTION = (2.0 / 3.0);
 
   // Agitation state
   private TrapezoidProfile agitateProfile;
@@ -49,12 +51,17 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
-      new LoggedTunableGainsBuilder("Gains/Extender/", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/Extender/", 5.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public LoggedTunableGainsBuilder differentialTunableGains =
+      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public ExtenderSubsystem(ExtenderIO IO) {
     m_IO = IO;
 
     logged.distance = Inches.mutable(0);
+    logged.followerDistance = Inches.mutable(0);
+    logged.differentialPositionError = Inches.mutable(0);
     logged.velocity = InchesPerSecond.mutable(0);
     logged.setPoint = Meters.mutable(0);
     logged.supplyCurrent = Amps.mutable(0);
@@ -97,8 +104,13 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
       case AGITATING:
         updateAgitation();
         break;
+      case TESTING:
+        setExtenderHeight(Inches.of(0.0));
+        break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));
+    differentialTunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setDifferentialGains(gains));
+    Logger.recordOutput("Extender/DifferentialError", logged.differentialPositionError.in(Inches));
   }
 
   private void updateAgitation() {
@@ -182,5 +194,21 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   @Override
   public Trigger agitatingTrigger() {
     return m_state.is(ExtenderState.AGITATING);
+  }
+
+  public Command getNewDistanceCommand(DoubleSupplier distance) {
+    return new InstantCommand(
+        () -> {
+          m_IO.setExtenderHeight(Inches.of(distance.getAsDouble()));
+        },
+        this);
+  }
+
+  public Command getNewStopCommand() {
+    return new InstantCommand(
+        () -> {
+          m_IO.stop();
+        },
+        this);
   }
 }

@@ -9,9 +9,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
-import static frc.robot.subsystems.vision.VisionConstants.frontCamera;
-import static frc.robot.subsystems.vision.VisionConstants.questCamName;
-import static frc.robot.subsystems.vision.VisionConstants.robotToFrontCamera;
+import static frc.robot.subsystems.vision.VisionConstants.backCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToBackCamera;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
@@ -82,7 +81,6 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vision.VisionIOQuest;
 import frc.robot.util.AllEvents;
 import frc.robot.util.GoalBehavior;
 import frc.robot.util.HighFrequencyLoop;
@@ -105,7 +103,7 @@ public class RobotContainer {
 
   // Set to true when Testing Individual subsystems
   // This should stay false otherwise
-  private static final boolean ISTESTING = false;
+  private static final boolean ISTESTING = true;
 
   private final AprilTagVision vision;
 
@@ -143,19 +141,21 @@ public class RobotContainer {
   private AutoCommandManager autoCommandManager;
 
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
+      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 2500.0);
   final LoggedTunableNumber setFeederVelocity =
-      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
+      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 2500.0);
+  final LoggedTunableNumber setKickerVelocity =
+      new LoggedTunableNumber("RobotTesting/Kicker/setVelocity", 2500.0);
   final LoggedTunableNumber setShooterSpeed =
-      new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
+      new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 1800);
   final LoggedTunableNumber setIntakeRPM =
-      new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
-  final LoggedTunableNumber setIntakeExtenderUp =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleUP", 105.0);
-  final LoggedTunableNumber setIntakeExtenderDown =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setAngleDOWN", 0.0);
+      new LoggedTunableNumber("RobotTesting/Intake/setRPM", 2000);
+  final LoggedTunableNumber setExtenderOut =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceOut", 1.0);
+  final LoggedTunableNumber setExtenderIn =
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 0.0);
   final LoggedTunableNumber setHoodAngle =
-      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 45.0);
+      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 16.0);
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
@@ -181,29 +181,26 @@ public class RobotContainer {
                 (robotPose) -> {});
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
-        intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, upperCanbus));
+        intake = new IntakeSubsystem(new IntakeIOTalonFX(10, 12, upperCanbus));
         // intake = new IntakeSubsystem(new IntakeIO() {});
-        extender =
-            new ExtenderSubsystem(
-                new ExtenderIOTalonFX(11, upperCanbus)); // TODO find extendermoterID
+        extender = new ExtenderSubsystem(new ExtenderIOTalonFX(9, 11, upperCanbus));
 
         shooter =
             new ShooterSubsystem(
-                new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
+                new ShooterIOTalonFX(1, 2, 4, 3, upperCanbus), aimingService::getShooterRPM);
         // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
 
         indexer =
             new IndexerSubsystem(
                 new IndexerIOTalonFX(
-                    8, upperCanbus, 930)); // TODO set this to an actual motor ID witawey
+                    7, upperCanbus, 6)); // TODO set this to an actual motor ID witawey
         // indexer = new IndexerSubsystem(new IndexerIO() {});
 
-        feeder = new FeederSubsystem(new FeederIOTalonFX(9, upperCanbus));
+        feeder = new FeederSubsystem(new FeederIOTalonFX(8, upperCanbus));
 
-        hood =
-            new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        hood = new HoodSubsystem(new HoodIOTalonFX(5, upperCanbus), aimingService::getHoodAngleDeg);
         compactor =
-            new CompactorSubsystem(new CompactorIOTalonFX(12, upperCanbus)); // TODO add actual ID
+            new CompactorSubsystem(new CompactorIOTalonFX(20, upperCanbus)); // TODO add actual ID
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -227,8 +224,9 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOLimelight(frontCamera, drive::getRotation),
-                new VisionIOQuest(drive::getAutoAlignPose, questCamName));
+                new VisionIOLimelight(backCamera, drive::getRotation)
+                // ,new VisionIOQuest(drive::getAutoAlignPose, questCamName)
+                );
 
         break;
 
@@ -247,13 +245,14 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOPhotonVisionSim(frontCamera, robotToFrontCamera, drive::getPose));
+                new VisionIOPhotonVisionSim(backCamera, robotToBackCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker =
             new DriveZoneTracker(
                 driveSimulation::getSimulatedDriveTrainPose,
                 driveSimulation::getDriveTrainSimulatedChassisSpeedsRobotRelative);
-        intake = new IntakeSubsystem(new IntakeIOSim(driveSimulation));
+        intake =
+            new IntakeSubsystem(new IntakeIOSim(driveSimulation, aimingService::isSolutionValid));
         extender = new ExtenderSubsystem(new ExtenderIOSim());
         indexer = new IndexerSubsystem(new IndexerIOSim());
         feeder = new FeederSubsystem(new FeederIOSim());
@@ -445,53 +444,34 @@ public class RobotContainer {
     indexer.setTestingState();
     feeder.setTestingState();
     hood.setTestingState();
-    // testController
-    //     .a()
-    //     .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
-    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-    //     .whileFalse(new InstantCommand(() -> intake.stop()));
-    // testController
-    //     .a()
-    //     .whileTrue(
-    //         intake.getNewSetIntakeExtenderAngleCommand(
-    //             () -> Degrees.of(setIntakeExtenderUp.get()), false))
-    //     .whileFalse(
-    //         intake.getNewSetIntakeExtenderAngleCommand(
-    //             () -> Degrees.of(setIntakeExtenderDown.get()), false));
-    // testController
-    //     .a()
-    //     .povDown()
-    //     .whileTrue(indexer.getNewSetFeederVelocityCommand(setFeederVelocity))
-    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
-    // testController
-    //     .b()
-    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
-    // testController
-    //     .y()
-    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-    //     .whileFalse(new InstantCommand(() -> intake.stop()));
-    // testController
-    //     .povUp()
-    //     .whileTrue(intake.getNewSetIntakeExtenderVoltsCommand(setIntakeExtenderVolts, false))
-    //     .whileFalse(
-    //         intake.getNewSetIntakeExtenderVoltsCommand(
-    //             setIntakeExtenderVolts, true)); // Default value for intake extender volts
-    // testController
-    //     .b()
-    //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-    //     .whileFalse(hood.getNewSetHoodAngleCommand(() -> 10.0));
+    testController
+        .leftBumper()
+        .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+        .whileFalse(new InstantCommand(() -> intake.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
+        .whileFalse(new InstantCommand(() -> feeder.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
+    testController
+        .leftBumper()
+        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
+        .whileFalse(new InstantCommand(() -> indexer.stop()));
+    testController
+        .rightBumper()
+        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+        .whileFalse(new InstantCommand(() -> shooter.stop()));
+    testController
+        .a()
+        .whileTrue(extender.getNewDistanceCommand(setExtenderOut))
+        .whileFalse(extender.getNewDistanceCommand(setExtenderIn));
+    testController
+        .rightBumper()
+        .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
+        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 5.0));
   }
 
   public void configureCharacterizationButtonBindings() {
@@ -522,7 +502,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  SignalLogger.setPath("/media/sda1/logs");
+                  SignalLogger.setPath("/U/logs");
                   // SignalLogger.enableAutoLogging(true);
                   SignalLogger.start();
                   System.out.println("Started Logger");
