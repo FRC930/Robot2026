@@ -141,21 +141,21 @@ public class RobotContainer {
   private AutoCommandManager autoCommandManager;
 
   final LoggedTunableNumber setIndexerVelocity =
-      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 50.0);
+      new LoggedTunableNumber("RobotTesting/Indexer/setVelocity", 2500.0);
   final LoggedTunableNumber setFeederVelocity =
-      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 50.0);
+      new LoggedTunableNumber("RobotTesting/Feeder/setVelocity", 2500.0);
   final LoggedTunableNumber setKickerVelocity =
-      new LoggedTunableNumber("RobotTesting/Kicker/setVelocity", 50.0);
+      new LoggedTunableNumber("RobotTesting/Kicker/setVelocity", 2500.0);
   final LoggedTunableNumber setShooterSpeed =
-      new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 87);
+      new LoggedTunableNumber("RobotTesting/Shooter/setSpeed", 1800);
   final LoggedTunableNumber setIntakeRPM =
-      new LoggedTunableNumber("RobotTesting/Intake/setRPM", 1000);
+      new LoggedTunableNumber("RobotTesting/Intake/setRPM", 2000);
   final LoggedTunableNumber setExtenderOut =
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceOut", 1.0);
   final LoggedTunableNumber setExtenderIn =
       new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 0.0);
   final LoggedTunableNumber setHoodAngle =
-      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 10.0);
+      new LoggedTunableNumber("RobotTesting/Hood/setAngle", 16.0);
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
