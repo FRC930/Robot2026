@@ -26,9 +26,5 @@ public class ExtenderBehavior extends SubsystemBehavior {
         .and(events.drive().isNotMoving())
         .whileTrue(this.extender.agitateCommand());
     events.goals().isRaisedIntakeTrigger().whileTrue(this.extender.raisedCommand());
-    events.goals().isClimbingL0().whileTrue(this.extender.idleCommand());
-    events.goals().isClimbingL1().whileTrue(this.extender.idleCommand());
-    events.goals().isClimbingL2().whileTrue(this.extender.idleCommand());
-    events.goals().isClimbingL3().whileTrue(this.extender.idleCommand());
   }
 }

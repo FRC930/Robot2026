@@ -51,25 +51,6 @@ public class OperatorIntent implements OperatorIntentEvents {
     return driver;
   }
 
-  // @Override
-  // public Trigger wantsToClimbL0() {
-  //   return driver.povLeft();
-  // }
-
-  // public Trigger wantsToClimbL1() {
-  //   return driver.povUp();
-  // }
-
-  // @Override
-  // public Trigger wantsToClimbL2() {
-  //   return driver.povRight();
-  // }
-
-  // @Override
-  // public Trigger wantsToClimbL3() {
-  //   return driver.povDown();
-  // }
-
   @Override
   public Trigger wantsToOuttake() {
     return driver.b();
