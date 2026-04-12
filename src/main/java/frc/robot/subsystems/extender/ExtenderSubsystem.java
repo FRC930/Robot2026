@@ -31,7 +31,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
 
   public static final double SPOOL_RADIUS = INCHES_PER_ROT / (2.0 * Math.PI);
 
-  public static final double REDUCTION = (2.0 / 3.0);
+  public static final double REDUCTION = (50.0 / 15.0);
 
   // Agitation state
   private TrapezoidProfile agitateProfile;
