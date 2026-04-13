@@ -3,9 +3,9 @@ package frc.robot.aiming;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.hood.HoodIOTalonFX;
-import frc.robot.util.LoggedTunableNumber;
 
 public final class AimingConstants {
 
@@ -13,32 +13,18 @@ public final class AimingConstants {
 
   // ===== SHOOTER GEOMETRY (measured) =====
   // Offset of shooter pivot from robot center, robot-frame (x=forward, y=left)
-  public static final Translation2d SHOOTER_OFFSET_FROM_CENTER = new Translation2d(0.0, 0.0);
-
-  // Height of the shooter pivot above the ground
-  public static final double SHOOTER_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
+  public static final Translation2d SHOOTER_OFFSET_FROM_CENTER =
+      new Translation2d(Units.inchesToMeters(-5.93), 0.0);
 
   // Robot rotation angular limits (degrees) - full [-180, 180] since robot can face any direction
   public static final double ROBOT_AIM_MIN_DEG = -180.0;
   public static final double ROBOT_AIM_MAX_DEG = 180.0;
 
-  // ===== BALL PHYSICS (tunable for field calibration) =====
-  public static final LoggedTunableNumber BALL_MASS_KG =
-      new LoggedTunableNumber("Aiming/ballMassKg", 0.27);
-  public static final LoggedTunableNumber BALL_RADIUS_M =
-      new LoggedTunableNumber("Aiming/ballRadiusM", 0.0508);
-  public static final LoggedTunableNumber DRAG_COEFFICIENT =
-      new LoggedTunableNumber("Aiming/dragCoefficient", 0.47);
-  public static final LoggedTunableNumber LIFT_COEFFICIENT =
-      new LoggedTunableNumber("Aiming/liftCoefficient", 0.15);
-  public static final double AIR_DENSITY_KG_M3 = 1.225;
   public static final double GRAVITY = 9.81;
 
   // ===== SHOOTER PARAMETERS (tunable) =====
-  public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
-      new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
-  public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
-      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.63);
+  public static final double FLYWHEEL_RADIUS_M = Units.inchesToMeters(2.0);
+  public static final double SPEED_TRANSFER_RATIO = 0.68;
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 6000.0;
 
@@ -51,25 +37,64 @@ public final class AimingConstants {
   public static final double HOOD_MIN_DEG = 90.0 - HoodIOTalonFX.MAXANGLE;
   public static final double HOOD_MAX_DEG = 90.0 - HoodIOTalonFX.MINANGLE;
 
-  // ===== SIMULATION PARAMETERS =====
-  public static final double SIM_DT = 0.005;
-  public static final double SIM_MAX_TIME = 3.0;
-  public static final int TRAJECTORY_MAX_POINTS = 100;
+  // ===== INTERPOLATION TABLES =====
+  // Distance (meters) → hood angle (degrees from horizontal) and shooter RPM.
+  // Seed values generated from physics model with updated transfer ratio (0.68).
+  // Tune empirically on the real robot.
+  public static final InterpolatingDoubleTreeMap HUB_HOOD_ANGLE_MAP =
+      new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap HUB_RPM_MAP = new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap PASS_HOOD_ANGLE_MAP =
+      new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap PASS_RPM_MAP = new InterpolatingDoubleTreeMap();
 
-  // ===== LAUNCH ANGLE =====
-  // Desired field-frame launch angle (degrees). Higher = more lob, must be within hood range.
-  // Ball arrives descending as long as this is above the minimum-energy angle (~45° for level
-  // targets).
-  public static final LoggedTunableNumber TARGET_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetLaunchAngleDeg", 71.0);
-  public static final LoggedTunableNumber TARGET_FAR_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetFarLaunchAngleDeg", 65.0);
-  public static final LoggedTunableNumber FAR_DISTANCE_THRESHOLD_M =
-      new LoggedTunableNumber("Aiming/farDistanceThresholdM", 3.5);
-  public static final LoggedTunableNumber FAR_DISTANCE_HYSTERESIS_M =
-      new LoggedTunableNumber("Aiming/farDistanceHysteresisM", 0.3);
-  public static final LoggedTunableNumber TARGET_PASS_LAUNCH_ANGLE_DEG =
-      new LoggedTunableNumber("Aiming/targetPassLaunchAngleDeg", 61.0);
+  static {
+    // Hub target: distance (m) → hood angle (deg from horizontal)
+    // Seeded at 64° (known good at 7ft). Tune per-distance on robot.
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(3), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(4), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(5), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(6), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(7), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(8), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(9), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(11), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(12), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(13), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(14), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 64.0);
+
+    // Hub target: distance (m) → shooter RPM
+    // Seed values from physics model, calibrated to 1800 RPM at 7ft
+    HUB_RPM_MAP.put(Units.feetToMeters(3), 2692.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(4), 1843.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(5), 1748.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(6), 1758.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(7), 1800.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(8), 1855.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(9), 1916.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(10), 1979.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(11), 2043.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(12), 2107.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(13), 2168.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(14), 2230.0);
+    HUB_RPM_MAP.put(Units.feetToMeters(15), 2290.0);
+
+    // Pass target: distance (m) → hood angle (deg from horizontal)
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 64.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 64.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(20), 64.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(25), 64.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(30), 64.0);
+
+    // Pass target: distance (m) → shooter RPM
+    PASS_RPM_MAP.put(Units.feetToMeters(10), 1636.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(15), 2027.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(20), 2356.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(25), 2644.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(30), 2903.0);
+  }
 
   // ===== PASS TARGET POSITIONS =====
   public static final Translation2d LOW_RED_PASS =
@@ -80,14 +105,6 @@ public final class AimingConstants {
       new Translation2d(Meters.of(1.1), Meters.of(0.9));
   public static final Translation2d HIGH_BLUE_PASS =
       new Translation2d(Meters.of(1.1), Meters.of(7.1));
-
-  // ===== DISTANCE-BASED RPM SCALING =====
-  // Adjusts RPM based on distance: rpm *= 1.0 + rpmDistanceScale * (distance - rpmRefDistance)
-  // Positive scale → far shots boosted, close shots reduced
-  public static final LoggedTunableNumber RPM_DISTANCE_SCALE =
-      new LoggedTunableNumber("Aiming/rpmDistanceScale", 0.01);
-  public static final LoggedTunableNumber RPM_REF_DISTANCE_M =
-      new LoggedTunableNumber("Aiming/rpmRefDistanceM", 5.0);
 
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)

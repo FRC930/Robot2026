@@ -62,7 +62,6 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
   private double smoothedAimDeg = 0.0;
   private double smoothedHoodDeg = 0.0;
   private boolean emaInitialized = false;
-  private boolean usingFarAngle = false;
 
   public static final BallTrajectorySim trajectorySim = new BallTrajectorySim();
 
@@ -153,7 +152,6 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double dx = target.getX() - shooterFieldPos.getX();
     double dy = target.getY() - shooterFieldPos.getY();
     double horizontalDistance = Math.hypot(dx, dy);
-    double verticalDistance = target.getZ() - AimingConstants.SHOOTER_PIVOT_HEIGHT_METERS;
 
     distanceToTargetM = horizontalDistance;
 
@@ -170,62 +168,34 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double vRadial = shooterVelocity.getX() * ux + shooterVelocity.getY() * uy;
     double vTangential = -shooterVelocity.getX() * uy + shooterVelocity.getY() * ux;
 
-    double launchAngleDeg;
+    // Look up hood angle and RPM from distance-based interpolation tables
+    double interpolatedHoodDeg;
+    double rpm;
     if (currentTarget == AimingTarget.HUB) {
-      double threshold = AimingConstants.FAR_DISTANCE_THRESHOLD_M.get();
-      double hysteresis = AimingConstants.FAR_DISTANCE_HYSTERESIS_M.get();
-      if (usingFarAngle) {
-        usingFarAngle = horizontalDistance > (threshold - hysteresis);
-      } else {
-        usingFarAngle = horizontalDistance > (threshold + hysteresis);
-      }
-      launchAngleDeg =
-          usingFarAngle
-              ? AimingConstants.TARGET_FAR_LAUNCH_ANGLE_DEG.get()
-              : AimingConstants.TARGET_LAUNCH_ANGLE_DEG.get();
+      interpolatedHoodDeg = AimingConstants.HUB_HOOD_ANGLE_MAP.get(horizontalDistance);
+      rpm = AimingConstants.HUB_RPM_MAP.get(horizontalDistance);
     } else {
-      launchAngleDeg = AimingConstants.TARGET_PASS_LAUNCH_ANGLE_DEG.get();
-    }
-    double fieldLaunchAngle = Math.toRadians(launchAngleDeg);
-    double tanTheta = Math.tan(fieldLaunchAngle);
-    double cosTheta = Math.cos(fieldLaunchAngle);
-    double denominator = horizontalDistance * tanTheta - verticalDistance;
-
-    if (denominator <= 0) {
-      solutionValid = false;
-      return;
+      interpolatedHoodDeg = AimingConstants.PASS_HOOD_ANGLE_MAP.get(horizontalDistance);
+      rpm = AimingConstants.PASS_RPM_MAP.get(horizontalDistance);
     }
 
-    double fieldTotalSpeed =
-        (horizontalDistance / cosTheta) * Math.sqrt(AimingConstants.GRAVITY / (2.0 * denominator));
+    // Reverse-derive ball speed from RPM for velocity compensation and sim visualization
+    double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M;
+    double ballSpeed = (rpm * flywheelCircumference / 60.0) * AimingConstants.SPEED_TRANSFER_RATIO;
+    double hoodAngleRad = Math.toRadians(interpolatedHoodDeg);
+    double ballHorizontal = ballSpeed * Math.cos(hoodAngleRad);
 
-    double fieldHorizontal = fieldTotalSpeed * Math.cos(fieldLaunchAngle);
-    double fieldVertical = fieldTotalSpeed * Math.sin(fieldLaunchAngle);
-
-    double launcherRadial = fieldHorizontal - vRadial;
-    double launcherTangential = -vTangential;
+    // Velocity compensation: check radial ball speed exceeds robot motion
+    double launcherRadial = ballHorizontal - vRadial;
 
     if (launcherRadial <= AimingConstants.MIN_BALL_RADIAL_SPEED) {
       solutionValid = false;
       return;
     }
 
-    double launcherHorizontal = Math.hypot(launcherRadial, launcherTangential);
-    double launcherSpeed = Math.hypot(launcherHorizontal, fieldVertical);
-    double launcherAngleRad = Math.atan2(fieldVertical, launcherHorizontal);
-
     // Yaw correction: aim off-target to cancel tangential velocity
     double yawCorrectionRad = Math.atan2(-vTangential, launcherRadial);
     double compensatedAimDeg = rawAimAngleDeg + Math.toDegrees(yawCorrectionRad);
-
-    // Convert launcher speed to RPM
-    double shooterSurfaceSpeedMps = launcherSpeed / AimingConstants.SPEED_TRANSFER_RATIO.get();
-    double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M.get();
-    double rpm = (shooterSurfaceSpeedMps / flywheelCircumference) * 60.0;
-
-    // Distance-based RPM scaling to compensate for unmodeled drag
-    double distanceOffset = horizontalDistance - AimingConstants.RPM_REF_DISTANCE_M.get();
-    rpm *= 1.0 + AimingConstants.RPM_DISTANCE_SCALE.get() * distanceOffset;
 
     double robotRotation = robotPose.getRotation().getDegrees();
 
@@ -233,10 +203,9 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     boolean aimInRange =
         robotRotation >= aimAngleDeg + negativeAimingCompensation.get()
             && robotRotation <= aimAngleDeg + positiveAimingCompensation.get();
-    double launcherAngleDeg = Math.toDegrees(launcherAngleRad);
     boolean hoodInRange =
-        launcherAngleDeg >= AimingConstants.HOOD_MIN_DEG
-            && launcherAngleDeg <= AimingConstants.HOOD_MAX_DEG;
+        interpolatedHoodDeg >= AimingConstants.HOOD_MIN_DEG
+            && interpolatedHoodDeg <= AimingConstants.HOOD_MAX_DEG;
     boolean rpmInRange =
         rpm >= AimingConstants.SHOOTER_MIN_RPM && rpm <= AimingConstants.SHOOTER_MAX_RPM;
 
@@ -249,7 +218,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
             AimingConstants.ROBOT_AIM_MAX_DEG);
     double clampedHood =
         MathUtil.clamp(
-            launcherAngleDeg, AimingConstants.HOOD_MIN_DEG, AimingConstants.HOOD_MAX_DEG);
+            interpolatedHoodDeg, AimingConstants.HOOD_MIN_DEG, AimingConstants.HOOD_MAX_DEG);
     double clampedRPM =
         MathUtil.clamp(rpm, AimingConstants.SHOOTER_MIN_RPM, AimingConstants.SHOOTER_MAX_RPM);
 
@@ -275,11 +244,11 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     boolean isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
 
     // Cache launcher params for 50Hz trajectory visualization
-    cachedLauncherSpeed = launcherSpeed;
+    cachedLauncherSpeed = ballSpeed;
     if (isBlue) {
-      cachedLauncherAngleRad = Math.PI - launcherAngleRad;
+      cachedLauncherAngleRad = Math.PI - hoodAngleRad;
     } else {
-      cachedLauncherAngleRad = launcherAngleRad;
+      cachedLauncherAngleRad = hoodAngleRad;
     }
   }
 
@@ -345,9 +314,5 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
 
   public boolean isSolutionValid() {
     return solutionValid;
-  }
-
-  public double getDistanceToTargetM() {
-    return distanceToTargetM;
   }
 }
