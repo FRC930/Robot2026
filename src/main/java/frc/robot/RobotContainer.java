@@ -10,7 +10,9 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.vision.VisionConstants.backCamera;
+import static frc.robot.subsystems.vision.VisionConstants.leftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.robotToBackCamera;
+import static frc.robot.subsystems.vision.VisionConstants.robotToLeftCamera;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
@@ -224,7 +226,8 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOLimelight(backCamera, drive::getRotation)
+                new VisionIOLimelight(backCamera, drive::getRotation),
+                new VisionIOLimelight(leftCamera, drive::getRotation)
                 // ,new VisionIOQuest(drive::getAutoAlignPose, questCamName)
                 );
 
@@ -245,7 +248,8 @@ public class RobotContainer {
             new AprilTagVision(
                 drive::setPose,
                 drive::addVisionMeasurementAutoAlign,
-                new VisionIOPhotonVisionSim(backCamera, robotToBackCamera, drive::getPose));
+                new VisionIOPhotonVisionSim(backCamera, robotToBackCamera, drive::getPose),
+                new VisionIOPhotonVisionSim(leftCamera, robotToLeftCamera, drive::getPose));
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker =
             new DriveZoneTracker(
