@@ -82,11 +82,11 @@ public final class AimingConstants {
     HUB_RPM_MAP.put(Units.feetToMeters(15), 2290.0);
 
     // Pass target: distance (m) → hood angle (deg from horizontal)
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 64.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 64.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(20), 64.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(25), 64.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(30), 64.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 49.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 49.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(20), 49.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(25), 49.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(30), 49.0);
 
     // Pass target: distance (m) → shooter RPM
     PASS_RPM_MAP.put(Units.feetToMeters(10), 1636.0);
