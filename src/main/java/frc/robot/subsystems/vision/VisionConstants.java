@@ -23,6 +23,7 @@ public class VisionConstants {
   // Camera names, must match names configured on coprocessor
   public static String backCamera = "limelight-back";
   public static String leftCamera = "limelight-left";
+  public static String rightCamera = "limelight-right";
   public static String questCamName = "Quest";
   /*
    * CAMERA POSITIONS ON ROBOT (looking down from above, with front of robot at top of page)
@@ -42,9 +43,17 @@ public class VisionConstants {
           Units.inchesToMeters(-1.49063),
           Units.inchesToMeters(6.516693),
           new Rotation3d(0.0, Units.degreesToRadians(150.0), 0.0));
-  // LL Forward-X: -0.01524, LL Right-Y: 0.348198(Negitive in code), LL up-Z: 0.46195, LL Roll 0.0,
+  // LL Forward-X: -0.01524, LL Right-Y: -0.348198(Negitive in code), LL up-Z: 0.46195, LL Roll 0.0,
   // LL Pitch 0.0, LL Yaw 90.0.
   public static Transform3d robotToLeftCamera =
+      new Transform3d(
+          Units.inchesToMeters(-0.6),
+          Units.inchesToMeters(13.70858),
+          Units.inchesToMeters(18.18701),
+          new Rotation3d(0.0, 0.0, Units.degreesToRadians(90.0)));
+  // LL Forward-X: -0.01524, LL Right-Y: 0.348198(Negitive in code), LL up-Z: 0.46195, LL Roll 0.0,
+  // LL Pitch 0.0, LL Yaw 90.0.
+  public static Transform3d robotToRightCamera =
       new Transform3d(
           Units.inchesToMeters(-0.6),
           Units.inchesToMeters(-13.70858),
