@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0982012301384843,
-        "y": 2.5201196652228885
+        "x": 2.9651497860199716,
+        "y": 0.49627674750356565
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootRight.1"
     },
     {
       "anchor": {
-        "x": 2.8498554216867467,
-        "y": 2.5488313253012054
+        "x": 4.740349397590362,
+        "y": 0.5490602409638552
       },
       "prevControl": {
-        "x": 2.6000401293205444,
-        "y": 2.558439639408736
+        "x": 3.7403493975903617,
+        "y": 0.5490602409638553
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 5.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -135.0
+    "velocity": 5.0,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -145.0
   },
   "useDefaultConstraints": false
 }
