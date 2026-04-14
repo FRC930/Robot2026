@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "trenchIntakeShootRight.2"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "AutoAim"
@@ -49,6 +43,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "trenchIntakeShootRight.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "trenchIntakeShootRight.3"
           }
         },
@@ -56,18 +56,6 @@
           "type": "path",
           "data": {
             "pathName": "trenchIntakeShootRight.4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "trenchIntakeShootRight.5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "trenchIntakeShootRight.6"
           }
         },
         {

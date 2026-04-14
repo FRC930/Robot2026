@@ -3,37 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.980987951801619,
-        "y": 5.586734939762856
+        "x": 5.007265091076911,
+        "y": 7.397947643757513
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9785829967998088,
-        "y": 7.74032278983716
+        "x": 6.239709476426719,
+        "y": 7.393037506764087
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootLeft.2"
     },
     {
       "anchor": {
-        "x": 5.007265091076911,
-        "y": 7.397947643757513
+        "x": 6.029819277108434,
+        "y": 4.548602409638555
       },
       "prevControl": {
-        "x": 2.69977582949327,
-        "y": 7.383435132678371
+        "x": 6.029819277108434,
+        "y": 7.1486024096385545
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "trenchIntakeShootLeft.3"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4788381742738593,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intaking",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 5.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +53,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 5.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootLeft",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 135.0
+    "velocity": 5.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
