@@ -12,7 +12,7 @@ public class ExtenderBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
-    events.goals().isIdleTrigger().whileTrue(this.extender.idleCommand());
+    // events.goals().isIdleTrigger().whileTrue(this.extender.idleCommand());
     events.goals().isOuttakingTrigger().whileTrue(this.extender.outtakeCommand());
     events.goals().isIntakingTrigger().whileTrue(this.extender.intakeCommand());
     events
@@ -24,7 +24,8 @@ public class ExtenderBehavior extends SubsystemBehavior {
         .goals()
         .isShootingTrigger()
         .and(events.drive().isNotMoving())
-        .whileTrue(this.extender.agitateCommand());
+        .whileTrue(this.extender.intakeCommand())
+        .onFalse(this.extender.intakeCommand());
     events.goals().isRaisedIntakeTrigger().whileTrue(this.extender.raisedCommand());
   }
 }

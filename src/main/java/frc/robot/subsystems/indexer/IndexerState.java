@@ -16,8 +16,8 @@ public enum IndexerState {
       new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50),
       new LoggedTunableNumber("Indexer/setKickerPointReverse", -50)),
   INTAKING(
-      new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 50),
-      new LoggedTunableNumber("Indexer/setKickerPointIntaking", 50));
+      new LoggedTunableNumber("Indexer/setIndexerPointIntaking", 0),
+      new LoggedTunableNumber("Indexer/setKickerPointIntaking", 0));
 
   private DoubleSupplier m_indexerVelocity;
   private DoubleSupplier m_kickerVelocity;

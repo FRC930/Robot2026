@@ -45,8 +45,8 @@ public class ExtenderIOTalonFX implements ExtenderIO {
   private void configureTalons() {
     TalonFXConfiguration cfgExtender = new TalonFXConfiguration();
     cfgExtender.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfgExtender.Voltage.PeakForwardVoltage = 12;
-    cfgExtender.Voltage.PeakReverseVoltage = -12;
+    cfgExtender.Voltage.PeakForwardVoltage = 7;
+    cfgExtender.Voltage.PeakReverseVoltage = -7;
     cfgExtender.CurrentLimits.StatorCurrentLimit = 80;
     cfgExtender.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgExtender.CurrentLimits.SupplyCurrentLimit = 30;
@@ -69,8 +69,8 @@ public class ExtenderIOTalonFX implements ExtenderIO {
 
     TalonFXConfiguration cfgFollower = new TalonFXConfiguration();
     cfgFollower.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfgFollower.Voltage.PeakForwardVoltage = 12;
-    cfgFollower.Voltage.PeakReverseVoltage = -12;
+    cfgFollower.Voltage.PeakForwardVoltage = 7;
+    cfgFollower.Voltage.PeakReverseVoltage = -7;
     cfgFollower.CurrentLimits.StatorCurrentLimit = 80;
     cfgFollower.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgFollower.CurrentLimits.SupplyCurrentLimit = 30;

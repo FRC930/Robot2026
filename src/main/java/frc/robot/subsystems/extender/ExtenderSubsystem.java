@@ -48,6 +48,10 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
       new LoggedTunableNumber("Intake/agitateMaxVelocityInchPerSec", 20.0);
   private static final LoggedTunableNumber agitateMaxAcceleration =
       new LoggedTunableNumber("Intake/agitateMaxAccelInchPerSec2", 25.0);
+  private static final LoggedTunableNumber extenderRetractedSetpoint =
+      new LoggedTunableNumber("Intake/extenderRetractedSetpoint", 4.0);
+  private static final LoggedTunableNumber extenderExtendedSetpoint =
+      new LoggedTunableNumber("Intake/extenderExtendedSetpoint", 10.0);
   private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
 
   public LoggedTunableGainsBuilder tunableGains =
@@ -88,19 +92,19 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     Logger.processInputs("RobotState/Extender", logged);
     switch (m_state.get()) {
       case IDLE:
-        m_IO.setExtenderHeight(Inches.of(0));
+        m_IO.setExtenderHeight(Inches.of(extenderRetractedSetpoint.getAsDouble()));
         break;
       case INTAKING:
-        m_IO.setExtenderHeight(Inches.of(12));
+        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
         break;
       case OUTTAKING:
-        m_IO.setExtenderHeight(Inches.of(12));
+        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
         break;
       case SHOOTING:
-        m_IO.setExtenderHeight(Inches.of(12));
+        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
         break;
       case RAISED:
-        m_IO.setExtenderHeight(Inches.of(0));
+        m_IO.setExtenderHeight(Inches.of(extenderRetractedSetpoint.getAsDouble()));
         break;
       case AGITATING:
         updateAgitation();
