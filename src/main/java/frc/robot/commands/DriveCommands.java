@@ -47,7 +47,7 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   public static boolean m_snakeModeOn = false;
-  public static boolean aimingLinedUp = false;
+  public static boolean s_aimingLinedUp = false;
 
   private static LoggedTunableNumber m_slewRateTunableNumber =
       new LoggedTunableNumber("DriveAutoAim/SlewRateDriveCommands", 20);
@@ -56,7 +56,7 @@ public class DriveCommands {
   private static LoggedTunableNumber m_kDTunableNumber =
       new LoggedTunableNumber("DriveAutoAim/kD", ANGLE_KD);
   private static boolean m_reconfigurePIDAndSlewLimiter = false;
-  public static boolean m_resetPIDAndSlewLimiter = false;
+  public static boolean s_resetPIDAndSlewLimiter = false;
 
   private DriveCommands() {}
 
@@ -139,9 +139,9 @@ public class DriveCommands {
 
     return Commands.run(
             () -> {
-              aimingLinedUp = false;
+              s_aimingLinedUp = false;
 
-              if (m_resetPIDAndSlewLimiter) {
+              if (s_resetPIDAndSlewLimiter) {
                 // TODO FIX go back to m_reconfigurePIDAndSlewLimiter is get ifchanged() to work
                 // if (m_reconfigurePIDAndSlewLimiter) {
                 filter.reset(m_slewRateTunableNumber.getAsDouble());
@@ -150,10 +150,10 @@ public class DriveCommands {
                 m_reconfigurePIDAndSlewLimiter = false;
               }
 
-              if (m_resetPIDAndSlewLimiter) {
+              if (s_resetPIDAndSlewLimiter) {
                 angleController.reset(drive.getRotation().getRadians());
                 filter.reset(m_slewRateTunableNumber.getAsDouble());
-                m_resetPIDAndSlewLimiter = false;
+                s_resetPIDAndSlewLimiter = false;
               }
 
               RobotGoals robotGoals = RobotGoals.getInstance();
@@ -203,8 +203,8 @@ public class DriveCommands {
                 Logger.recordOutput("DriveCommands/slewfilter", filter.calculate(controllerAngle));
                 // If we are forcing the auto aim — auto — and we are close to the angle we want to
                 // be we stop rotating/auto aiming
-                if (forceAutoAim && MathUtil.isNear(omega, 0.0, 0.01)) {
-                  aimingLinedUp = true;
+                if (MathUtil.isNear(omega, 0.0, 0.04)) {
+                  s_aimingLinedUp = true;
                 }
               } else {
                 // Apply rotation deadband
@@ -229,7 +229,10 @@ public class DriveCommands {
             },
             drive)
         // this is where we actually stop the aiming
-        .until(() -> aimingLinedUp)
+        .until(
+            () -> {
+              return (forceAutoAim && s_aimingLinedUp);
+            })
 
         // Reset PID controller when command starts
         // TODO determine how to reset the PIDs/Slewrate things

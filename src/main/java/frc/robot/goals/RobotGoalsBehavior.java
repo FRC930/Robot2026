@@ -1,7 +1,5 @@
 package frc.robot.goals;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.DriveCommands;
 import frc.robot.operator.OperatorIntentEvents;
 import frc.robot.util.GoalBehavior;
 
@@ -38,12 +36,7 @@ public class RobotGoalsBehavior extends GoalBehavior {
     intent
         .wantsToScoreTrigger()
         .and(intent.wantsToRevIndexer().negate())
-        .whileTrue(
-            new InstantCommand(
-                    () -> {
-                      DriveCommands.m_resetPIDAndSlewLimiter = true;
-                    })
-                .andThen(goals.setGoalCommand(RobotGoal.SHOOTING)));
+        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
 
     intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
 
