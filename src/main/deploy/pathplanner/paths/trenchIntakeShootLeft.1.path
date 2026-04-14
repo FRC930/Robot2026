@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.78605816191407,
-        "y": 5.744038998049692
+        "x": 7.700699001426534,
+        "y": 3.627432239657632
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootLeft.0"
+    },
+    {
+      "anchor": {
+        "x": 5.941041369472182,
+        "y": 5.011868758915835
+      },
+      "prevControl": {
+        "x": 5.941041369472182,
+        "y": 3.8603281027104153
+      },
+      "nextControl": {
+        "x": 5.941041369472182,
+        "y": 5.620536066882141
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -30,15 +46,15 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.48138957816377365,
-      "maxWaypointRelativePos": 0.8506203473945315,
+      "minWaypointRelativePos": 0.95,
+      "maxWaypointRelativePos": 1.7,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -61,7 +77,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootLeft",
