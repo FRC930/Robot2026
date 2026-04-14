@@ -27,9 +27,5 @@ public class IntakeBehavior extends SubsystemBehavior {
         .and(events.drive().isNotMoving())
         .whileTrue(this.intake.agitateCommand());
     events.goals().isRaisedIntakeTrigger().whileTrue(this.intake.raisedCommand());
-    events.goals().isClimbingL0().whileTrue(this.intake.idleCommand());
-    events.goals().isClimbingL1().whileTrue(this.intake.idleCommand());
-    events.goals().isClimbingL2().whileTrue(this.intake.idleCommand());
-    events.goals().isClimbingL3().whileTrue(this.intake.idleCommand());
   }
 }

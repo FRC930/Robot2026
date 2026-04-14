@@ -12,14 +12,6 @@ public interface RobotEvents {
 
   public Trigger isShootingTrigger();
 
-  public Trigger isClimbingL0();
-
-  public Trigger isClimbingL1();
-
-  public Trigger isClimbingL2();
-
-  public Trigger isClimbingL3();
-
   public Trigger isReverseIndexer();
 
   public Trigger isRaisedIntakeTrigger();
