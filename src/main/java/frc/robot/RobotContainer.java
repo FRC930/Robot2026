@@ -374,11 +374,11 @@ public class RobotContainer {
               aimingService);
 
       SubsystemBehavior.configureAll(robotEvents);
-      robotGoals
-          .isShootingTrigger()
-          .and(robotEvents.drive().isNotMoving())
-          .and(matchState.isTeleopEnabledTrigger())
-          .whileTrue(Commands.runOnce(drive::stopWithX, drive));
+      // robotGoals
+      //     .isShootingTrigger()
+      //     .and(robotEvents.drive().isNotMoving())
+      //     .and(matchState.isTeleopEnabledTrigger())
+      //     .whileTrue(Commands.runOnce(drive::stopWithX, drive));
     }
     // Reset gyro / odometry
     final Runnable resetOdometry =
