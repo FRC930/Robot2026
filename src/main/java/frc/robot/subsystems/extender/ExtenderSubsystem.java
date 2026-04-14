@@ -88,6 +88,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     Logger.processInputs("RobotState/Extender", logged);
     switch (m_state.get()) {
       case IDLE:
+        m_IO.setExtenderHeight(Inches.of(0));
         break;
       case INTAKING:
         m_IO.setExtenderHeight(Inches.of(12));
