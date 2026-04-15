@@ -31,21 +31,37 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 2.0;
-  private static final double ANGLE_KD = 0.4;
+  private static final double ANGLE_KP = 4.0;
+  private static final double ANGLE_KD = 0.005;
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  private static final double AUTO_AIM_TOLERANCE = 0.04;
+  private static final double SLEW_RATE = 20;
   public static boolean m_snakeModeOn = false;
-  public static boolean aimingLinedUp = false;
+  public static boolean s_aimingLinedUp = false;
+
+  private static LoggedTunableNumber m_slewRateTunableNumber =
+      new LoggedTunableNumber("DriveAutoAim/SlewRateDriveCommands", SLEW_RATE);
+  private static LoggedTunableNumber m_kPTunableNumber =
+      new LoggedTunableNumber("DriveAutoAim/kP", ANGLE_KP);
+  private static LoggedTunableNumber m_kDTunableNumber =
+      new LoggedTunableNumber("DriveAutoAim/kD", ANGLE_KD);
+  private static LoggedTunableNumber m_AutoAimTolerance =
+      new LoggedTunableNumber("DriveAutoAim/AutoAimTolerance", AUTO_AIM_TOLERANCE);
+  private static boolean m_reconfigurePIDAndSlewLimiter = false;
+  public static boolean s_resetPIDAndSlewLimiter = false;
+  private static double autoAimTolerance;
 
   private DriveCommands() {}
 
@@ -109,17 +125,42 @@ public class DriveCommands {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
-            ANGLE_KP,
+            m_kPTunableNumber.getAsDouble(),
             0.0,
-            ANGLE_KD,
+            m_kDTunableNumber.getAsDouble(),
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
 
-    LoggedTunableNumber slewRate = new LoggedTunableNumber("SlewRateDriveCommands", 20);
-    SlewRateLimiter filter = new SlewRateLimiter(slewRate.getAsDouble());
+    SlewRateLimiter filter = new SlewRateLimiter(m_slewRateTunableNumber.getAsDouble());
     angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    LoggedTunableNumber.ifChanged(
+        Objects.hash(),
+        () -> {
+          m_reconfigurePIDAndSlewLimiter = true;
+        },
+        m_slewRateTunableNumber,
+        m_kPTunableNumber,
+        m_kDTunableNumber);
+    autoAimTolerance = m_AutoAimTolerance.getAsDouble();
     return Commands.run(
             () -> {
-              aimingLinedUp = false;
+              s_aimingLinedUp = false;
+
+              if (s_resetPIDAndSlewLimiter) {
+                // TODO FIX go back to m_reconfigurePIDAndSlewLimiter is get ifchanged() to work
+                // if (m_reconfigurePIDAndSlewLimiter) {
+                filter.reset(m_slewRateTunableNumber.getAsDouble());
+                angleController.setD(m_kDTunableNumber.getAsDouble());
+                angleController.setP(m_kPTunableNumber.getAsDouble());
+                m_reconfigurePIDAndSlewLimiter = false;
+              }
+
+              if (s_resetPIDAndSlewLimiter) {
+                angleController.reset(drive.getRotation().getRadians());
+                filter.reset(m_slewRateTunableNumber.getAsDouble());
+                s_resetPIDAndSlewLimiter = false;
+                autoAimTolerance = m_AutoAimTolerance.getAsDouble();
+              }
 
               RobotGoals robotGoals = RobotGoals.getInstance();
               boolean isFlipped =
@@ -160,12 +201,16 @@ public class DriveCommands {
                     Math.toRadians(aimingService.getAimAngleDeg());
 
                 omega =
-                    angleController.calculate(
-                        drive.getRotation().getRadians(), filter.calculate(controllerAngle));
+                    angleController.calculate(drive.getRotation().getRadians(), controllerAngle);
+                // filter.calculate(controllerAngle));
+                Logger.recordOutput("DriveCommands/omega", omega);
+                Logger.recordOutput("DriveCommands/measurement", drive.getRotation().getRadians());
+                Logger.recordOutput("DriveCommands/controllerAngle", controllerAngle);
+                Logger.recordOutput("DriveCommands/slewfilter", filter.calculate(controllerAngle));
                 // If we are forcing the auto aim — auto — and we are close to the angle we want to
                 // be we stop rotating/auto aiming
-                if (forceAutoAim && MathUtil.isNear(omega, 0.0, 0.01)) {
-                  aimingLinedUp = true;
+                if (MathUtil.isNear(omega, 0.0, autoAimTolerance)) {
+                  s_aimingLinedUp = true;
                 }
               } else {
                 // Apply rotation deadband
@@ -190,7 +235,11 @@ public class DriveCommands {
             },
             drive)
         // this is where we actually stop the aiming
-        .until(() -> aimingLinedUp)
+        .until(
+            () -> {
+              // Only Exit Defaull Command if forceAutoAim (in Automotmous) stopX will interrupt
+              return (forceAutoAim && s_aimingLinedUp);
+            })
 
         // Reset PID controller when command starts
         // TODO determine how to reset the PIDs/Slewrate things

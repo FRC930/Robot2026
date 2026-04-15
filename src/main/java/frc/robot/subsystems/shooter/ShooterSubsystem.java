@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DriveCommands;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -58,6 +59,8 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   public Command shooterCommand() {
     return runOnce(
         () -> {
+          // reset drive auto aim profiled PIDs + slew limiter
+          DriveCommands.s_resetPIDAndSlewLimiter = true;
           m_state.set(ShooterState.SHOOTING);
         });
   }

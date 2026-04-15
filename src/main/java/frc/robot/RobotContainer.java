@@ -374,11 +374,35 @@ public class RobotContainer {
               aimingService);
 
       SubsystemBehavior.configureAll(robotEvents);
-      robotGoals
-          .isShootingTrigger()
-          .and(robotEvents.drive().isNotMoving())
-          .and(matchState.isTeleopEnabledTrigger())
-          .whileTrue(Commands.runOnce(drive::stopWithX, drive));
+
+      // This will allow us to stopwithX But then no shot on the move (given needed to have
+      // isFinish() false so does loop between stopWithX and joystick)
+      // Command stopWithX =
+      //     new FunctionalCommand(
+      //         drive::stopWithX, // init
+      //         () -> {
+      //           return;
+      //         }, // execute
+      //         (a) -> {
+      //           return;
+      //         }, // end
+      //         () -> {
+      //           return false;
+      //         }, // isFinished
+      //         drive // requirements
+      //         );
+
+      // robotGoals
+      //     .isShootingTrigger()
+      //     .and(robotEvents.drive().isNotMoving())
+      //     .and(
+      //         new Trigger(
+      //             () -> {
+      //               return DriveCommands.s_aimingLinedUp;
+      //             }))
+      //     .and(matchState.isTeleopEnabledTrigger())
+      //     .whileTrue(stopWithX);
+      //     .whileTrue(Commands.runOnce(drive::stopWithX, drive));
     }
     // Reset gyro / odometry
     final Runnable resetOdometry =
