@@ -42,7 +42,7 @@ public class VisionConstants {
           Units.inchesToMeters(-13.10929),
           Units.inchesToMeters(-1.49063),
           Units.inchesToMeters(6.516693),
-          new Rotation3d(0.0, Units.degreesToRadians(150.0), 0.0));
+          new Rotation3d(0.0, -Units.degreesToRadians(150.0), 0.0));
   // LL Forward-X: -0.01524, LL Right-Y: -0.348198(Negitive in code), LL up-Z: 0.46195, LL Roll 0.0,
   // LL Pitch 0.0, LL Yaw 90.0.
   public static Transform3d robotToLeftCamera =
@@ -52,7 +52,7 @@ public class VisionConstants {
           Units.inchesToMeters(18.18701),
           new Rotation3d(0.0, 0.0, Units.degreesToRadians(90.0)));
   // LL Forward-X: -0.01524, LL Right-Y: 0.348198(Negitive in code), LL up-Z: 0.46195, LL Roll 0.0,
-  // LL Pitch 0.0, LL Yaw 90.0.
+  // LL Pitch 0.0, LL Yaw -90.0.
   public static Transform3d robotToRightCamera =
       new Transform3d(
           Units.inchesToMeters(-0.6),
