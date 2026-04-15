@@ -46,17 +46,22 @@ public class DriveCommands {
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  private static final double AUTO_AIM_TOLERANCE = 0.04;
+  private static final double SLEW_RATE = 20;
   public static boolean m_snakeModeOn = false;
   public static boolean s_aimingLinedUp = false;
 
   private static LoggedTunableNumber m_slewRateTunableNumber =
-      new LoggedTunableNumber("DriveAutoAim/SlewRateDriveCommands", 20);
+      new LoggedTunableNumber("DriveAutoAim/SlewRateDriveCommands", SLEW_RATE);
   private static LoggedTunableNumber m_kPTunableNumber =
       new LoggedTunableNumber("DriveAutoAim/kP", ANGLE_KP);
   private static LoggedTunableNumber m_kDTunableNumber =
       new LoggedTunableNumber("DriveAutoAim/kD", ANGLE_KD);
+  private static LoggedTunableNumber m_AutoAimTolerance =
+      new LoggedTunableNumber("DriveAutoAim/AutoAimTolerance", AUTO_AIM_TOLERANCE);
   private static boolean m_reconfigurePIDAndSlewLimiter = false;
   public static boolean s_resetPIDAndSlewLimiter = false;
+  private static double autoAimTolerance;
 
   private DriveCommands() {}
 
@@ -103,7 +108,7 @@ public class DriveCommands {
       AimingService aimingService) {
     return joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, aimingService, false);
   }
-
+  
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    *
@@ -136,7 +141,7 @@ public class DriveCommands {
         m_slewRateTunableNumber,
         m_kPTunableNumber,
         m_kDTunableNumber);
-
+    autoAimTolerance = m_AutoAimTolerance.getAsDouble();
     return Commands.run(
             () -> {
               s_aimingLinedUp = false;
@@ -154,6 +159,7 @@ public class DriveCommands {
                 angleController.reset(drive.getRotation().getRadians());
                 filter.reset(m_slewRateTunableNumber.getAsDouble());
                 s_resetPIDAndSlewLimiter = false;
+                autoAimTolerance = m_AutoAimTolerance.getAsDouble();
               }
 
               RobotGoals robotGoals = RobotGoals.getInstance();
@@ -203,7 +209,7 @@ public class DriveCommands {
                 Logger.recordOutput("DriveCommands/slewfilter", filter.calculate(controllerAngle));
                 // If we are forcing the auto aim — auto — and we are close to the angle we want to
                 // be we stop rotating/auto aiming
-                if (MathUtil.isNear(omega, 0.0, 0.04)) {
+                if (MathUtil.isNear(omega, 0.0, autoAimTolerance)) {
                   s_aimingLinedUp = true;
                 }
               } else {
