@@ -51,35 +51,21 @@ public final class AimingConstants {
   static {
     // Hub target: distance (m) → hood angle (deg from horizontal)
     // Seeded at 64° (known good at 7ft). Tune per-distance on robot.
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(3), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(4), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(5), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(6), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(7), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(8), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(9), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(11), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(12), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(13), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(14), 64.0);
-    HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 64.0);
+    // HUB_HOOD_ANGLE_MAP.put(Units.feetToMeters(3), 64.0);
+    HUB_HOOD_ANGLE_MAP.put(2.78, 16.5);
+    HUB_HOOD_ANGLE_MAP.put(1.85, 8.0);
+    HUB_HOOD_ANGLE_MAP.put(3.8, 24.0);
+    HUB_HOOD_ANGLE_MAP.put(3.18, 19.7);
+    HUB_HOOD_ANGLE_MAP.put(2.35, 12.0);
 
     // Hub target: distance (m) → shooter RPM
     // Seed values from physics model, calibrated to 1800 RPM at 7ft
-    HUB_RPM_MAP.put(Units.feetToMeters(3), 2692.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(4), 1843.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(5), 1748.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(6), 1758.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(7), 1800.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(8), 1855.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(9), 1916.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(10), 1979.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(11), 2043.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(12), 2107.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(13), 2168.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(14), 2230.0);
-    HUB_RPM_MAP.put(Units.feetToMeters(15), 2290.0);
+    // HUB_RPM_MAP.put(Units.feetToMeters(3), 2692.0);
+    HUB_RPM_MAP.put(2.78, 1850.0);
+    HUB_RPM_MAP.put(1.85, 1850.0);
+    HUB_RPM_MAP.put(3.8, 1850.0);
+    HUB_RPM_MAP.put(3.18, 1850.0);
+    HUB_RPM_MAP.put(2.35, 1850.0);
 
     // Pass target: distance (m) → hood angle (deg from horizontal)
     PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 49.0);

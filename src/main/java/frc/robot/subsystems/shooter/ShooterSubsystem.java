@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private final ShooterIO m_IO;
-  private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 2500);
+  private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 1850.0);
   private final LoggedTunableNumber spunUpThreshold =
       new LoggedTunableNumber("Shooter/spunUpPercent", 0.80);
   private final LoggedTunableNumber spunUpDebounce =
