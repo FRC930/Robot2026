@@ -108,7 +108,7 @@ public class DriveCommands {
       AimingService aimingService) {
     return joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, aimingService, false);
   }
-  
+
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    *
@@ -237,6 +237,7 @@ public class DriveCommands {
         // this is where we actually stop the aiming
         .until(
             () -> {
+              // Only Exit Defaull Command if forceAutoAim (in Automotmous) stopX will interrupt
               return (forceAutoAim && s_aimingLinedUp);
             })
 
