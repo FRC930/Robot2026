@@ -169,6 +169,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
     double vTangential = -shooterVelocity.getX() * uy + shooterVelocity.getY() * ux;
 
     // Look up hood angle and RPM from distance-based interpolation tables
+
     double interpolatedHoodDeg;
     double rpm;
     if (currentTarget == AimingTarget.HUB) {
@@ -178,6 +179,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
       interpolatedHoodDeg = AimingConstants.PASS_HOOD_ANGLE_MAP.get(horizontalDistance);
       rpm = AimingConstants.PASS_RPM_MAP.get(horizontalDistance);
     }
+    Logger.recordOutput("Aiming/interpolatedHoodDeg", interpolatedHoodDeg);
 
     // Reverse-derive ball speed from RPM for velocity compensation and sim visualization
     double flywheelCircumference = 2.0 * Math.PI * AimingConstants.FLYWHEEL_RADIUS_M;

@@ -34,8 +34,8 @@ public final class AimingConstants {
   // This is correct, it is the ball trajectory & is SUPPOSED to be inverted
   // The hood MAXANGLE should be used to calcute the HOOD_MIN_DEG.
   // The hood MINANGLE should be used to calcute the HOOD_MAX_DEG.
-  public static final double HOOD_MIN_DEG = HoodIOTalonFX.MAXANGLE;
-  public static final double HOOD_MAX_DEG = HoodIOTalonFX.MINANGLE;
+  public static final double HOOD_MIN_DEG = HoodIOTalonFX.MINANGLE;
+  public static final double HOOD_MAX_DEG = HoodIOTalonFX.MAXANGLE;
 
   // ===== INTERPOLATION TABLES =====
   // Distance (meters) → hood angle (degrees from horizontal) and shooter RPM.
