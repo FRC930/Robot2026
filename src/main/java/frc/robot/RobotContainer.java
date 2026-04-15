@@ -112,7 +112,7 @@ public class RobotContainer {
       new SwerveDriveSimulation(Drive.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
 
   private final double REG_DRIVE_SPEED = 0.9;
-  private final double REG_ANGULAR_SPEED = 0.75;
+  private final double REG_ANGULAR_SPEED = 0.6;
 
   private final double SLOW_DRIVE_SPEED = 0.5;
 
@@ -320,7 +320,7 @@ public class RobotContainer {
                 if (hood.shouldThreadCommand()) {
                   // Transform angle from 0 degrees vertical to 0 degree horizontal so like tranform
                   // the angle by 90 degrees
-                  double hoodAngle = 90.0 - aimingService.getHoodAngleDeg();
+                  double hoodAngle = aimingService.getHoodAngleDeg();
                   hood.getIO().setHoodTarget(Degrees.of(hoodAngle));
                 }
               })

@@ -210,7 +210,7 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
         rpm >= AimingConstants.SHOOTER_MIN_RPM && rpm <= AimingConstants.SHOOTER_MAX_RPM;
 
     solutionValid = aimInRange && hoodInRange && rpmInRange;
-
+    Logger.recordOutput("Aiming/compensatedAimDeg", compensatedAimDeg);
     double clampedAim =
         MathUtil.clamp(
             compensatedAimDeg,

@@ -45,11 +45,11 @@ public class ExtenderIOTalonFX implements ExtenderIO {
   private void configureTalons() {
     TalonFXConfiguration cfgExtender = new TalonFXConfiguration();
     cfgExtender.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfgExtender.Voltage.PeakForwardVoltage = 7;
-    cfgExtender.Voltage.PeakReverseVoltage = -7;
-    cfgExtender.CurrentLimits.StatorCurrentLimit = 80;
+    cfgExtender.Voltage.PeakForwardVoltage = 4;
+    cfgExtender.Voltage.PeakReverseVoltage = -4;
+    cfgExtender.CurrentLimits.StatorCurrentLimit = 40;
     cfgExtender.CurrentLimits.StatorCurrentLimitEnable = true;
-    cfgExtender.CurrentLimits.SupplyCurrentLimit = 30;
+    cfgExtender.CurrentLimits.SupplyCurrentLimit = 20;
     cfgExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
     cfgExtender.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -69,11 +69,11 @@ public class ExtenderIOTalonFX implements ExtenderIO {
 
     TalonFXConfiguration cfgFollower = new TalonFXConfiguration();
     cfgFollower.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfgFollower.Voltage.PeakForwardVoltage = 7;
-    cfgFollower.Voltage.PeakReverseVoltage = -7;
-    cfgFollower.CurrentLimits.StatorCurrentLimit = 80;
+    cfgFollower.Voltage.PeakForwardVoltage = 4;
+    cfgFollower.Voltage.PeakReverseVoltage = -4;
+    cfgFollower.CurrentLimits.StatorCurrentLimit = 40;
     cfgFollower.CurrentLimits.StatorCurrentLimitEnable = true;
-    cfgFollower.CurrentLimits.SupplyCurrentLimit = 30;
+    cfgFollower.CurrentLimits.SupplyCurrentLimit = 20;
     cfgFollower.CurrentLimits.SupplyCurrentLimitEnable = true;
     cfgFollower.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
