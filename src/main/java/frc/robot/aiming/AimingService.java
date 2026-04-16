@@ -53,9 +53,9 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
       new LoggedTunableNumber("Aiming/Smoothing/hoodEmaAlpha", 0.10);
 
   private static final LoggedTunableNumber negativeAimingCompensation =
-      new LoggedTunableNumber("Aiming/negativeAimingCompensation", -30.00);
+      new LoggedTunableNumber("Aiming/negativeAimingCompensation", -10.00);
   private static final LoggedTunableNumber positiveAimingCompensation =
-      new LoggedTunableNumber("Aiming/positiveAimingCompensation", 30.00);
+      new LoggedTunableNumber("Aiming/positiveAimingCompensation", 10.00);
 
   // EMA state (only written by AimingThread, no synchronization needed)
   private double smoothedRPM = 0.0;

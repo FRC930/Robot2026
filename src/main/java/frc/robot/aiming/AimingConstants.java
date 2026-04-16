@@ -68,18 +68,18 @@ public final class AimingConstants {
     HUB_RPM_MAP.put(2.35, 1850.0);
 
     // Pass target: distance (m) → hood angle (deg from horizontal)
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 49.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 49.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(20), 49.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(25), 49.0);
-    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(30), 49.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 30.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(15), 30.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(20), 30.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(25), 30.0);
+    PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(30), 30.0);
 
     // Pass target: distance (m) → shooter RPM
-    PASS_RPM_MAP.put(Units.feetToMeters(10), 1636.0);
-    PASS_RPM_MAP.put(Units.feetToMeters(15), 2027.0);
-    PASS_RPM_MAP.put(Units.feetToMeters(20), 2356.0);
-    PASS_RPM_MAP.put(Units.feetToMeters(25), 2644.0);
-    PASS_RPM_MAP.put(Units.feetToMeters(30), 2903.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(10), 2000.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(15), 2000.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(20), 2000.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(25), 2000.0);
+    PASS_RPM_MAP.put(Units.feetToMeters(30), 2000.0);
   }
 
   // ===== PASS TARGET POSITIONS =====
