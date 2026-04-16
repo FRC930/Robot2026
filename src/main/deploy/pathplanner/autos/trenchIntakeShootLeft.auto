@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "SyncOdometry"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AutoAim"
           }
         },
@@ -56,6 +62,12 @@
           "type": "path",
           "data": {
             "pathName": "trenchIntakeShootLeft.4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SyncOdometry"
           }
         },
         {
