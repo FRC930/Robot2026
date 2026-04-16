@@ -108,7 +108,7 @@
     "rotation": -145.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 3.2,
     "rotation": 90.0
