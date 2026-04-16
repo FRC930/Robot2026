@@ -36,4 +36,14 @@ public interface ExtenderIO {
 
   public default void setDifferentialGains(Gains gains) {}
   ;
+
+  /**
+   * Configure the trapezoidal motion profile used by {@link #setExtenderHeight(Distance)}.
+   *
+   * @param cruiseVelocityInchesPerSec maximum steady-state velocity
+   * @param accelerationInchesPerSec2 maximum acceleration
+   */
+  public default void setMotionConstraints(
+      double cruiseVelocityInchesPerSec, double accelerationInchesPerSec2) {}
+  ;
 }

@@ -9,9 +9,5 @@ public interface ExtenderEvents {
 
   public Trigger outtakingTrigger();
 
-  public Trigger shootingTrigger();
-
   public Trigger raisedTrigger();
-
-  public Trigger agitatingTrigger();
 }

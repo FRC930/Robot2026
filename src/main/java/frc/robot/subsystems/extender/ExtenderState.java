@@ -5,7 +5,5 @@ public enum ExtenderState {
   IDLE,
   INTAKING,
   OUTTAKING,
-  SHOOTING,
-  RAISED,
-  AGITATING
+  RAISED
 }

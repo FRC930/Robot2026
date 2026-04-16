@@ -6,11 +6,12 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DifferentialFollower;
-import com.ctre.phoenix6.controls.DifferentialPositionVoltage;
+import com.ctre.phoenix6.controls.DifferentialMotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.DifferentialSensorSourceValue;
@@ -23,7 +24,12 @@ import frc.robot.util.Gains;
 import frc.robot.util.PhoenixUtil;
 
 public class ExtenderIOTalonFX implements ExtenderIO {
-  public DifferentialPositionVoltage Request;
+  // Conservative initial Motion Magic constraints (inches/sec, inches/sec^2). Overridden at runtime
+  // by ExtenderSubsystem via setMotionConstraints().
+  private static final double INITIAL_CRUISE_VELOCITY_IN_PER_SEC = 30.0;
+  private static final double INITIAL_ACCELERATION_IN_PER_SEC2 = 50.0;
+
+  public DifferentialMotionMagicVoltage Request;
   public TalonFX extenderMotor;
   public TalonFX followerMotor;
 
@@ -31,13 +37,21 @@ public class ExtenderIOTalonFX implements ExtenderIO {
 
   private Distance m_setPoint = Distance.ofBaseUnits(0, Inches);
 
+  // Last-applied Motion Magic constraints (inches) — avoid redundant config applies.
+  private double lastCruiseVelInchPerSec = Double.NaN;
+  private double lastAccelInchPerSec2 = Double.NaN;
+
   private final NeutralOut m_brake = new NeutralOut();
+
+  private static double inchesToRotations(double inches) {
+    return inches / ExtenderSubsystem.INCHES_PER_ROT;
+  }
 
   public ExtenderIOTalonFX(int extenderMotorID, int followerMotorID, CANBus canbus) {
     extenderMotor = new TalonFX(extenderMotorID, canbus);
     followerMotor = new TalonFX(followerMotorID, canbus);
     m_setPoint = Inches.of(0.0);
-    Request = new DifferentialPositionVoltage(0, 0).withEnableFOC(true);
+    Request = new DifferentialMotionMagicVoltage(0, 0).withEnableFOC(true);
 
     configureTalons();
   }
@@ -64,6 +78,15 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     cfgExtender.Slot1.kP = 0;
     cfgExtender.Slot1.kI = 0;
     cfgExtender.Slot1.kD = 0;
+
+    // Initial Motion Magic profile constraints. Runtime overrides come through
+    // setMotionConstraints().
+    cfgExtender.MotionMagic.MotionMagicCruiseVelocity =
+        inchesToRotations(INITIAL_CRUISE_VELOCITY_IN_PER_SEC);
+    cfgExtender.MotionMagic.MotionMagicAcceleration =
+        inchesToRotations(INITIAL_ACCELERATION_IN_PER_SEC2);
+    lastCruiseVelInchPerSec = INITIAL_CRUISE_VELOCITY_IN_PER_SEC;
+    lastAccelInchPerSec2 = INITIAL_ACCELERATION_IN_PER_SEC2;
 
     PhoenixUtil.tryUntilOk(5, () -> extenderMotor.getConfigurator().apply(cfgExtender));
 
@@ -112,7 +135,7 @@ public class ExtenderIOTalonFX implements ExtenderIO {
   @Override
   public void setExtenderHeight(Distance target) {
     Request =
-        Request.withAveragePosition(target.in(Inches) / ExtenderSubsystem.INCHES_PER_ROT)
+        Request.withAveragePosition(inchesToRotations(target.in(Inches)))
             .withDifferentialPosition(0)
             .withAverageSlot(0)
             .withDifferentialSlot(1);
@@ -149,5 +172,20 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     slot1Configs.kV = gains.kV;
     slot1Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> extenderMotor.getConfigurator().apply(slot1Configs));
+  }
+
+  @Override
+  public void setMotionConstraints(
+      double cruiseVelocityInchesPerSec, double accelerationInchesPerSec2) {
+    if (cruiseVelocityInchesPerSec == lastCruiseVelInchPerSec
+        && accelerationInchesPerSec2 == lastAccelInchPerSec2) {
+      return;
+    }
+    MotionMagicConfigs cfg = new MotionMagicConfigs();
+    cfg.MotionMagicCruiseVelocity = inchesToRotations(cruiseVelocityInchesPerSec);
+    cfg.MotionMagicAcceleration = inchesToRotations(accelerationInchesPerSec2);
+    PhoenixUtil.tryUntilOk(5, () -> extenderMotor.getConfigurator().apply(cfg));
+    lastCruiseVelInchPerSec = cruiseVelocityInchesPerSec;
+    lastAccelInchPerSec2 = accelerationInchesPerSec2;
   }
 }
