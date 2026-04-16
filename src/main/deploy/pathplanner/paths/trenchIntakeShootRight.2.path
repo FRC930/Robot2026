@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.9651497860199716,
-        "y": 0.49627674750356565
+        "y": 0.4962767475035652
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootRight.1"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 5.0,
+    "velocity": 3.0,
     "rotation": 0.0
   },
   "reversed": false,
