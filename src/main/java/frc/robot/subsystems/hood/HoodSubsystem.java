@@ -17,7 +17,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   // Implementation goes here​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​ † ​₀
   // ​​​​​​​​​​​ᴥ ₀​​ †
 
-  private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
+  private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 8.0);
   private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);
 
   private final HoodIO m_IO;
@@ -76,7 +76,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     shouldThreadCommand = (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
-        m_IO.setHoodTarget(Degrees.of(0.0));
+        m_IO.setHoodTarget(Degrees.of(2.0));
         break;
       case AIMING:
         break; // ​250Hz ​​thread​ handles​​ ​​​​motor​ commands
