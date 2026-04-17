@@ -36,12 +36,12 @@
   ],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
+      "name": "Intaking",
       "minWaypointRelativePos": 0.5046762589928051,
       "maxWaypointRelativePos": 0.9924460431654547,
       "constraints": {
-        "maxVelocity": 1.6,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 2.5,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -65,7 +65,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.2,
-    "maxAcceleration": 1.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -76,7 +76,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 0.0

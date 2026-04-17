@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.700699001426534,
-        "y": 3.627432239657632
+        "x": 7.739514978601996,
+        "y": 3.4074750356633388
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootLeft.0"
@@ -20,24 +20,24 @@
         "y": 5.011868758915835
       },
       "prevControl": {
-        "x": 5.941041369472182,
-        "y": 3.8603281027104153
+        "x": 5.9927960057061345,
+        "y": 3.4851069900142653
       },
       "nextControl": {
-        "x": 5.941041369472182,
-        "y": 5.620536066882141
+        "x": 5.920420423683799,
+        "y": 5.620186659673115
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.980987951801619,
-        "y": 5.586734939762856
+        "x": 2.2923395149786017,
+        "y": 5.542353780313838
       },
       "prevControl": {
-        "x": 3.980987951801619,
-        "y": 5.586734939762856
+        "x": 3.2923395149786017,
+        "y": 5.542353780313838
       },
       "nextControl": null,
       "isLocked": false,
@@ -72,7 +72,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.2,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -86,7 +86,7 @@
   "reversed": false,
   "folder": "TrenchIntakeShootLeft",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 1.8,
     "rotation": -90.0
   },
   "useDefaultConstraints": false

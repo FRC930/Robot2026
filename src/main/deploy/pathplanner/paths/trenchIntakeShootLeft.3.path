@@ -41,11 +41,16 @@
       "name": "Intaking",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.2,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -53,13 +58,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 3.0,
+    "velocity": 3.2,
     "rotation": -90.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootLeft",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 3.2,
     "rotation": 0.0
   },
   "useDefaultConstraints": false
