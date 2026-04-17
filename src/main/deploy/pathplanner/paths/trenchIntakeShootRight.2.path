@@ -20,21 +20,26 @@
         "y": 0.7020481927710842
       },
       "prevControl": {
-        "x": 3.838698795180722,
-        "y": 0.7020481927710843
+        "x": 2.5511126961483592,
+        "y": 0.742111269614836
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "trenchIntakeShootRight.2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5177453027139848,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.2,
-    "maxAcceleration": 1.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
