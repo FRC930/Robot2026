@@ -83,4 +83,11 @@ public class ExtenderIOSim implements ExtenderIO {
     this.target = target;
     controller.setGoal(target.in(Inches));
   }
+
+  @Override
+  public void setMotionConstraints(
+      double cruiseVelocityInchesPerSec, double accelerationInchesPerSec2) {
+    controller.setConstraints(
+        new Constraints(cruiseVelocityInchesPerSec, accelerationInchesPerSec2));
+  }
 }

@@ -1,9 +1,16 @@
 package frc.robot.subsystems.extender;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.AllEvents;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.SubsystemBehavior;
+import java.util.Set;
 
 public class ExtenderBehavior extends SubsystemBehavior {
+  // How long to keep the extender out after the shoot goal engages before retracting.
+  private static final LoggedTunableNumber shootRetractDelaySec =
+      new LoggedTunableNumber("Extender/shootRetractDelaySec", 1.0);
+
   private final ExtenderSubsystem extender;
 
   public ExtenderBehavior(ExtenderSubsystem extender) {
@@ -12,20 +19,18 @@ public class ExtenderBehavior extends SubsystemBehavior {
 
   @Override
   public void configure(AllEvents events) {
-    // events.goals().isIdleTrigger().whileTrue(this.extender.idleCommand());
     events.goals().isOuttakingTrigger().whileTrue(this.extender.outtakeCommand());
     events.goals().isIntakingTrigger().whileTrue(this.extender.intakeCommand());
+    // On shoot: wait, then retract slowly. `Commands.defer` re-reads the tunable on each fire so
+    // live-tuning the delay takes effect without a reboot. If the shoot goal drops mid-wait the
+    // sequence cancels and the other triggers (intake, idle, etc.) take back over naturally.
     events
         .goals()
         .isShootingTrigger()
-        .and(events.drive().isNotMoving().negate())
-        .whileTrue(this.extender.shootingCommand());
-    events
-        .goals()
-        .isShootingTrigger()
-        .and(events.drive().isNotMoving())
-        .whileTrue(this.extender.intakeCommand())
-        .onFalse(this.extender.intakeCommand());
+        .whileTrue(
+            Commands.sequence(
+                Commands.defer(() -> Commands.waitSeconds(shootRetractDelaySec.get()), Set.of()),
+                this.extender.retractCommand()));
     events.goals().isRaisedIntakeTrigger().whileTrue(this.extender.raisedCommand());
   }
 }

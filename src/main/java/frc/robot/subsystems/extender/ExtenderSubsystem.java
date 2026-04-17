@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,26 +32,21 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
 
   public static final double REDUCTION = (50.0 / 15.0);
 
-  // Agitation state
-  private TrapezoidProfile agitateProfile;
-  private TrapezoidProfile.State agitateCurrentState = new TrapezoidProfile.State(0, 0);
-  private double agitateGoalPosition;
-  private boolean agitateInitialized = false;
-
-  // Agitation tunables
-  private static final LoggedTunableNumber agitateInDistance =
-      new LoggedTunableNumber("Intake/agitateInDistance", 3.0);
-  private static final LoggedTunableNumber agitateOutDistance =
-      new LoggedTunableNumber("Intake/agitateOutDistance", 8.0);
-  private static final LoggedTunableNumber agitateMaxVelocity =
-      new LoggedTunableNumber("Intake/agitateMaxVelocityInchPerSec", 20.0);
-  private static final LoggedTunableNumber agitateMaxAcceleration =
-      new LoggedTunableNumber("Intake/agitateMaxAccelInchPerSec2", 25.0);
   private static final LoggedTunableNumber extenderRetractedSetpoint =
-      new LoggedTunableNumber("Intake/extenderRetractedSetpoint", 4.0);
+      new LoggedTunableNumber("Extender/extenderRetractedSetpoint", 2.0);
   private static final LoggedTunableNumber extenderExtendedSetpoint =
-      new LoggedTunableNumber("Intake/extenderExtendedSetpoint", 10.0);
-  private static final double AGITATE_POSITION_TOLERANCE_DEG = 2.0;
+      new LoggedTunableNumber("Extender/extenderExtendedSetpoint", 10.0);
+
+  // Motion Magic constraints. Commands set these before issuing a state change, so the motor's
+  // trapezoidal profile matches the direction of travel.
+  private static final LoggedTunableNumber extendVelocityInchPerSec =
+      new LoggedTunableNumber("Extender/extendVelocityInchPerSec", 100.0);
+  private static final LoggedTunableNumber extendAccelerationInchPerSec2 =
+      new LoggedTunableNumber("Extender/extendAccelerationInchPerSec2", 500.0);
+  private static final LoggedTunableNumber retractVelocityInchPerSec =
+      new LoggedTunableNumber("Extender/retractVelocityInchPerSec", 25.0);
+  private static final LoggedTunableNumber retractAccelerationInchPerSec2 =
+      new LoggedTunableNumber("Extender/retractAccelerationInchPerSec2", 500.0);
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder("Gains/Extender/", 20.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -90,24 +84,15 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   public void periodic() {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Extender", logged);
+
     switch (m_state.get()) {
       case IDLE:
-        m_IO.setExtenderHeight(Inches.of(extenderRetractedSetpoint.getAsDouble()));
-        break;
-      case INTAKING:
-        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
-        break;
-      case OUTTAKING:
-        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
-        break;
-      case SHOOTING:
-        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
-        break;
       case RAISED:
         m_IO.setExtenderHeight(Inches.of(extenderRetractedSetpoint.getAsDouble()));
         break;
-      case AGITATING:
-        updateAgitation();
+      case INTAKING:
+      case OUTTAKING:
+        m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
         break;
       case TESTING:
         setExtenderHeight(Inches.of(0.0));
@@ -118,57 +103,54 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     Logger.recordOutput("Extender/DifferentialError", logged.differentialPositionError.in(Inches));
   }
 
-  private void updateAgitation() {
-    if (!agitateInitialized) {
-      agitateProfile =
-          new TrapezoidProfile(
-              new TrapezoidProfile.Constraints(
-                  agitateMaxVelocity.get(), agitateMaxAcceleration.get()));
-      agitateCurrentState = new TrapezoidProfile.State(logged.distance.in(Inches), 0);
-      agitateGoalPosition = agitateInDistance.get();
-      agitateInitialized = true;
-    }
-
-    TrapezoidProfile.State goal = new TrapezoidProfile.State(agitateGoalPosition, 0);
-    agitateCurrentState = agitateProfile.calculate(0.020, agitateCurrentState, goal);
-
-    m_IO.setExtenderHeight(Inches.of(agitateCurrentState.position));
-
-    if (Math.abs(agitateCurrentState.position - agitateGoalPosition)
-        < AGITATE_POSITION_TOLERANCE_DEG) {
-      if (agitateGoalPosition == agitateInDistance.get()) {
-        agitateGoalPosition = agitateOutDistance.get();
-      } else {
-        agitateGoalPosition = agitateInDistance.get();
-      }
-    }
-
-    Logger.recordOutput("Extender/AgitateSetpoint", agitateCurrentState.position);
-    Logger.recordOutput("Extender/AgitateGoal", agitateGoalPosition);
-  }
-
   public Command idleCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.IDLE));
+    return runOnce(
+        () -> {
+          applyRetractConstraints();
+          m_state.set(ExtenderState.IDLE);
+        });
   }
 
   public Command intakeCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.INTAKING));
+    return runOnce(
+        () -> {
+          applyExtendConstraints();
+          m_state.set(ExtenderState.INTAKING);
+        });
   }
 
   public Command outtakeCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.OUTTAKING));
-  }
-
-  public Command shootingCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.SHOOTING));
+    return runOnce(
+        () -> {
+          applyExtendConstraints();
+          m_state.set(ExtenderState.OUTTAKING);
+        });
   }
 
   public Command raisedCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.RAISED));
+    return runOnce(
+        () -> {
+          applyRetractConstraints();
+          m_state.set(ExtenderState.RAISED);
+        });
   }
 
-  public Command agitateCommand() {
-    return runOnce(() -> m_state.set(ExtenderState.AGITATING));
+  /** Retract the extender using the slower "retract" motion profile. */
+  public Command retractCommand() {
+    return runOnce(
+        () -> {
+          applyRetractConstraints();
+          m_state.set(ExtenderState.IDLE);
+        });
+  }
+
+  private void applyExtendConstraints() {
+    m_IO.setMotionConstraints(extendVelocityInchPerSec.get(), extendAccelerationInchPerSec2.get());
+  }
+
+  private void applyRetractConstraints() {
+    m_IO.setMotionConstraints(
+        retractVelocityInchPerSec.get(), retractAccelerationInchPerSec2.get());
   }
 
   @Override
@@ -187,18 +169,8 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   }
 
   @Override
-  public Trigger shootingTrigger() {
-    return m_state.is(ExtenderState.SHOOTING);
-  }
-
-  @Override
   public Trigger raisedTrigger() {
     return m_state.is(ExtenderState.RAISED);
-  }
-
-  @Override
-  public Trigger agitatingTrigger() {
-    return m_state.is(ExtenderState.AGITATING);
   }
 
   public Command getNewDistanceCommand(DoubleSupplier distance) {
