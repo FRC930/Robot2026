@@ -33,20 +33,20 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   public static final double REDUCTION = (50.0 / 15.0);
 
   private static final LoggedTunableNumber extenderRetractedSetpoint =
-      new LoggedTunableNumber("Intake/extenderRetractedSetpoint", 4.0);
+      new LoggedTunableNumber("Extender/extenderRetractedSetpoint", 2.0);
   private static final LoggedTunableNumber extenderExtendedSetpoint =
-      new LoggedTunableNumber("Intake/extenderExtendedSetpoint", 10.0);
+      new LoggedTunableNumber("Extender/extenderExtendedSetpoint", 10.0);
 
   // Motion Magic constraints. Commands set these before issuing a state change, so the motor's
   // trapezoidal profile matches the direction of travel.
   private static final LoggedTunableNumber extendVelocityInchPerSec =
-      new LoggedTunableNumber("Extender/extendVelocityInchPerSec", 10.0);
+      new LoggedTunableNumber("Extender/extendVelocityInchPerSec", 100.0);
   private static final LoggedTunableNumber extendAccelerationInchPerSec2 =
-      new LoggedTunableNumber("Extender/extendAccelerationInchPerSec2", 20.0);
+      new LoggedTunableNumber("Extender/extendAccelerationInchPerSec2", 500.0);
   private static final LoggedTunableNumber retractVelocityInchPerSec =
-      new LoggedTunableNumber("Extender/retractVelocityInchPerSec", 5.0);
+      new LoggedTunableNumber("Extender/retractVelocityInchPerSec", 25.0);
   private static final LoggedTunableNumber retractAccelerationInchPerSec2 =
-      new LoggedTunableNumber("Extender/retractAccelerationInchPerSec2", 10.0);
+      new LoggedTunableNumber("Extender/retractAccelerationInchPerSec2", 500.0);
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder("Gains/Extender/", 20.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
