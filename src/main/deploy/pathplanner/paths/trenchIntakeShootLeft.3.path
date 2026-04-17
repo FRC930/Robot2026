@@ -41,7 +41,12 @@
       "name": "Intaking",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intaking"
+        }
+      }
     }
   ],
   "globalConstraints": {
