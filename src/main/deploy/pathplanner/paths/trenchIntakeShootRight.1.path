@@ -86,7 +86,7 @@
   "reversed": false,
   "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
-    "velocity": 0.75,
+    "velocity": 2.5,
     "rotation": 90.0
   },
   "useDefaultConstraints": false
