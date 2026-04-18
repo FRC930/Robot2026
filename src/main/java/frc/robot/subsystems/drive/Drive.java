@@ -478,7 +478,7 @@ public class Drive extends SubsystemBase {
 
   @AutoLogOutput(key = "Drive/EffectiveSpeedLimit")
   public double getEffectiveSpeedLimit() {
-    return Math.min(operatorSpeedLimit, goalSpeedLimit);
+    return 1.0;
   }
 
   /** Returns the maximum linear speed in meters per sec. */

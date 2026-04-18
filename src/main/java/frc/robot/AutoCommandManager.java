@@ -67,7 +67,7 @@ public class AutoCommandManager {
   private void configureNamedCommands(Drive drive, RobotGoals goals, AimingService AimingService) {
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
     NamedCommands.registerCommand(
-        "Shooting", 
+        "Shooting",
         goals
             .setGoalCommand(RobotGoal.SHOOTING)
             .alongWith(DriveCommands.autoAimForAutoNoExit(drive, AimingService).withTimeout(2.0)));
