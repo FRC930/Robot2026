@@ -126,7 +126,7 @@ public class DriveCommands {
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
       AimingService aimingService,
-      boolean forceAutoAim,
+      boolean forceAutoAim, // Autonomous
       boolean allow_to_exit) {
 
     // Create PID controller
