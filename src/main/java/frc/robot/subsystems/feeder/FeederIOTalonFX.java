@@ -27,7 +27,7 @@ public class FeederIOTalonFX implements FeederIO {
 
   public FeederIOTalonFX(int feederMotorCAN, CANBus canbus) {
     feederMotor = new TalonFX(feederMotorCAN, canbus);
-    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
     configureTalons();
   }
 

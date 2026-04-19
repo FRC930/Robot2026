@@ -32,7 +32,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   public IntakeIOTalonFX(int IntakeLeadMotorCAN, int IntakeFollowMotorCAN, CANBus canbus) {
     leaderIntakeMotor = new TalonFX(IntakeLeadMotorCAN, canbus);
     followIntakeMotor = new TalonFX(IntakeFollowMotorCAN, canbus);
-    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
     configureTalons();
   }
 
