@@ -68,7 +68,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     logged.voltage = Volts.mutable(0);
 
     RobotVisualization.instance().setExtenderExtensionSource(logged.distance);
-    setExtenderHeight(Inches.of(0.0));
+    // setExtenderHeight(Inches.of(0.0));
   }
 
   /**
