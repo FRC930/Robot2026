@@ -35,7 +35,7 @@ public class HoodIOTalonFX implements HoodIO {
   private void configureTalons() {
     TalonFXConfiguration cfg = new TalonFXConfiguration();
     cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    cfg.CurrentLimits.SupplyCurrentLimit = 40.0;
+    cfg.CurrentLimits.SupplyCurrentLimit = 20.0;
     cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.CurrentLimits.StatorCurrentLimitEnable = true;

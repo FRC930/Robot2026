@@ -55,7 +55,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     followConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     followConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    followConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+    followConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;

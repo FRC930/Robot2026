@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.127674750356633,
-        "y": 3.4851069900142657
+        "x": 7.83289156626506,
+        "y": 3.4449036144578313
       },
       "prevControl": {
-        "x": 8.127674750356633,
-        "y": 0.5346250623034217
+        "x": 7.83289156626506,
+        "y": 0.4944216867469873
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6730290456431451,
+      "waypointRelativePos": 0.8784648187633219,
       "rotationDegrees": 90.0
     }
   ],
@@ -73,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 1.8,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootRight",

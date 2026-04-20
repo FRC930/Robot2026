@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.127674750356633,
-        "y": 3.4851069900142657
+        "x": 7.83289156626506,
+        "y": 3.4449036144578313
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.034903666019283,
-        "y": 3.965926267122699
+        "x": 6.74012048192771,
+        "y": 3.9257228915662647
       },
       "isLocked": false,
       "linkedName": "trenchIntakeShootRight.0"
@@ -45,6 +45,10 @@
     }
   ],
   "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6908315565031994,
+      "rotationDegrees": 180.0
+    },
     {
       "waypointRelativePos": 1.1,
       "rotationDegrees": 90.0
@@ -87,7 +91,7 @@
   "folder": "TrenchIntakeShootRight",
   "idealStartingState": {
     "velocity": 2.5,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }
