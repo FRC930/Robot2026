@@ -39,6 +39,8 @@ public class HoodIOTalonFX implements HoodIO {
     cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
     cfg.CurrentLimits.StatorCurrentLimit = 80.0;
     cfg.CurrentLimits.StatorCurrentLimitEnable = true;
+    cfg.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    cfg.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     cfg.Voltage.PeakForwardVoltage = 12.0;
     cfg.Voltage.PeakReverseVoltage = -3.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

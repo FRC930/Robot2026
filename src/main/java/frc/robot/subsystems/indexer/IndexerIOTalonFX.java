@@ -46,6 +46,10 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
     configIndexer.CurrentLimits.SupplyCurrentLimit = 20.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configIndexer.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    configIndexer.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    configIndexer.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    configIndexer.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     configIndexer.Feedback.SensorToMechanismRatio = INDEXER_GEAR_RATIO;
     configIndexer.Voltage.PeakForwardVoltage = 12.0;
     configIndexer.Voltage.PeakReverseVoltage = -12.0;
@@ -56,10 +60,14 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     TalonFXConfiguration configKicker = new TalonFXConfiguration();
     configKicker.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configKicker.CurrentLimits.StatorCurrentLimit = 80.0;
+    configKicker.CurrentLimits.StatorCurrentLimit = 60.0;
     configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
-    configKicker.CurrentLimits.StatorCurrentLimit = 30.0;
-    configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
+    configKicker.CurrentLimits.SupplyCurrentLimit = 30.0;
+    configKicker.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configKicker.CurrentLimits.SupplyCurrentLowerLimit = 25.0;
+    configKicker.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    configKicker.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    configKicker.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     configKicker.Feedback.SensorToMechanismRatio = KICKER_GEAR_RATIO;
     configKicker.Voltage.PeakForwardVoltage = 12.0;
     configKicker.Voltage.PeakReverseVoltage = -12.0;

@@ -45,6 +45,8 @@ public class CompactorIOTalonFX implements CompactorIO {
     cfg.CurrentLimits.StatorCurrentLimitEnable = true;
     cfg.CurrentLimits.SupplyCurrentLimit = 30;
     cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
+    cfg.TorqueCurrent.PeakForwardTorqueCurrent = 80;
+    cfg.TorqueCurrent.PeakReverseTorqueCurrent = -80;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     cfg.Feedback.SensorToMechanismRatio = CompactorSubsystem.REDUCTION;

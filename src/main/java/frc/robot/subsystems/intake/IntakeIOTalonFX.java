@@ -43,6 +43,10 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leaderConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    leaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    leaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    leaderConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    leaderConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     leaderConfig.Voltage.PeakForwardVoltage = 12.0;
     leaderConfig.Voltage.PeakReverseVoltage = -12.0;
     leaderConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
@@ -51,12 +55,19 @@ public class IntakeIOTalonFX implements IntakeIO {
         5, () -> leaderIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(leaderConfig));
 
+    // Follower runs lighter limits than the leader — both motors drive the
+    // same shaft opposed, so total throughput is set by the leader. Dropping
+    // the follower saves ~10-15 A of supply draw during intake spikes.
     TalonFXConfiguration followConfig = new TalonFXConfiguration();
     followConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    followConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+    followConfig.CurrentLimits.StatorCurrentLimit = 60.0;
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     followConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    followConfig.CurrentLimits.SupplyCurrentLowerLimit = 20.0;
+    followConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    followConfig.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    followConfig.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
