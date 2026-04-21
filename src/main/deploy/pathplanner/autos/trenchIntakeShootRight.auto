@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SyncOdometry"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "trenchIntakeShootRight.1"
@@ -32,12 +38,6 @@
           "type": "named",
           "data": {
             "name": "Shooting"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.5
           }
         },
         {
@@ -85,7 +85,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 3.0
           }
         },
         {

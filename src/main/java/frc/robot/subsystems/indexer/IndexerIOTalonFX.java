@@ -33,8 +33,8 @@ public class IndexerIOTalonFX implements IndexerIO {
   public IndexerIOTalonFX(int indexerMotorCAN, CANBus canbus, int kickerMotorCAN) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     kickerMotor = new TalonFX(kickerMotorCAN, canbus);
-    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
-    kickerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    kickerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
 
     configureTalons();
   }
@@ -44,7 +44,7 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configIndexer.CurrentLimits.StatorCurrentLimit = 80.0;
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
-    configIndexer.CurrentLimits.SupplyCurrentLimit = 40.0;
+    configIndexer.CurrentLimits.SupplyCurrentLimit = 20.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
     configIndexer.Feedback.SensorToMechanismRatio = INDEXER_GEAR_RATIO;
     configIndexer.Voltage.PeakForwardVoltage = 12.0;
@@ -58,7 +58,7 @@ public class IndexerIOTalonFX implements IndexerIO {
     configKicker.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configKicker.CurrentLimits.StatorCurrentLimit = 80.0;
     configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
-    configKicker.CurrentLimits.StatorCurrentLimit = 40.0;
+    configKicker.CurrentLimits.StatorCurrentLimit = 30.0;
     configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
     configKicker.Feedback.SensorToMechanismRatio = KICKER_GEAR_RATIO;
     configKicker.Voltage.PeakForwardVoltage = 12.0;

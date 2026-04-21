@@ -48,11 +48,11 @@
     },
     {
       "anchor": {
-        "x": 2.205120481927711,
+        "x": 1.7747931526390865,
         "y": 2.6034698795180726
       },
       "prevControl": {
-        "x": 1.205120481927711,
+        "x": 0.7747931526390865,
         "y": 2.6034698795180726
       },
       "nextControl": null,
@@ -85,6 +85,19 @@
       "maxWaypointRelativePos": 2.4625310173696944,
       "constraints": {
         "maxVelocity": 2.75,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Intaking",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 1.950372208436671,
+      "constraints": {
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,

@@ -32,7 +32,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   public IntakeIOTalonFX(int IntakeLeadMotorCAN, int IntakeFollowMotorCAN, CANBus canbus) {
     leaderIntakeMotor = new TalonFX(IntakeLeadMotorCAN, canbus);
     followIntakeMotor = new TalonFX(IntakeFollowMotorCAN, canbus);
-    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
     configureTalons();
   }
 
@@ -55,7 +55,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     followConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     followConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    followConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+    followConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;

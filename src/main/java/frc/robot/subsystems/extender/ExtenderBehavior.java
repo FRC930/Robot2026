@@ -20,7 +20,11 @@ public class ExtenderBehavior extends SubsystemBehavior {
   @Override
   public void configure(AllEvents events) {
     events.goals().isOuttakingTrigger().whileTrue(this.extender.outtakeCommand());
-    events.goals().isIntakingTrigger().whileTrue(this.extender.intakeCommand());
+    events
+        .goals()
+        .isIntakingTrigger()
+        .whileTrue(this.extender.intakeCommand())
+        .whileFalse(this.extender.idleCommand());
     // On shoot: wait, then retract slowly. `Commands.defer` re-reads the tunable on each fire so
     // live-tuning the delay takes effect without a reboot. If the shoot goal drops mid-wait the
     // sequence cancels and the other triggers (intake, idle, etc.) take back over naturally.

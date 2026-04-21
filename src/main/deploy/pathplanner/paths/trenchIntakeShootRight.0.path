@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 7.778253012048193,
-        "y": 3.499542168674699
+        "x": 7.83289156626506,
+        "y": 3.4449036144578313
       },
       "prevControl": {
-        "x": 7.778253012048193,
-        "y": 0.549060240963855
+        "x": 7.83289156626506,
+        "y": 0.4944216867469873
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,17 +30,17 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6730290456431451,
+      "waypointRelativePos": 0.8784648187633219,
       "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Intaking",
-      "minWaypointRelativePos": 0.5046762589928051,
+      "minWaypointRelativePos": 0.7057071960297804,
       "maxWaypointRelativePos": 0.9924460431654547,
       "constraints": {
-        "maxVelocity": 2.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -73,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 1.8,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "TrenchIntakeShootRight",

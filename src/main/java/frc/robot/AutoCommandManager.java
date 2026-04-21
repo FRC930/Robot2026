@@ -66,13 +66,17 @@ public class AutoCommandManager {
 
   private void configureNamedCommands(Drive drive, RobotGoals goals, AimingService AimingService) {
     NamedCommands.registerCommand("Intaking", goals.setGoalCommand(RobotGoal.INTAKING));
-    NamedCommands.registerCommand("Shooting", goals.setGoalCommand(RobotGoal.SHOOTING));
+    NamedCommands.registerCommand(
+        "Shooting",
+        goals
+            .setGoalCommand(RobotGoal.SHOOTING)
+            .alongWith(DriveCommands.autoAimForAutoNoExit(drive, AimingService).withTimeout(2.0)));
     NamedCommands.registerCommand("Outtaking", goals.setGoalCommand(RobotGoal.OUTTAKING));
     // TODO: Make only the intake retract
     NamedCommands.registerCommand("Idle", goals.setGoalCommand(RobotGoal.IDLE));
     NamedCommands.registerCommand("SyncOdometry", DriveCommands.syncOdometry(drive));
-    NamedCommands.registerCommand(
-        "AutoAim", DriveCommands.joystickDrive(drive, AimingService).withTimeout(1.0));
+    // NamedCommands.registerCommand(
+    // "AutoAim", DriveCommands.joystickDrive(drive, AimingService).withTimeout(1.0));
   }
 
   public Command getAutoWithCurrentPose() {

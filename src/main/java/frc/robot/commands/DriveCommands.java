@@ -86,8 +86,14 @@ public class DriveCommands {
    * @param aimingService
    * @return
    */
+  public static Command autoAimForAutoNoExit(Drive drive, AimingService aimingService) {
+    // Dont allow to exit during auto
+    return joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0, aimingService, true, false);
+  }
+
+  // Old command to exit when at target during auto
   public static Command joystickDrive(Drive drive, AimingService aimingService) {
-    return joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0, aimingService, true);
+    return joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0, aimingService, true, true);
   }
 
   /**
@@ -106,7 +112,7 @@ public class DriveCommands {
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
       AimingService aimingService) {
-    return joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, aimingService, false);
+    return joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, aimingService, false, true);
   }
 
   /**
@@ -120,7 +126,8 @@ public class DriveCommands {
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
       AimingService aimingService,
-      boolean forceAutoAim) {
+      boolean forceAutoAim, // Autonomous
+      boolean allow_to_exit) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -238,7 +245,7 @@ public class DriveCommands {
         .until(
             () -> {
               // Only Exit Defaull Command if forceAutoAim (in Automotmous) stopX will interrupt
-              return (forceAutoAim && s_aimingLinedUp);
+              return (allow_to_exit && forceAutoAim && s_aimingLinedUp);
             })
 
         // Reset PID controller when command starts
