@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -24,7 +24,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   TalonFX follower2;
   TalonFX follower3;
 
-  private VelocityVoltage shooterRequest;
+  private VelocityTorqueCurrentFOC shooterRequest;
   private AngularVelocity shooterSetPoint = RPM.of(0);
 
   /* Keep a neutral out so we can disable the motor */
@@ -41,7 +41,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1 = new TalonFX(followerMotor1CAN, canbus);
     follower2 = new TalonFX(followerMotor2CAN, canbus);
     follower3 = new TalonFX(followerMotor3CAN, canbus);
-    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    shooterRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
     configureTalons();
   }
 

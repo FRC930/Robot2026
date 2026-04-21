@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -20,7 +20,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   TalonFX followIntakeMotor;
   TalonFX leaderIntakeMotor;
 
-  private VelocityVoltage intakeRequest;
+  private VelocityTorqueCurrentFOC intakeRequest;
   private AngularVelocity intakeSetPoint = RPM.of(0);
   boolean firstTime = true;
   public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
@@ -32,7 +32,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   public IntakeIOTalonFX(int IntakeLeadMotorCAN, int IntakeFollowMotorCAN, CANBus canbus) {
     leaderIntakeMotor = new TalonFX(IntakeLeadMotorCAN, canbus);
     followIntakeMotor = new TalonFX(IntakeFollowMotorCAN, canbus);
-    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    intakeRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
     configureTalons();
   }
 

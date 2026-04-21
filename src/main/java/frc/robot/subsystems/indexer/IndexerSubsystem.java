@@ -26,10 +26,10 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
 
   private final LoggedTunableGainsBuilder m_indexerTunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/Indexer/", 0.185, 0.0, 0.0, 0.28, 0.0, .125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/Indexer/", 15.0, 0.0, 0.0, 16.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   private final LoggedTunableGainsBuilder m_kickerTunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/Kicker/", 0.55, 0, 0.025, 0.25, 0, 0.35, 0, 0, 0, 0, 0, 0);
+          "Gains/Kicker/", 50.0, 0, 0.0, 5.7, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   // Jam detection tunable thresholds
   private final LoggedTunableNumber m_jamVelocityThreshold =
