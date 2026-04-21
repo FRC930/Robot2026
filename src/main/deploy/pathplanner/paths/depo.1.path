@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8072230674119891,
+        "y": 5.946169794015738
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.9408406973930231,
+        "y": 5.734873014678589
+      },
+      "isLocked": false,
+      "linkedName": "depo.0"
+    },
+    {
+      "anchor": {
+        "x": 1.516019971469329,
+        "y": 4.830727532097005
+      },
+      "prevControl": {
+        "x": 0.9919458308391144,
+        "y": 5.662769069268913
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "depo.1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Idle",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Idle"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Depo",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}
