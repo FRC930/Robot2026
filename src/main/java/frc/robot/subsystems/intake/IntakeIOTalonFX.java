@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -20,7 +20,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   TalonFX followIntakeMotor;
   TalonFX leaderIntakeMotor;
 
-  private VelocityVoltage intakeRequest;
+  private VelocityTorqueCurrentFOC intakeRequest;
   private AngularVelocity intakeSetPoint = RPM.of(0);
   boolean firstTime = true;
   public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
@@ -32,7 +32,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   public IntakeIOTalonFX(int IntakeLeadMotorCAN, int IntakeFollowMotorCAN, CANBus canbus) {
     leaderIntakeMotor = new TalonFX(IntakeLeadMotorCAN, canbus);
     followIntakeMotor = new TalonFX(IntakeFollowMotorCAN, canbus);
-    intakeRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    intakeRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
     configureTalons();
   }
 
@@ -43,6 +43,10 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leaderConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    leaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    leaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    leaderConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    leaderConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     leaderConfig.Voltage.PeakForwardVoltage = 12.0;
     leaderConfig.Voltage.PeakReverseVoltage = -12.0;
     leaderConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
@@ -51,12 +55,19 @@ public class IntakeIOTalonFX implements IntakeIO {
         5, () -> leaderIntakeMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(leaderConfig));
 
+    // Follower runs lighter limits than the leader — both motors drive the
+    // same shaft opposed, so total throughput is set by the leader. Dropping
+    // the follower saves ~10-15 A of supply draw during intake spikes.
     TalonFXConfiguration followConfig = new TalonFXConfiguration();
     followConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    followConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+    followConfig.CurrentLimits.StatorCurrentLimit = 60.0;
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     followConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    followConfig.CurrentLimits.SupplyCurrentLowerLimit = 20.0;
+    followConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    followConfig.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    followConfig.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;

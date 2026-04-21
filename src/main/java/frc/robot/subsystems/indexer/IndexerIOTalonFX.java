@@ -6,7 +6,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -16,25 +16,25 @@ import frc.robot.util.PhoenixUtil;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
-  private VelocityVoltage indexerRequest;
+  private VelocityTorqueCurrentFOC indexerRequest;
   private TalonFX indexerMotor;
-  private VelocityVoltage kickerRequest;
+  private VelocityTorqueCurrentFOC kickerRequest;
   private TalonFX kickerMotor;
 
   private AngularVelocity indexerSetPoint = RPM.of(0);
   private AngularVelocity kickerSetPoint = RPM.of(0);
 
   private static final double SENSOR_MECH_INDEXER = 1;
-  private static final double KICKER_GEAR_RATIO = 3.0; // 3/1
-  private static final double INDEXER_GEAR_RATIO = 30 / 18;
+  private static final double KICKER_GEAR_RATIO = 24.0 / 18.0;
+  private static final double INDEXER_GEAR_RATIO = 30.0 / 18.0;
 
   private final NeutralOut m_neutralOut = new NeutralOut();
 
   public IndexerIOTalonFX(int indexerMotorCAN, CANBus canbus, int kickerMotorCAN) {
     indexerMotor = new TalonFX(indexerMotorCAN, canbus);
     kickerMotor = new TalonFX(kickerMotorCAN, canbus);
-    indexerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
-    kickerRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    indexerRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
+    kickerRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
 
     configureTalons();
   }
@@ -44,8 +44,12 @@ public class IndexerIOTalonFX implements IndexerIO {
     configIndexer.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configIndexer.CurrentLimits.StatorCurrentLimit = 80.0;
     configIndexer.CurrentLimits.StatorCurrentLimitEnable = true;
-    configIndexer.CurrentLimits.SupplyCurrentLimit = 20.0;
+    configIndexer.CurrentLimits.SupplyCurrentLimit = 30.0;
     configIndexer.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configIndexer.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    configIndexer.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    configIndexer.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    configIndexer.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     configIndexer.Feedback.SensorToMechanismRatio = INDEXER_GEAR_RATIO;
     configIndexer.Voltage.PeakForwardVoltage = 12.0;
     configIndexer.Voltage.PeakReverseVoltage = -12.0;
@@ -56,10 +60,14 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     TalonFXConfiguration configKicker = new TalonFXConfiguration();
     configKicker.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configKicker.CurrentLimits.StatorCurrentLimit = 80.0;
+    configKicker.CurrentLimits.StatorCurrentLimit = 60.0;
     configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
-    configKicker.CurrentLimits.StatorCurrentLimit = 30.0;
-    configKicker.CurrentLimits.StatorCurrentLimitEnable = true;
+    configKicker.CurrentLimits.SupplyCurrentLimit = 30.0;
+    configKicker.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configKicker.CurrentLimits.SupplyCurrentLowerLimit = 25.0;
+    configKicker.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    configKicker.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
+    configKicker.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
     configKicker.Feedback.SensorToMechanismRatio = KICKER_GEAR_RATIO;
     configKicker.Voltage.PeakForwardVoltage = 12.0;
     configKicker.Voltage.PeakReverseVoltage = -12.0;

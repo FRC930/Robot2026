@@ -100,7 +100,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
         m_IO.setExtenderHeight(Inches.of(extenderExtendedSetpoint.getAsDouble()));
         break;
       case TESTING:
-        setExtenderHeight(Inches.of(0.0));
+        setExtenderHeight(Inches.of(2.0));
         break;
     }
     tunableGains.ifGainsHaveChanged((gains) -> this.m_IO.setGains(gains));

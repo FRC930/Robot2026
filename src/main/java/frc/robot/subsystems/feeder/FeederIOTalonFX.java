@@ -39,6 +39,10 @@ public class FeederIOTalonFX implements FeederIO {
     configFeeder.CurrentLimits.StatorCurrentLimitEnable = true;
     configFeeder.CurrentLimits.SupplyCurrentLimit = 35.0;
     configFeeder.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configFeeder.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    configFeeder.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    configFeeder.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    configFeeder.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     configFeeder.Voltage.PeakForwardVoltage = 12.0;
     configFeeder.Voltage.PeakReverseVoltage = -12.0;
     configFeeder.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

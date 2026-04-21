@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -24,7 +24,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   TalonFX follower2;
   TalonFX follower3;
 
-  private VelocityVoltage shooterRequest;
+  private VelocityTorqueCurrentFOC shooterRequest;
   private AngularVelocity shooterSetPoint = RPM.of(0);
 
   /* Keep a neutral out so we can disable the motor */
@@ -41,7 +41,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1 = new TalonFX(followerMotor1CAN, canbus);
     follower2 = new TalonFX(followerMotor2CAN, canbus);
     follower3 = new TalonFX(followerMotor3CAN, canbus);
-    shooterRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(false).withSlot(0);
+    shooterRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0)).withSlot(0);
     configureTalons();
   }
 
@@ -52,6 +52,13 @@ public class ShooterIOTalonFX implements ShooterIO {
     configshooter.CurrentLimits.StatorCurrentLimitEnable = true;
     configshooter.CurrentLimits.SupplyCurrentLimit = 40.0;
     configshooter.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configshooter.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    configshooter.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    // Asymmetric torque: allow full forward thrust but clamp reverse so
+    // deceleration/regen from the flywheel doesn't push a current spike into
+    // the battery bus (3847 pattern).
+    configshooter.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    configshooter.TorqueCurrent.PeakReverseTorqueCurrent = -10.0;
     configshooter.Feedback.SensorToMechanismRatio = GEAR_RATIO;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     configshooter.Voltage.PeakForwardVoltage = 12.0;
@@ -71,6 +78,10 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower1Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
     follower1Configuration.CurrentLimits.SupplyCurrentLimit = 40.0;
     follower1Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
+    follower1Configuration.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    follower1Configuration.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    follower1Configuration.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    follower1Configuration.TorqueCurrent.PeakReverseTorqueCurrent = -10.0;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower1Configuration.Voltage.PeakForwardVoltage = 12.0;
     follower1Configuration.Voltage.PeakReverseVoltage = 0.0;
@@ -84,6 +95,10 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower2Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
     follower2Configuration.CurrentLimits.SupplyCurrentLimit = 40.0;
     follower2Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
+    follower2Configuration.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    follower2Configuration.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    follower2Configuration.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    follower2Configuration.TorqueCurrent.PeakReverseTorqueCurrent = -10.0;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower2Configuration.Voltage.PeakForwardVoltage = 12.0;
     follower2Configuration.Voltage.PeakReverseVoltage = 0.0;
@@ -97,6 +112,10 @@ public class ShooterIOTalonFX implements ShooterIO {
     follower3Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
     follower3Configuration.CurrentLimits.SupplyCurrentLimit = 40.0;
     follower3Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
+    follower3Configuration.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
+    follower3Configuration.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    follower3Configuration.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    follower3Configuration.TorqueCurrent.PeakReverseTorqueCurrent = -10.0;
     configshooter.Feedback.RotorToSensorRatio = 1.0;
     follower3Configuration.Voltage.PeakForwardVoltage = 12.0;
     follower3Configuration.Voltage.PeakReverseVoltage = 0.0;

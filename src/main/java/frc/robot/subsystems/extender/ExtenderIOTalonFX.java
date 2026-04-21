@@ -65,6 +65,8 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     cfgExtender.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgExtender.CurrentLimits.SupplyCurrentLimit = 20;
     cfgExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
+    cfgExtender.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+    cfgExtender.TorqueCurrent.PeakReverseTorqueCurrent = -40;
     cfgExtender.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     cfgExtender.Feedback.SensorToMechanismRatio = ExtenderSubsystem.REDUCTION;
@@ -98,6 +100,8 @@ public class ExtenderIOTalonFX implements ExtenderIO {
     cfgFollower.CurrentLimits.StatorCurrentLimitEnable = true;
     cfgFollower.CurrentLimits.SupplyCurrentLimit = 20;
     cfgFollower.CurrentLimits.SupplyCurrentLimitEnable = true;
+    cfgFollower.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+    cfgFollower.TorqueCurrent.PeakReverseTorqueCurrent = -40;
     cfgFollower.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     cfgFollower.Feedback.SensorToMechanismRatio = ExtenderSubsystem.REDUCTION;

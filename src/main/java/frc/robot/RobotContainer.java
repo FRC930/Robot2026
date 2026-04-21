@@ -150,9 +150,9 @@ public class RobotContainer {
   final LoggedTunableNumber setIntakeRPM =
       new LoggedTunableNumber("RobotTesting/Intake/setRPM", 2000);
   final LoggedTunableNumber setExtenderOut =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceOut", 1.0);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceOut", 2.0);
   final LoggedTunableNumber setExtenderIn =
-      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 0.0);
+      new LoggedTunableNumber("RobotTesting/IntakeExtender/setDistanceIn", 2.0);
   final LoggedTunableNumber setHoodAngle =
       new LoggedTunableNumber("RobotTesting/Hood/setAngle", 16.0);
 
@@ -472,34 +472,34 @@ public class RobotContainer {
     indexer.setTestingState();
     feeder.setTestingState();
     hood.setTestingState();
-    testController
-        .leftBumper()
-        .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
-        .whileFalse(new InstantCommand(() -> intake.stop()));
-    testController
-        .leftBumper()
-        .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
-        .whileFalse(new InstantCommand(() -> feeder.stop()));
-    testController
-        .leftBumper()
-        .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
-    testController
-        .leftBumper()
-        .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
-        .whileFalse(new InstantCommand(() -> indexer.stop()));
-    testController
-        .rightBumper()
-        .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
-        .whileFalse(new InstantCommand(() -> shooter.stop()));
-    testController
-        .a()
-        .whileTrue(extender.getNewDistanceCommand(setExtenderOut))
-        .whileFalse(extender.getNewDistanceCommand(setExtenderIn));
-    testController
-        .rightBumper()
-        .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
-        .whileFalse(hood.getNewSetHoodAngleCommand(() -> 5.0));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(intake.getNewSetIntakeVelocityCommand(setIntakeRPM))
+    //     .whileFalse(new InstantCommand(() -> intake.stop()));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(feeder.getNewSetFeederVelocityCommand(setFeederVelocity))
+    //     .whileFalse(new InstantCommand(() -> feeder.stop()));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(indexer.getNewSetKickerVelocityCommand(setKickerVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    // testController
+    //     .leftBumper()
+    //     .whileTrue(indexer.getNewSetIndexerVelocityCommand(setIndexerVelocity))
+    //     .whileFalse(new InstantCommand(() -> indexer.stop()));
+    // testController
+    //     .rightBumper()
+    //     .whileTrue(shooter.getNewSetShooterSpeedCommand(setShooterSpeed))
+    //     .whileFalse(new InstantCommand(() -> shooter.stop()));
+    // testController
+    //     .a()
+    //     .whileTrue(extender.getNewDistanceCommand(setExtenderOut))
+    //     .whileFalse(extender.getNewDistanceCommand(setExtenderIn));
+    // testController
+    //     .rightBumper()
+    //     .whileTrue(hood.getNewSetHoodAngleCommand(setHoodAngle))
+    //     .whileFalse(hood.getNewSetHoodAngleCommand(() -> 5.0));
   }
 
   public void configureCharacterizationButtonBindings() {
