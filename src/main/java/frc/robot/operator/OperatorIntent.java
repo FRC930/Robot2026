@@ -81,14 +81,4 @@ public class OperatorIntent implements OperatorIntentEvents {
   public Trigger wantsToRaiseIntake() {
     return driver.povLeft();
   }
-
-  @Override
-  public Trigger wantsToRaiseCompactor() {
-    return driver.leftTrigger();
-  }
-
-  @Override
-  public Trigger wantsToLowerCompactor() {
-    return driver.rightTrigger();
-  }
 }
