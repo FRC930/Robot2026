@@ -3,9 +3,10 @@
   "robotLength": 0.889,
   "holonomicMode": true,
   "pathFolders": [
+    "Depo",
     "IntakeShootLeftLine",
     "IntakeShootRightLine",
-    "Depo",
+    "MidleDepo",
     "TrenchIntakeShootLeft",
     "TrenchIntakeShootRight"
   ],
