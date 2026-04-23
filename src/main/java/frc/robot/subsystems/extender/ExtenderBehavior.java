@@ -9,7 +9,9 @@ import java.util.Set;
 public class ExtenderBehavior extends SubsystemBehavior {
   // How long to keep the extender out after the shoot goal engages before retracting.
   private static final LoggedTunableNumber shootRetractDelaySec =
-      new LoggedTunableNumber("Extender/shootRetractDelaySec", 1.0);
+      new LoggedTunableNumber("Extender/shootRetractDelaySec", 1.5);
+  private static final LoggedTunableNumber shootExtendDelaySec =
+      new LoggedTunableNumber("Extender/shootExtendDelaySec", 1.0);
 
   private final ExtenderSubsystem extender;
 
@@ -32,9 +34,12 @@ public class ExtenderBehavior extends SubsystemBehavior {
         .goals()
         .isShootingTrigger()
         .whileTrue(
-            Commands.sequence(
+            Commands.repeatingSequence(
+                this.extender.intakeCommand(),
                 Commands.defer(() -> Commands.waitSeconds(shootRetractDelaySec.get()), Set.of()),
-                this.extender.retractCommand()));
+                this.extender.retractCommand(),
+                Commands.defer(() -> Commands.waitSeconds(shootExtendDelaySec.get()), Set.of())));
+
     events.goals().isRaisedIntakeTrigger().whileTrue(this.extender.raisedCommand());
   }
 }

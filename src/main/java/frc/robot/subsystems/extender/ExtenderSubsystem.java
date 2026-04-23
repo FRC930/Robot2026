@@ -145,7 +145,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
     return runOnce(
         () -> {
           applyRetractConstraints();
-          m_state.set(ExtenderState.IDLE);
+          m_state.set(ExtenderState.RAISED);
         });
   }
 

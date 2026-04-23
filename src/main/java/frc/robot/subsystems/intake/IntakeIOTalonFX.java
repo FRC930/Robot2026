@@ -24,7 +24,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   private AngularVelocity intakeSetPoint = RPM.of(0);
   boolean firstTime = true;
   public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
-  public static double GEAR_RATIO_ROLLERS = 3.0;
+  public static double GEAR_RATIO_ROLLERS = 4 / 3;
 
   /* Keep a neutral out so we can disable the motor */
   private final NeutralOut m_brake = new NeutralOut();
