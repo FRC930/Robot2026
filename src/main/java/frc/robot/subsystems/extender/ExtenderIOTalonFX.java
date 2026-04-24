@@ -108,11 +108,11 @@ public class ExtenderIOTalonFX implements ExtenderIO {
 
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(cfgFollower));
 
-    // followerMotor.setPosition(0.0);
+    followerMotor.setPosition(0.0);
     followerMotor.setControl(
         new DifferentialFollower(extenderMotor.getDeviceID(), MotorAlignmentValue.Opposed));
 
-    // extenderMotor.setPosition(0.0);
+    extenderMotor.setPosition(0.0);
   }
 
   @Override

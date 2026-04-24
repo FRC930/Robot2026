@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
   private final ShooterIO m_IO;
   private final LoggedTunableNumber setpoint = new LoggedTunableNumber("Shooter/setpoint", 1875.0);
   private final LoggedTunableNumber spunUpThreshold =
-      new LoggedTunableNumber("Shooter/spunUpPercent", 0.90);
+      new LoggedTunableNumber("Shooter/spunUpPercent", 0.80);
   private final LoggedTunableNumber spunUpDebounce =
       new LoggedTunableNumber("Shooter/spunUpDebounce", 0.08);
   private volatile boolean shouldThreadCommand = false;
@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
 
   public LoggedTunableGainsBuilder tunableGains =
       new LoggedTunableGainsBuilder(
-          "Gains/ShooterSubsystem/", 10., 0, 0.0, 5.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/ShooterSubsystem/", 10000.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   public ShooterSubsystem(ShooterIO IO, DoubleSupplier shooterRPMSupplier) {
     m_IO = IO;

@@ -6,7 +6,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -16,7 +16,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class FeederIOTalonFX implements FeederIO {
 
-  private VelocityVoltage feederRequest;
+  private VelocityTorqueCurrentFOC feederRequest;
   private TalonFX feederMotor;
 
   private AngularVelocity feederSetPoint = RPM.of(0);
@@ -27,7 +27,8 @@ public class FeederIOTalonFX implements FeederIO {
 
   public FeederIOTalonFX(int feederMotorCAN, CANBus canbus) {
     feederMotor = new TalonFX(feederMotorCAN, canbus);
-    feederRequest = new VelocityVoltage(RPM.of(0.0)).withEnableFOC(true).withSlot(0);
+    feederRequest = new VelocityTorqueCurrentFOC(RPM.of(0.0));
+
     configureTalons();
   }
 

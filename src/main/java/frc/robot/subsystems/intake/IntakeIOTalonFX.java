@@ -23,8 +23,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   private VelocityTorqueCurrentFOC intakeRequest;
   private AngularVelocity intakeSetPoint = RPM.of(0);
   boolean firstTime = true;
-  public static AngularVelocity KRACKEN_X60_FOC_MAX_RPM = RPM.of(5784);
-  public static double GEAR_RATIO_ROLLERS = 3.0;
+  public static double GEAR_RATIO_ROLLERS = 4.0 / 3.0; // MAKE SURE IF THIS IS CHANGED YOU ADD ".0"
 
   /* Keep a neutral out so we can disable the motor */
   private final NeutralOut m_brake = new NeutralOut();
@@ -43,8 +42,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leaderConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    leaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30.0;
-    leaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
     leaderConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
     leaderConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     leaderConfig.Voltage.PeakForwardVoltage = 12.0;
@@ -60,14 +57,12 @@ public class IntakeIOTalonFX implements IntakeIO {
     // the follower saves ~10-15 A of supply draw during intake spikes.
     TalonFXConfiguration followConfig = new TalonFXConfiguration();
     followConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    followConfig.CurrentLimits.StatorCurrentLimit = 60.0;
+    followConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     followConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    followConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
+    followConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     followConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    followConfig.CurrentLimits.SupplyCurrentLowerLimit = 20.0;
-    followConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
-    followConfig.TorqueCurrent.PeakForwardTorqueCurrent = 60.0;
-    followConfig.TorqueCurrent.PeakReverseTorqueCurrent = -60.0;
+    followConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+    followConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     followConfig.Voltage.PeakForwardVoltage = 12.0;
     followConfig.Voltage.PeakReverseVoltage = -12.0;
     followConfig.Feedback.SensorToMechanismRatio = GEAR_RATIO_ROLLERS;
