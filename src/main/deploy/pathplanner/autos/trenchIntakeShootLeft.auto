@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "WaitTime"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "trenchIntakeShootLeft.0"
