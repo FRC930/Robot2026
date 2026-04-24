@@ -35,7 +35,7 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
   private static final LoggedTunableNumber extenderRetractedSetpoint =
       new LoggedTunableNumber("Extender/extenderRetractedSetpoint", 2.0);
   private static final LoggedTunableNumber extenderExtendedSetpoint =
-      new LoggedTunableNumber("Extender/extenderExtendedSetpoint", 10.5);
+      new LoggedTunableNumber("Extender/extenderExtendedSetpoint", 10.0);
   private static final LoggedTunableNumber extenderIdleSetpoint =
       new LoggedTunableNumber("Extender/extenderIdleSetpoint", 6.0);
 
@@ -51,10 +51,10 @@ public class ExtenderSubsystem extends SubsystemBase implements ExtenderEvents {
       new LoggedTunableNumber("Extender/retractAccelerationInchPerSec2", 500.0);
 
   public LoggedTunableGainsBuilder tunableGains =
-      new LoggedTunableGainsBuilder("Gains/Extender/", 20.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/Extender/", 50.0, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public LoggedTunableGainsBuilder differentialTunableGains =
-      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 10.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new LoggedTunableGainsBuilder("Gains/ExtenderDiff/", 20.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public ExtenderSubsystem(ExtenderIO IO) {
     m_IO = IO;

@@ -10,8 +10,8 @@ public enum IndexerState {
   TESTING(() -> 0.0, () -> 0.0),
   IDLE(() -> 0.0, () -> 0.0),
   FEEDING(
-      new LoggedTunableNumber("Indexer/setIndexerPointShooting", 2500.0),
-      new LoggedTunableNumber("Indexer/setKickerPointShooting", 3200.0)),
+      new LoggedTunableNumber("Indexer/setIndexerPointShooting", 3500.0),
+      new LoggedTunableNumber("Indexer/setKickerPointShooting", 3500.0)),
   REVERSING(
       new LoggedTunableNumber("Indexer/setIndexerPointReverse", -50),
       new LoggedTunableNumber("Indexer/setKickerPointReverse", -50)),

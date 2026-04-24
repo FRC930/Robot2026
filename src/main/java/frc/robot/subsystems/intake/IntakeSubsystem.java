@@ -28,11 +28,6 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   /** Creates a new ExampleSubsystem. */
   private IntakeIO m_IO;
 
-  private double rpm =
-      (11.0 / 12.0)
-          * IntakeIOTalonFX.KRACKEN_X60_FOC_MAX_RPM.in(RPM)
-          / IntakeIOTalonFX.GEAR_RATIO_ROLLERS;
-
   private LoggedTunableNumber intakeTargetRPM =
       new LoggedTunableNumber("Intake/intakeTargetRPM", 4000.0);
   private LoggedTunableNumber intakeExtenderTargetAngleDown =
@@ -59,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
 
   public LoggedTunableGainsBuilder rollerGains =
       new LoggedTunableGainsBuilder(
-          "Gains/IntakeSubsystem/", 5.0, 0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+          "Gains/IntakeSubsystem/", 1.0, 0, 0.1, 3.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   private IntakeInputsAutoLogged logged = new IntakeInputsAutoLogged();
 
   public IntakeSubsystem(IntakeIO IO) {

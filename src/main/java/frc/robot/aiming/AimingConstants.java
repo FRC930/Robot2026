@@ -59,13 +59,13 @@ public final class AimingConstants {
     HUB_HOOD_ANGLE_MAP.put(2.35, 12.0);
 
     // Hub target: distance (m) → shooter RPM
-    // Seed values from physics model, calibrated to 1800 RPM at 7ft
+    // Seed values from physics model, calibrated to 1910 RPM at 7ft
     // HUB_RPM_MAP.put(Units.feetToMeters(3), 2692.0);
-    HUB_RPM_MAP.put(2.78, 1890.0);
-    HUB_RPM_MAP.put(1.85, 1890.0);
-    HUB_RPM_MAP.put(3.8, 1890.0);
-    HUB_RPM_MAP.put(3.18, 1890.0);
-    HUB_RPM_MAP.put(2.35, 1890.0);
+    HUB_RPM_MAP.put(2.78, 1910.0);
+    HUB_RPM_MAP.put(1.85, 1910.0);
+    HUB_RPM_MAP.put(3.8, 1910.0);
+    HUB_RPM_MAP.put(3.18, 1910.0);
+    HUB_RPM_MAP.put(2.35, 1910.0);
 
     // Pass target: distance (m) → hood angle (deg from horizontal)
     PASS_HOOD_ANGLE_MAP.put(Units.feetToMeters(10), 30.0);
