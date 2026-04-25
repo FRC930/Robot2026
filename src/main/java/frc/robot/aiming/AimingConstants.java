@@ -84,13 +84,13 @@ public final class AimingConstants {
 
   // ===== PASS TARGET POSITIONS =====
   public static final Translation2d LOW_RED_PASS =
-      new Translation2d(Meters.of(15.5), Meters.of(0.9));
+      new Translation2d(Meters.of(15.5), Meters.of(1.1));
   public static final Translation2d HIGH_RED_PASS =
-      new Translation2d(Meters.of(15.5), Meters.of(7.1));
+      new Translation2d(Meters.of(15.5), Meters.of(6.9));
   public static final Translation2d LOW_BLUE_PASS =
-      new Translation2d(Meters.of(1.1), Meters.of(0.9));
+      new Translation2d(Meters.of(1.1), Meters.of(1.1));
   public static final Translation2d HIGH_BLUE_PASS =
-      new Translation2d(Meters.of(1.1), Meters.of(7.1));
+      new Translation2d(Meters.of(1.1), Meters.of(6.9));
 
   // ===== VELOCITY COMPENSATION =====
   // Minimum ball radial speed before solution is considered invalid (m/s)
