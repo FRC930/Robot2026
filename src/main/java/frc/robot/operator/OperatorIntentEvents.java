@@ -22,8 +22,4 @@ public interface OperatorIntentEvents {
   Trigger wantsToRevIndexer();
 
   Trigger wantsToRaiseIntake();
-
-  Trigger wantsToRaiseCompactor();
-
-  Trigger wantsToLowerCompactor();
 }

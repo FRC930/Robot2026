@@ -121,7 +121,6 @@ public class RobotContainer {
   private final FeederSubsystem feeder;
   private final ShooterSubsystem shooter;
   private final HoodSubsystem hood;
-  // private final CompactorSubsystem compactor;
   private final AimingService aimingService;
   private final DriveZoneTracker driveZoneTracker;
   private final ExtenderSubsystem extender;
@@ -198,8 +197,6 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIOTalonFX(8, upperCanbus));
 
         hood = new HoodSubsystem(new HoodIOTalonFX(5, upperCanbus), aimingService::getHoodAngleDeg);
-        // compactor =
-        //     new CompactorSubsystem(new CompactorIOTalonFX(20, upperCanbus)); // TODO add actual
         // ID
         // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
@@ -262,7 +259,6 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIOSim());
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
-        // compactor = new CompactorSubsystem(new CompactorIOSim());
         break;
 
       default:
@@ -289,7 +285,6 @@ public class RobotContainer {
         feeder = new FeederSubsystem(new FeederIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
-        // compactor = new CompactorSubsystem(new CompactorIO() {});
         break;
     }
 
@@ -339,7 +334,6 @@ public class RobotContainer {
     new ShooterBehavior(shooter);
     new HoodBehavior(hood);
     new AimingBehavior(aimingService);
-    // new CompactorBehavior(compactor);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
@@ -369,7 +363,6 @@ public class RobotContainer {
               intake,
               extender,
               hood,
-              // compactor,
               driveZoneTracker,
               aimingService);
 

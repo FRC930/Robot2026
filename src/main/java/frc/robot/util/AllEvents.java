@@ -21,6 +21,5 @@ public record AllEvents(
     IntakeEvents intake,
     ExtenderEvents extender,
     HoodEvents hood,
-    // CompactorEvents compactor,
     DriveEvents drive,
     AimingEvents aiming) {}

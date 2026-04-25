@@ -22,7 +22,6 @@ import org.littletonrobotics.junction.Logger;
 public class RobotVisualization extends VirtualSubsystem {
   private static RobotVisualization instance;
 
-  private MutDistance compactorExtension = Inches.mutable(0.0);
   private MutDistance extenderExtension = Inches.mutable(0.0);
   private MutAngle hoodAngle = Degrees.mutable(0.0);
 
@@ -63,18 +62,6 @@ public class RobotVisualization extends VirtualSubsystem {
     this.extenderExtension = extenderExtension;
   }
 
-  public Distance getCompactorExtension() {
-    return compactorExtension;
-  }
-
-  public void setCompactorExtension(Distance compactorExtension) {
-    this.compactorExtension.mut_replace(compactorExtension);
-  }
-
-  public void setCompactorExtensionSource(MutDistance compactorExtension) {
-    this.compactorExtension = compactorExtension;
-  }
-
   public Angle getHoodAngle() {
     return hoodAngle;
   }
@@ -95,11 +82,6 @@ public class RobotVisualization extends VirtualSubsystem {
   }
 
   private void visualize() {
-    Pose3d compactorPose =
-        new Pose3d(
-            new Translation3d(Inches.zero(), Inches.zero(), this.getCompactorExtension()),
-            Rotation3d.kZero);
-
     Pose3d extenderPose =
         new Pose3d(
             new Translation3d(this.getExtenderExtension(), Inches.zero(), Inches.zero()),
@@ -113,7 +95,6 @@ public class RobotVisualization extends VirtualSubsystem {
                 Meters.of(0.4807)), // constant value for attachment offset
             new Rotation3d(Degrees.zero(), this.getHoodAngle().unaryMinus(), Degrees.zero()));
 
-    Logger.recordOutput("RobotState/Compactor/" + key, compactorPose);
     Logger.recordOutput("RobotState/Extender/" + key, extenderPose);
     Logger.recordOutput("RobotState/Hood/" + key, hoodPose);
   }
