@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "WaitTime"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "trenchIntakeShootLeft.0"
+            "pathName": "WAITtrenchIntakeShootRight.0"
           }
         },
         {
@@ -19,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "trenchIntakeShootLeft.1"
+            "pathName": "trenchIntakeShootRight.1"
           }
         },
         {
@@ -49,19 +55,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "trenchIntakeShootLeft.2"
+            "pathName": "trenchIntakeShootRight.2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "trenchIntakeShootLeft.3"
+            "pathName": "trenchIntakeShootRight.3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "trenchIntakeShootLeft.4"
+            "pathName": "trenchIntakeShootRight.4"
           }
         },
         {
