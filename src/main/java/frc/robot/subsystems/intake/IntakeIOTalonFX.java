@@ -127,7 +127,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     leaderIntakeMotor.setControl(m_brake);
     intakeSetPoint = RPM.of(0.0);
     // Doing nothing with extender motor
-    // intakeExtenderMotor.setControl(intakeExtenderRequest.withOutput(-5.0));
   }
 
   @Override
@@ -135,7 +134,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     if (target.in(RPM) != intakeSetPoint.in(RPM)) {
       leaderIntakeMotor.setControl(intakeRequest.withVelocity(target));
       intakeSetPoint = target;
-      // IntakeMotor.set(target.in(Volts))
     }
   }
 
@@ -159,14 +157,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(slot0Configs));
 
-    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    // PhoenixUtil.tryUntilOk(5, () ->
-    // leaderIntakeMotor.getConfigurator().apply(motionMagicConfigs));
   }
 
   @Override
@@ -182,13 +172,5 @@ public class IntakeIOTalonFX implements IntakeIO {
     slot0Configs.kG = gains.kG;
     PhoenixUtil.tryUntilOk(5, () -> intakeExtenderMotor.getConfigurator().apply(slot0Configs));
 
-    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    // PhoenixUtil.tryUntilOk(5, () ->
-    // intakeExtenderMotor.getConfigurator().apply(motionMagicConfigs));
   }
 }

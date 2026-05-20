@@ -81,18 +81,14 @@ public class IntakeIOSim implements IntakeIO {
             kArmLengthMeters,
             kMinExtenderRads,
             kMaxExtenderRads,
-            false, // TODO NOT using gravity may need to switch angles so 0 is down. and 90 is up
+            false, // NOT using gravity may need to switch angles so 0 is down. and 90 is up
             kMaxExtenderRads, // make sure to set m_extenderAngleSetPoint to this angle
             0.001,
             0.001);
 
-    // TODO: FINAL INTAKE SPACE CONFIGURATION FOR MAPLE-SIM
-    // Here, create the intake simulation with respect to the intake on your real robot
     this.intakeSim =
         IntakeSimulation.OverTheBumperIntake(
-            // Specify the type of game pieces that the intake can collect
             "Fuel",
-            // Specify the drivetrain to which this intake is attached
             driveTrain,
             // Width of the intake
             Meters.of(0.6),

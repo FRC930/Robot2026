@@ -8,15 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
-import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase implements HoodEvents {
-  // Implementation goes here † ₀ ᴥ ₀ †
-
-  private LoggedTunableNumber aimAngle = new LoggedTunableNumber("Hood/aimAngle", 45);
-  private LoggedTunableNumber passAngle = new LoggedTunableNumber("Hood/passAngle", 22.5);
+  // Implementation goes here
 
   private final HoodIO m_IO;
   private volatile boolean shouldThreadCommand = false;
@@ -29,11 +25,8 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 
-  private final DoubleSupplier hoodAngleSupplier;
-
   public HoodSubsystem(HoodIO IO, DoubleSupplier hoodAngleSupplier) {
     m_IO = IO;
-    this.hoodAngleSupplier = hoodAngleSupplier;
     logged.hoodAngle = Degrees.mutable(0);
     logged.hoodSetAngle = Degrees.mutable(0);
     logged.hoodVoltage = Volts.mutable(0);
@@ -70,7 +63,6 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
     m_IO.updateInputs(logged);
     Logger.processInputs("RobotState/Hood", logged);
     HoodState state = currentGoal.get();
-    // TODO find out why state is not being set to aiming
     shouldThreadCommand = (state == HoodState.AIMING);
     switch (state) {
       case IDLE:
