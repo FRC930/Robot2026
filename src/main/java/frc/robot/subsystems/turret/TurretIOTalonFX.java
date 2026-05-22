@@ -24,14 +24,6 @@ public class TurretIOTalonFX implements TurretIO {
 
   private Angle m_setAngle;
 
-  // TODO initialize offset while disabled
-  //      while disabled, get initial offset from the 2 external cancoders
-  //      Use this offset when doing internal encoder position
-  private Angle offset;
-
-  private double encoder1ratio;
-  private double encoder2ratio;
-
   private final double KCANTIMEOUT = 0.010;
 
   // Gear tooth counts: main turret gear and two encoder gears (must be co-prime)
@@ -102,16 +94,12 @@ public class TurretIOTalonFX implements TurretIO {
     cfg.CurrentLimits.SupplyCurrentLimit = 40.0;
     cfg.CurrentLimits.StatorCurrentLimit = 120.0;
     cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    // TODO find actual gear ratios & set encoder ratios (math)
     cfg.Feedback.SensorToMechanismRatio = 195.0 / 10.0;
     cfg.Feedback.RotorToSensorRatio = 1.0;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(cfg));
 
-    // TODO figure out why not working
     double startAngle = 0.0;
-    // calculateTurretAngleFromCANCoderDegrees(
-    //     getCanCoderAngle1().in(Degrees), getCanCoderAngle2().in(Degrees));
     motor.setPosition(startAngle, KCANTIMEOUT);
 
     // High-frequency signal updates for 250Hz turret thread

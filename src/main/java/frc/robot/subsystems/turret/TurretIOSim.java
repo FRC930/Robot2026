@@ -51,8 +51,6 @@ public class TurretIOSim implements TurretIO {
     input.turretSetAngle.mut_replace(turretAppliedAngle);
     input.turretVoltage.mut_replace(volts);
     input.turretSupplyCurrent.mut_replace(turretSim.getCurrentDrawAmps(), Amps);
-    // inputs.turretTorqueCurrent.mut_replace();
-
   }
 
   private Voltage updateTurretPID() {

@@ -57,10 +57,6 @@ public class ShooterIOTalonFX implements ShooterIO {
     configshooter.Voltage.PeakForwardVoltage = 16.0;
     configshooter.Voltage.PeakReverseVoltage = 0.0;
     configshooter.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    // configshooter.MotionMagic.MotionMagicExpo_kA = 1.0;
-    // configshooter.MotionMagic.MotionMagicExpo_kV = 1.0;
-    // configshooter.MotionMagic.MotionMagicAcceleration = 1.0;
-    // configshooter.MotionMagic.MotionMagicCruiseVelocity = 1.0;
     PhoenixUtil.tryUntilOk(
         5, () -> shooterMotor.getConfigurator().apply(new TalonFXConfiguration()));
     PhoenixUtil.tryUntilOk(5, () -> shooterMotor.getConfigurator().apply(configshooter));
@@ -110,7 +106,6 @@ public class ShooterIOTalonFX implements ShooterIO {
     if (target.in(RPM) != shooterSetPoint.in(RPM)) {
       shooterMotor.setControl(shooterRequest.withVelocity(target));
       shooterSetPoint = target;
-      // shooterMotor.set(target.in(Volts));
     }
   }
 
@@ -141,13 +136,5 @@ public class ShooterIOTalonFX implements ShooterIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> shooterMotor.getConfigurator().apply(slot0Configs));
-
-    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    // PhoenixUtil.tryUntilOk(5, () -> shooterMotor.getConfigurator().apply(motionMagicConfigs));
   }
 }

@@ -232,12 +232,8 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
             sim.setRunning(false);
           }
         }
-        // m_IO.setRollerTargetSpeed(RPM.of(0.0));
-        // m_IO.setExtenderTargetAngle(Degrees.of(intakeExtenderTargetAngleUp.get()));
-        // TODO add a up state for when not intaking and not outtaking
         break;
       case AGITATING:
-        // m_IO.setRollerTargetSpeed(RPM.of(intakeTargetRPM.get()));
         m_IO.stop();
         updateAgitation();
         if (Constants.currentMode == Constants.Mode.SIM) {

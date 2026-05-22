@@ -156,7 +156,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> leaderIntakeMotor.getConfigurator().apply(slot0Configs));
-
   }
 
   @Override
@@ -171,6 +170,5 @@ public class IntakeIOTalonFX implements IntakeIO {
     slot0Configs.kA = gains.kA;
     slot0Configs.kG = gains.kG;
     PhoenixUtil.tryUntilOk(5, () -> intakeExtenderMotor.getConfigurator().apply(slot0Configs));
-
   }
 }

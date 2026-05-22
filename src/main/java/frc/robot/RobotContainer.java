@@ -192,26 +192,21 @@ public class RobotContainer {
         aimingService = new AimingService(drive::getLatestSnapshot);
         driveZoneTracker = new DriveZoneTracker(drive::getAutoAlignPose, drive::getChassisSpeeds);
         intake = new IntakeSubsystem(new IntakeIOTalonFX(1, 2, 3, upperCanbus));
-        // intake = new IntakeSubsystem(new IntakeIO() {});
 
-        climber = new ClimberSubsystem(new ClimberIO() {}); // TODO: Implement Climber
+        climber = new ClimberSubsystem(new ClimberIO() {});
 
         shooter =
             new ShooterSubsystem(
                 new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
-        // shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
 
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
-        // indexer = new IndexerSubsystem(new IndexerIO() {});
 
         turret =
             new TurretSubsystem(
                 new TurretIOTalonFX(7, upperCanbus), aimingService::getTurretAngleDeg);
-        // turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
 
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
-        // hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -222,14 +217,7 @@ public class RobotContainer {
         // arrangements.
         // Please see the AdvantageKit template documentation for more information:
         // https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template#custom-module-implementations
-        //
-        // drive =
-        // new Drive(
-        // new GyroIOPigeon2(),
-        // new ModuleIOTalonFXS(TunerConstants.FrontLeft),
-        // new ModuleIOTalonFXS(TunerConstants.FrontRight),
-        // new ModuleIOTalonFXS(TunerConstants.BackLeft),
-        // new ModuleIOTalonFXS(TunerConstants.BackRight));
+
         vision =
             new AprilTagVision(
                 drive::setPose,
@@ -625,7 +613,6 @@ public class RobotContainer {
 
   public void resetSimulation() {
     if (Constants.currentMode == Constants.Mode.SIM) {
-      // drive.setPose(new Pose2d(3, 3, new Rotation2d()));
       SimulatedArena.getInstance().resetFieldForAuto();
       if (DriverStation.isDisabled()) {
         // Disable AprilTags when disabled

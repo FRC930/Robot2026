@@ -129,8 +129,6 @@ public class IntakeIOSim implements IntakeIO {
   public void stop() {
     // If REAL robot use coast
     setRollerTargetSpeed(RPM.of(0));
-    // Doing nothing with extender motor
-    // setExtenderTargetAngle(Degrees.of(0));
   }
 
   public int getGamePiecesAmount() {
@@ -165,7 +163,7 @@ public class IntakeIOSim implements IntakeIO {
     // find a way to get volts from simulated motor
     double voltsToExtend = updateExtenderPID();
     input.extenderVoltage.mut_replace(
-        Volts.of(voltsToExtend)); // TODO: Not sure how to get actual voltage from the motor
+        Volts.of(voltsToExtend));
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
@@ -204,15 +202,11 @@ public class IntakeIOSim implements IntakeIO {
     // NOTE: Assuming if any voltage at maxRad
     double targetAngleRads = m_extenderAngleSetPoint.in(Radians);
 
-    // Logger.recordOutput(
-    //     "EXTSETANGLE",
-    //     targetAngleRads);
-
     // PID output (in volts) based on velocity error
     double pidOutput = extenderPID.calculate(currentAngleRads, targetAngleRads);
 
     // Feedforward voltage for target velocity
-    double ffOutput = extenderFF.calculate(targetAngleRads, 0.0); // TODO velocity
+    double ffOutput = extenderFF.calculate(targetAngleRads, 0.0);
     // Logger.recordOutput("EXTTOTALFF", ffOutput);
 
     // Total voltage command

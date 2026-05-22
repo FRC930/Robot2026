@@ -126,6 +126,5 @@ public class IndexerIOTalonFX implements IndexerIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(slot0Configs));
-
   }
 }
