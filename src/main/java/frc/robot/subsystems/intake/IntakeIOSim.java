@@ -162,8 +162,7 @@ public class IntakeIOSim implements IntakeIO {
     // NOTE: Special case given inputing volts to controller down(+)/up(-) intake extender can not
     // find a way to get volts from simulated motor
     double voltsToExtend = updateExtenderPID();
-    input.extenderVoltage.mut_replace(
-        Volts.of(voltsToExtend));
+    input.extenderVoltage.mut_replace(Volts.of(voltsToExtend));
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);

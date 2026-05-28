@@ -9,7 +9,7 @@ import frc.robot.util.GoalBehavior;
  * <p>This is the teleop-specific logic. Autonomous bypasses this and calls RobotGoals.setGoal()
  * directly.
  *
- * <p> TODO (students): Map your button intents to goals here Example:
+ * <p>TODO (students): Map your button intents to goals here Example:
  * intent.wantsToScore().onTrue(goals.setGoal(RobotGoal.LAUNCHING))
  * .onFalse(goals.setGoal(RobotGoal.IDLE));
  */
@@ -33,9 +33,7 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToScoreTrigger()
-        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
+    intent.wantsToScoreTrigger().whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
 
     intent
         .wantsToRaiseIntake()

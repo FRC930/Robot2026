@@ -3,7 +3,6 @@ package frc.robot.subsystems.turret;
 import frc.robot.util.AllEvents;
 import frc.robot.util.SubsystemBehavior;
 
-
 public class TurretBehavior extends SubsystemBehavior {
 
   private final TurretSubsystem turret;
