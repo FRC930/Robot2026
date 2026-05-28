@@ -15,12 +15,10 @@ import org.littletonrobotics.junction.Logger;
  */
 public class BallTrajectorySim {
 
-  private static final int SPAWN_INTERVAL_CYCLES = 4; // Spawn a ball every 4 cycles (~80ms at 50Hz)
   private static final int MAX_BALLS = 40;
   private static final double DT = 0.02; // Physics step = one robot cycle (20ms)
 
   private final ArrayList<Projectile> activeBalls = new ArrayList<>();
-  private int spawnCounter = 0;
 
   /** Publish an empty trajectory when no valid solution exists. */
   public void publishEmpty() {

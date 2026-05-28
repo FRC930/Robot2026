@@ -28,37 +28,12 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onTrue(goals.setGoalCommand(RobotGoal.OUTTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    // intent
-    //     .wantsToClimbL0()
-    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL0))
-    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-
-    // intent
-    //     .wantsToClimbL1()
-    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL1))
-    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-
-    // intent
-    //     .wantsToClimbL2()
-    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL2))
-    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-
-    // intent
-    //     .wantsToClimbL3()
-    //     .onTrue(goals.setGoalCommand(RobotGoal.CLIMBINGL3))
-    //     .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
-
     intent
         .wantsToIntake()
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent
-        .wantsToScoreTrigger()
-        // .and(intent.wantsToRevIndexer().negate())
-        .whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
-
-    // intent.wantsToRevIndexer().whileTrue(goals.setGoalCommand(RobotGoal.REVERSE_INDEXER));
+    intent.wantsToScoreTrigger().whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
 
     intent
         .wantsToRaiseIntake()
@@ -67,7 +42,6 @@ public class RobotGoalsBehavior extends GoalBehavior {
 
     intent
         .wantsToScoreTrigger()
-        // .or(intent.wantsToRevIndexer())
         .or(intent.wantsToPass())
         .negate()
         .whileTrue(goals.setGoalCommand(RobotGoal.IDLE));

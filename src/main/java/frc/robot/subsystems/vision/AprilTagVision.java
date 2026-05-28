@@ -37,13 +37,6 @@ public class AprilTagVision extends Vision {
   public AprilTagVision(Consumer<Pose2d> resetPose, VisionConsumer consumer, VisionIO... io) {
     super(consumer, io);
     m_ResetPose = resetPose;
-
-    // try {
-    //   aprilTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory() + "/output.json");
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   throw new RuntimeException(e);
-    // }
   }
 
   @Override
@@ -67,10 +60,6 @@ public class AprilTagVision extends Vision {
   public void periodic() {
     // Log whether updating Odometry based on Apriltags
     Logger.recordOutput("Vision/UpdatingOdometryBasedOnApriltag", m_updateOdometryBaseOnApriltags);
-    // TODO If want to not even check all observations (better performance)
-    // if (!m_updateOdometryBaseOnApriltags) {
-    //    return;
-    // }
     super.periodic();
   }
 
@@ -98,14 +87,13 @@ public class AprilTagVision extends Vision {
     Optional<Alliance> optionalAlliance = DriverStation.getAlliance();
     if (optionalAlliance.isPresent()) {
       Alliance alliance = optionalAlliance.get();
-      // Add bumper and frame to length of the center of the robot TODO validate length
+      // Add bumper and frame to length of the center of the robot
       double robotLength = TunerConstants.kFrontLeftXPos.in(Meters) + Units.inchesToMeters(6.0);
       if (alliance == Alliance.Red) {
         Pose2d tag9Pose = aprilTagLayout.getTagPose(9).get().toPose2d();
         Pose2d tag8Pose = aprilTagLayout.getTagPose(8).get().toPose2d();
         pose =
             new Pose2d(
-                // TODO maybe half the length of robot X axis front/back
                 tag9Pose.getX() + (robotLength),
                 tag8Pose.getY(),
                 tag9Pose.getRotation().plus(Rotation2d.fromDegrees(180.0)));
@@ -114,7 +102,6 @@ public class AprilTagVision extends Vision {
         Pose2d tag24Pose = aprilTagLayout.getTagPose(24).get().toPose2d();
         pose =
             new Pose2d(
-                // TODO maybe half the length of robot X axis front/back
                 tag25Pose.getX() - robotLength,
                 tag24Pose.getY(),
                 tag25Pose.getRotation().plus(Rotation2d.fromDegrees(180.0)));

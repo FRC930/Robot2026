@@ -60,8 +60,6 @@ public abstract class SubsystemBehavior extends Behavior<SubsystemBehavior> {
   //  * @param matchState Match phase events (disabled, auto, teleop)
   //  * @param intake
   //  */
-  // public abstract void configure(
-  //     RobotGoalEvents goals, MatchStateEvents matchState, IntakeEvents intake);
 
   /**
    * Configure this subsystem behavior's trigger bindings.

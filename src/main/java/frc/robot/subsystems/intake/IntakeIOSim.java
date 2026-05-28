@@ -81,18 +81,14 @@ public class IntakeIOSim implements IntakeIO {
             kArmLengthMeters,
             kMinExtenderRads,
             kMaxExtenderRads,
-            false, // TODO NOT using gravity may need to switch angles so 0 is down. and 90 is up
+            false, // NOT using gravity may need to switch angles so 0 is down. and 90 is up
             kMaxExtenderRads, // make sure to set m_extenderAngleSetPoint to this angle
             0.001,
             0.001);
 
-    // TODO: FINAL INTAKE SPACE CONFIGURATION FOR MAPLE-SIM
-    // Here, create the intake simulation with respect to the intake on your real robot
     this.intakeSim =
         IntakeSimulation.OverTheBumperIntake(
-            // Specify the type of game pieces that the intake can collect
             "Fuel",
-            // Specify the drivetrain to which this intake is attached
             driveTrain,
             // Width of the intake
             Meters.of(0.6),
@@ -133,8 +129,6 @@ public class IntakeIOSim implements IntakeIO {
   public void stop() {
     // If REAL robot use coast
     setRollerTargetSpeed(RPM.of(0));
-    // Doing nothing with extender motor
-    // setExtenderTargetAngle(Degrees.of(0));
   }
 
   public int getGamePiecesAmount() {
@@ -168,8 +162,7 @@ public class IntakeIOSim implements IntakeIO {
     // NOTE: Special case given inputing volts to controller down(+)/up(-) intake extender can not
     // find a way to get volts from simulated motor
     double voltsToExtend = updateExtenderPID();
-    input.extenderVoltage.mut_replace(
-        Volts.of(voltsToExtend)); // TODO: Not sure how to get actual voltage from the motor
+    input.extenderVoltage.mut_replace(Volts.of(voltsToExtend));
     input.extenderAngleSetPoint.mut_replace(m_extenderAngleSetPoint);
     input.extenderSupplyCurrent.mut_replace(extenderArmSim.getCurrentDrawAmps(), Amps);
     input.extenderAngle.mut_replace(extenderArmSim.getAngleRads(), Radians);
@@ -208,15 +201,11 @@ public class IntakeIOSim implements IntakeIO {
     // NOTE: Assuming if any voltage at maxRad
     double targetAngleRads = m_extenderAngleSetPoint.in(Radians);
 
-    // Logger.recordOutput(
-    //     "EXTSETANGLE",
-    //     targetAngleRads);
-
     // PID output (in volts) based on velocity error
     double pidOutput = extenderPID.calculate(currentAngleRads, targetAngleRads);
 
     // Feedforward voltage for target velocity
-    double ffOutput = extenderFF.calculate(targetAngleRads, 0.0); // TODO velocity
+    double ffOutput = extenderFF.calculate(targetAngleRads, 0.0);
     // Logger.recordOutput("EXTTOTALFF", ffOutput);
 
     // Total voltage command

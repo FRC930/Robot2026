@@ -24,7 +24,6 @@ public class AutoCommandManager {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-  private Drive m_drive;
 
   public AutoCommandManager(Drive drive, RobotGoals goals) {
     configureNamedCommands(drive, goals);

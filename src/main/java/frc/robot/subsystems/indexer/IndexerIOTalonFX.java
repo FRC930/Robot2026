@@ -115,15 +115,6 @@ public class IndexerIOTalonFX implements IndexerIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> indexerMotor.getConfigurator().apply(slot0Configs));
-
-    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    // PhoenixUtil.tryUntilOk(5, () ->
-    //   indexerMotor.getConfigurator().apply(motionMagicConfigs));
   }
 
   public void setFeederGains(Gains gains) {
@@ -135,13 +126,5 @@ public class IndexerIOTalonFX implements IndexerIO {
     slot0Configs.kV = gains.kV;
     slot0Configs.kA = gains.kA;
     PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(slot0Configs));
-
-    // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    // motionMagicConfigs.MotionMagicCruiseVelocity = gains.kMMV;
-    // motionMagicConfigs.MotionMagicAcceleration = gains.kMMA;
-    // motionMagicConfigs.MotionMagicJerk = gains.kMMJ;
-    // motionMagicConfigs.MotionMagicExpo_kV = gains.kMMEV;
-    // motionMagicConfigs.MotionMagicExpo_kA = gains.kMMEA;
-    // PhoenixUtil.tryUntilOk(5, () -> feederMotor.getConfigurator().apply(motionMagicConfigs));
   }
 }
