@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * <p>State lives in RobotGoals. This class just says what the operator is physically doing right
  * now.
  *
- * (students): Map your controller buttons to semantic intents here
+ * <p> TODO (students): Map your controller buttons to semantic intents here
  */
 public class OperatorIntent implements OperatorIntentEvents {
 

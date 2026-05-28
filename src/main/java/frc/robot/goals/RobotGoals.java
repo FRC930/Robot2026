@@ -12,7 +12,7 @@ import frc.robot.util.VirtualSubsystem;
  * <p>Can be set by: - Teleop via RobotGoalsBehavior reacting to OperatorIntent - Autonomous via
  * direct command calls
  *
- * (students): Add goal triggers for each value in RobotGoal enum
+ * <p> TODO (students): Add goal triggers for each value in RobotGoal enum
  */
 public class RobotGoals extends VirtualSubsystem implements RobotEvents {
 
