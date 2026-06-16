@@ -321,11 +321,11 @@ public class AimingService extends VirtualSubsystem implements AimingEvents {
   }
 
   public double getHoodAngleDeg() {
-    return hoodAngleDeg;
+    return 37;
   }
 
   public double getShooterRPM() {
-    return shooterRPM;
+    return 2350;
   }
 
   public boolean isSolutionValid() {
