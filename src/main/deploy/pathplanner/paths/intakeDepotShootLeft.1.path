@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.750819277108434,
-        "y": 5.510240963855422
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.750819277108434,
-        "y": 5.510240963855422
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": "intakeDepotShootLeft.0"

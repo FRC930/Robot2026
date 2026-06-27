@@ -7,6 +7,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "intakeDepotShootLeft.-1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "intakeDepotShootLeft.0"
           }
         },
