@@ -49,7 +49,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeEvents {
   private final EnumState<IntakeState> currentGoal =
       new EnumState<>("Intake/States", IntakeState.IDLE);
   private static final LoggedTunableNumber ToleranceAngle =
-      new LoggedTunableNumber("Intake/atPosToleranceAngle", 7.5);
+      new LoggedTunableNumber("Intake/atPosToleranceAngle", 10.5);
 
   // Agitation tunables
   private static final LoggedTunableNumber agitateDownAngle =

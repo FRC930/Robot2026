@@ -40,7 +40,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber FLYWHEEL_RADIUS_M =
       new LoggedTunableNumber("Aiming/flywheelRadiusM", Units.inchesToMeters(1.5));
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
-      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.555);
+      new LoggedTunableNumber("Aiming/speedTransferRatio", 0.60);
   public static final double SHOOTER_MIN_RPM = 1000.0;
   public static final double SHOOTER_MAX_RPM = 3500.0;
 
