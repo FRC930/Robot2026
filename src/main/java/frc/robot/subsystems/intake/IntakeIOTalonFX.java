@@ -84,9 +84,9 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     TalonFXConfiguration configIntakeExtender = new TalonFXConfiguration();
     configIntakeExtender.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configIntakeExtender.CurrentLimits.StatorCurrentLimit = 80.0; // this may need to be adjusted
+    configIntakeExtender.CurrentLimits.StatorCurrentLimit = 60.0; // this may need to be adjusted
     configIntakeExtender.CurrentLimits.StatorCurrentLimitEnable = true;
-    configIntakeExtender.CurrentLimits.SupplyCurrentLimit = 80.0; // this may need to be adjusted
+    configIntakeExtender.CurrentLimits.SupplyCurrentLimit = 40.0; // this may need to be adjusted
     configIntakeExtender.CurrentLimits.SupplyCurrentLimitEnable = true;
     configIntakeExtender.Voltage.PeakForwardVoltage = 8.0;
     configIntakeExtender.Voltage.PeakReverseVoltage = -8.0;
