@@ -2,6 +2,7 @@ package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,7 +26,7 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
 
   private HoodInputsAutoLogged logged = new HoodInputsAutoLogged();
 
-  public HoodSubsystem(HoodIO IO, DoubleSupplier hoodAngleSupplier) {
+  public HoodSubsystem(HoodIO IO) {
     m_IO = IO;
     logged.hoodAngle = Degrees.mutable(0);
     logged.hoodSetAngle = Degrees.mutable(0);
@@ -89,6 +90,20 @@ public class HoodSubsystem extends SubsystemBase implements HoodEvents {
   @Override
   public Trigger isAimingTrigger() {
     return currentGoal.is(HoodState.AIMING);
+  }
+
+  /** angle is in degrees :3 */
+  public Command getNewMoveHoodAngleCommand(DoubleSupplier angle) {
+    return new InstantCommand(
+        () -> {
+          m_IO.setHoodTarget(
+              Degrees.of(
+                  MathUtil.clamp(
+                      angle.getAsDouble() + logged.hoodSetAngle.in(Degrees),
+                      HoodIOTalonFX.MINANGLE,
+                      HoodIOTalonFX.MAXANGLE)));
+        },
+        this);
   }
 
   public Command getNewSetHoodAngleCommand(DoubleSupplier angle) {

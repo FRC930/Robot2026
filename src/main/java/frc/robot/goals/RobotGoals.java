@@ -97,7 +97,7 @@ public class RobotGoals extends VirtualSubsystem implements RobotEvents {
   }
 
   @Override
-  public Trigger isIgnoringToleranceTrigger() {
-    return currentGoal.is(RobotGoal.IGNORE_TOLERANCE);
+  public Trigger isPrespinningTrigger() {
+    return currentGoal.is(RobotGoal.PRESPIN);
   }
 }

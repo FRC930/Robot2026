@@ -21,8 +21,8 @@ public class ShooterBehavior extends SubsystemBehavior {
 
     events
         .goals()
-        .isIgnoringToleranceTrigger()
-        .whileTrue(shooter.shooterCommand())
+        .isPrespinningTrigger()
+        .whileTrue(shooter.prespinCommand())
         .whileFalse(shooter.idleCommand());
   }
 }

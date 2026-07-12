@@ -87,7 +87,7 @@ public class IndexerSubsystem extends SubsystemBase implements IndexerEvents {
       case IDLE:
         resetJamDetection();
         m_IO.stop();
-        m_IO.setIndexerTarget(IndexerState.REVERSING.indexerVelocity());
+        // m_IO.setIndexerTarget(IndexerState.REVERSING.indexerVelocity());
         break;
       case FEEDING:
         checkForJam();

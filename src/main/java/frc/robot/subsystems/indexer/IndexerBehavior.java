@@ -19,15 +19,15 @@ public class IndexerBehavior extends SubsystemBehavior {
     events
         .goals()
         .isShootingTrigger()
-        .and(events.turret().isInToleranceTrigger())
-        .and(events.shooter().isInToleranceTrigger())
+        // .and(events.turret().isInToleranceTrigger())
+        // .and(events.shooter().isInToleranceTrigger())
         .whileTrue(indexer.indexingCommand())
         .whileFalse(indexer.idleCommand());
 
-    events
-        .goals()
-        .isIgnoringToleranceTrigger()
-        .whileTrue(indexer.indexingCommand())
-        .whileFalse(indexer.idleCommand());
+    // events
+    //     .goals()
+    //     .isPrespinningTrigger()
+    //     .whileTrue(indexer.indexingCommand())
+    //     .whileFalse(indexer.idleCommand());
   }
 }

@@ -42,7 +42,7 @@ public final class AimingConstants {
   public static final LoggedTunableNumber SPEED_TRANSFER_RATIO =
       new LoggedTunableNumber("Aiming/speedTransferRatio", 0.60);
   public static final double SHOOTER_MIN_RPM = 1000.0;
-  public static final double SHOOTER_MAX_RPM = 3500.0;
+  public static final double SHOOTER_MAX_RPM = 6000.0;
 
   // ===== HOOD PARAMETERS =====
   // Hood measures from vertical (0° = straight up), but the aiming algorithm uses

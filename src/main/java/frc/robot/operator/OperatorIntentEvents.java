@@ -31,5 +31,5 @@ public interface OperatorIntentEvents {
 
   Trigger wantsToRaiseIntake();
 
-  Trigger wantsToShootNoTolerance();
+  Trigger wantsToPrespin();
 }

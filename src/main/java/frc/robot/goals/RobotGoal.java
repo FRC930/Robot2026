@@ -19,4 +19,5 @@ public enum RobotGoal {
   CLIMBINGL3,
   REVERSE_INDEXER,
   RAISED_INTAKE,
+  PRESPIN,
 }

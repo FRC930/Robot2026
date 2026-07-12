@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.aiming.AimingConstants;
 import frc.robot.util.EnumState;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -90,8 +91,11 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterEvents {
     shouldThreadCommand = (state == ShooterState.SHOOTING || state == ShooterState.PRESPIN);
     switch (state) {
       case SHOOTING:
+        setShooterSpeed(RPM.of(AimingConstants.SHOOTER_MAX_RPM));
+        break;
       case PRESPIN:
-        break; // 250Hz thread handles motor commands
+        setShooterSpeed(RPM.of(AimingConstants.SHOOTER_MAX_RPM));
+        break;
       case IDLE:
         stop();
         break;

@@ -102,7 +102,7 @@ public class OperatorIntent implements OperatorIntentEvents {
   }
 
   @Override
-  public Trigger wantsToShootNoTolerance() {
+  public Trigger wantsToPrespin() {
     return driver.rightTrigger();
   }
 }

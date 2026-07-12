@@ -1,5 +1,6 @@
 package frc.robot.goals;
 
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.operator.OperatorIntentEvents;
 import frc.robot.util.GoalBehavior;
 
@@ -33,7 +34,10 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .onTrue(goals.setGoalCommand(RobotGoal.INTAKING))
         .onFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
-    intent.wantsToScoreTrigger().whileTrue(goals.setGoalCommand(RobotGoal.SHOOTING));
+    intent
+        .wantsToScoreTrigger()
+        .whileTrue(new RepeatCommand(goals.setGoalCommand(RobotGoal.SHOOTING)))
+        .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
     intent
         .wantsToRaiseIntake()
@@ -41,14 +45,9 @@ public class RobotGoalsBehavior extends GoalBehavior {
         .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
 
     intent
-        .wantsToScoreTrigger()
-        .or(intent.wantsToPass())
-        .negate()
-        .whileTrue(goals.setGoalCommand(RobotGoal.IDLE));
-
-    intent
-        .wantsToShootNoTolerance()
-        .whileTrue(goals.setGoalCommand(RobotGoal.IGNORE_TOLERANCE))
+        .wantsToPrespin()
+        .and(intent.wantsToScoreTrigger().negate())
+        .whileTrue(goals.setGoalCommand(RobotGoal.PRESPIN))
         .whileFalse(goals.setGoalCommand(RobotGoal.IDLE));
   }
 }

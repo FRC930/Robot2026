@@ -12,7 +12,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.subsystems.vision.VisionConstants.backLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftCamera;
 import static frc.robot.subsystems.vision.VisionConstants.frontLeftForwardCamera;
@@ -25,7 +25,6 @@ import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamer
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -37,10 +36,9 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.aiming.AimingBehavior;
-import frc.robot.aiming.AimingConstants;
 import frc.robot.aiming.AimingService;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
@@ -93,9 +91,9 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.subsystems.vision.VisionIOQuest;
 import frc.robot.util.AllEvents;
 import frc.robot.util.GoalBehavior;
-import frc.robot.util.HighFrequencyLoop;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.SubsystemBehavior;
+import org.dyn4j.geometry.Vector2;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
@@ -138,6 +136,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController turretController = new CommandXboxController(1);
   private final CommandXboxController testController = new CommandXboxController(3);
   private final CommandXboxController characterizeController = new CommandXboxController(4);
 
@@ -195,18 +194,13 @@ public class RobotContainer {
 
         climber = new ClimberSubsystem(new ClimberIO() {});
 
-        shooter =
-            new ShooterSubsystem(
-                new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), aimingService::getShooterRPM);
+        shooter = new ShooterSubsystem(new ShooterIOTalonFX(4, 5, 6, 10, upperCanbus), () -> 2350);
 
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
 
-        turret =
-            new TurretSubsystem(
-                new TurretIOTalonFX(7, upperCanbus), aimingService::getTurretAngleDeg);
+        turret = new TurretSubsystem(new TurretIOTalonFX(7, upperCanbus));
 
-        hood =
-            new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
+        hood = new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus));
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -270,8 +264,8 @@ public class RobotContainer {
                         true,
                         Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
-        hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
+        turret = new TurretSubsystem(new TurretIOSim());
+        hood = new HoodSubsystem(new HoodIOSim());
         break;
 
       default:
@@ -296,55 +290,57 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
-        hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
+        turret = new TurretSubsystem(new TurretIO() {});
+        hood = new HoodSubsystem(new HoodIO() {});
         break;
     }
 
     // Start 250Hz control threads for REAL and SIM (not REPLAY)
-    if (Constants.currentMode != Constants.Mode.REPLAY) {
-      double freq = AimingConstants.AIMING_FREQUENCY;
+    // if (Constants.currentMode != Constants.Mode.REPLAY) {
+    //   double freq = AimingConstants.AIMING_FREQUENCY;
 
-      new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
+    //   new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
 
-      new HighFrequencyLoop(
-              "TurretThread",
-              freq,
-              () -> {
-                if (turret.shouldThreadCommand()) {
-                  double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0, 180.0);
-                  turret.getIO().setTarget(angle);
-                }
-              })
-          .start();
+    //   new HighFrequencyLoop(
+    //           "TurretThread",
+    //           freq,
+    //           () -> {
+    //             if (turret.shouldThreadCommand()) {
+    //               double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0,
+    // 180.0);
+    //               turret.getIO().setTarget(angle);
+    //             }
+    //           })
+    //       .start();
 
-      new HighFrequencyLoop(
-              "ShooterThread",
-              freq,
-              () -> {
-                if (shooter.shouldThreadCommand()) {
-                  double rpm = aimingService.getShooterRPM();
-                  if (rpm < AimingConstants.SHOOTER_MIN_RPM) {
-                    rpm = shooter.getPrespinSetpoint();
-                  }
-                  shooter.getIO().setShooterTarget(RPM.of(rpm));
-                }
-              })
-          .start();
+    //   new HighFrequencyLoop(
+    //           "ShooterThread",
+    //           freq,
+    //           () -> {
+    //             if (shooter.shouldThreadCommand()) {
+    //               double rpm = aimingService.getShooterRPM();
+    //               if (rpm < AimingConstants.SHOOTER_MIN_RPM) {
+    //                 rpm = shooter.getPrespinSetpoint();
+    //               }
+    //               shooter.getIO().setShooterTarget(RPM.of(rpm));
+    //             }
+    //           })
+    //       .start();
 
-      new HighFrequencyLoop(
-              "HoodThread",
-              freq,
-              () -> {
-                if (hood.shouldThreadCommand()) {
-                  // Transform angle from 0 degrees vertical to 0 degree horizontal so like tranform
-                  // the angle by 90 degrees
-                  double hoodAngle = 90.0 - aimingService.getHoodAngleDeg();
-                  hood.getIO().setHoodTarget(Degrees.of(hoodAngle));
-                }
-              })
-          .start();
-    }
+    //   new HighFrequencyLoop(
+    //           "HoodThread",
+    //           freq,
+    //           () -> {
+    //             if (hood.shouldThreadCommand()) {
+    //               // Transform angle from 0 degrees vertical to 0 degree horizontal so like
+    // tranform
+    //               // the angle by 90 degrees
+    //               double hoodAngle = 90.0 - aimingService.getHoodAngleDeg();
+    //               hood.getIO().setHoodTarget(Degrees.of(hoodAngle));
+    //             }
+    //           })
+    //       .start();
+    // }
 
     autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());
 
@@ -357,7 +353,6 @@ public class RobotContainer {
     new ClimberBehavior(climber);
     new HoodBehavior(hood);
     new TurretBehavior(turret);
-    new AimingBehavior(aimingService);
 
     // Configure all behaviors
     GoalBehavior.configureAll(operatorIntent);
@@ -365,6 +360,35 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings(ISTESTING);
     configureCharacterizationButtonBindings();
+
+    turretController
+        .rightBumper()
+        .whileTrue(
+            new RepeatCommand(
+                new InstantCommand(
+                    () -> {
+                      Vector2 joy =
+                          new Vector2(turretController.getRightY(), turretController.getRightX());
+                      if (joy.getMagnitudeSquared() < 0.5) return;
+                      double angle =
+                          Radians.of(joy.getDirection()).in(Degrees)
+                              - drive.getRotation().getDegrees();
+                      turret.setPosition((angle + 540) % 360 - 180);
+                    },
+                    turret)));
+
+    turretController
+        .leftBumper()
+        .whileTrue(
+            new RepeatCommand(
+                hood.getNewMoveHoodAngleCommand(
+                    () -> {
+                      return -turretController.getLeftY() / 5;
+                    })));
+
+    turretController.a().onTrue(new InstantCommand(() -> turret.setPosition(0.0), turret));
+
+    turretController.x().onTrue(new InstantCommand(() -> drive.setPose(Pose2d.kZero)));
   }
 
   /**

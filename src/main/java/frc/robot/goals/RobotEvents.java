@@ -12,7 +12,7 @@ public interface RobotEvents {
 
   public Trigger isShootingTrigger();
 
-  public Trigger isIgnoringToleranceTrigger();
+  public Trigger isPrespinningTrigger();
 
   public Trigger isClimbingL0();
 

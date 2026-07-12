@@ -19,13 +19,11 @@ public class IntakeBehavior extends SubsystemBehavior {
     events
         .goals()
         .isShootingTrigger()
-        .or(events.goals().isIgnoringToleranceTrigger())
         .and(events.drive().isNotMoving().negate())
         .whileTrue(this.intake.shootingCommand());
     events
         .goals()
         .isShootingTrigger()
-        .or(events.goals().isIgnoringToleranceTrigger())
         .and(events.drive().isNotMoving())
         .whileTrue(this.intake.agitateCommand());
     events.goals().isRaisedIntakeTrigger().whileTrue(this.intake.raisedCommand());
