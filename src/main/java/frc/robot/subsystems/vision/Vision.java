@@ -97,7 +97,7 @@ public class Vision extends SubsystemBase {
       for (var observation : inputs[cameraIndex].poseObservations) {
         // Check whether to reject pose
         boolean rejectPose = false;
-        boolean usingQuest = true;
+        boolean usingQuest = false;
         if (usingQuest ? isQuestPose : !isQuestPose) {
           rejectPose =
               rejectPose(observation)
