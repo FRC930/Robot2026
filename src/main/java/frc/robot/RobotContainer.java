@@ -25,7 +25,6 @@ import static frc.robot.subsystems.vision.VisionConstants.robotToFrontRightCamer
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -201,9 +200,7 @@ public class RobotContainer {
 
         indexer = new IndexerSubsystem(new IndexerIOTalonFX(8, 9, upperCanbus));
 
-        turret =
-            new TurretSubsystem(
-                new TurretIOTalonFX(7, upperCanbus), aimingService::getTurretAngleDeg);
+        turret = new TurretSubsystem(new TurretIOTalonFX(7, upperCanbus));
 
         hood =
             new HoodSubsystem(new HoodIOTalonFX(11, upperCanbus), aimingService::getHoodAngleDeg);
@@ -270,7 +267,7 @@ public class RobotContainer {
                         true,
                         Inches.of(0).in(Meters))));
         shooter = new ShooterSubsystem(new ShooterIOSim(), aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIOSim(), aimingService::getTurretAngleDeg);
+        turret = new TurretSubsystem(new TurretIOSim());
         hood = new HoodSubsystem(new HoodIOSim(), aimingService::getHoodAngleDeg);
         break;
 
@@ -296,7 +293,7 @@ public class RobotContainer {
         indexer = new IndexerSubsystem(new IndexerIO() {});
         climber = new ClimberSubsystem(new ClimberIO() {});
         shooter = new ShooterSubsystem(new ShooterIO() {}, aimingService::getShooterRPM);
-        turret = new TurretSubsystem(new TurretIO() {}, aimingService::getTurretAngleDeg);
+        turret = new TurretSubsystem(new TurretIO() {});
         hood = new HoodSubsystem(new HoodIO() {}, aimingService::getHoodAngleDeg);
         break;
     }
@@ -306,17 +303,6 @@ public class RobotContainer {
       double freq = AimingConstants.AIMING_FREQUENCY;
 
       new HighFrequencyLoop("AimingThread", freq, aimingService::computeAimingSolution).start();
-
-      new HighFrequencyLoop(
-              "TurretThread",
-              freq,
-              () -> {
-                if (turret.shouldThreadCommand()) {
-                  double angle = MathUtil.clamp(aimingService.getTurretAngleDeg(), -180.0, 180.0);
-                  turret.getIO().setTarget(angle);
-                }
-              })
-          .start();
 
       new HighFrequencyLoop(
               "ShooterThread",
@@ -409,7 +395,8 @@ public class RobotContainer {
             drive,
             () -> -controller.getLeftY() * drive.getEffectiveSpeedLimit(),
             () -> -controller.getLeftX() * drive.getEffectiveSpeedLimit(),
-            () -> -controller.getRightX() * REG_ANGULAR_SPEED * drive.getEffectiveSpeedLimit()));
+            () -> -controller.getRightX() * REG_ANGULAR_SPEED * drive.getEffectiveSpeedLimit(),
+            aimingService));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

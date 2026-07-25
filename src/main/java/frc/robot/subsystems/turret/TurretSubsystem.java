@@ -35,9 +35,7 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
 
   private TurretInputsAutoLogged logged = new TurretInputsAutoLogged();
 
-  private final DoubleSupplier turretAngleSupplier;
-
-  public TurretSubsystem(TurretIO IO, DoubleSupplier turretAngleSupplier) {
+  public TurretSubsystem(TurretIO IO) {
     m_IO = IO;
     this.m_IO.setGains(tunableGains.build());
     logged.turretAngle = Degrees.mutable(0);
@@ -48,8 +46,6 @@ public class TurretSubsystem extends SubsystemBase implements TurretEvents {
     logged.turretTorqueCurrent = Amps.mutable(0);
 
     RobotVisualization.instance().setTurretSource(logged.turretAngle);
-
-    this.turretAngleSupplier = turretAngleSupplier;
   }
 
   public LoggedTunableGainsBuilder tunableGains =

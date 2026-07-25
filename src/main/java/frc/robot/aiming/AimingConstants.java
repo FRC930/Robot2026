@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Meters;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.hood.HoodIOTalonFX;
-import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.util.LoggedTunableNumber;
 
 public final class AimingConstants {
@@ -21,8 +20,8 @@ public final class AimingConstants {
   public static final double TURRET_PIVOT_HEIGHT_METERS = Units.inchesToMeters(24.0);
 
   // Turret angular limits (degrees) - full [-180, 180] coverage, not continuous rotation
-  public static final double TURRET_MIN_DEG = TurretSubsystem.TURRET_MIN_POS;
-  public static final double TURRET_MAX_DEG = TurretSubsystem.TURRET_MAX_POS;
+  public static final double TURRET_MIN_DEG = -180.0;
+  public static final double TURRET_MAX_DEG = 180.0;
 
   // ===== BALL PHYSICS (tunable for field calibration) =====
   public static final LoggedTunableNumber BALL_MASS_KG =
