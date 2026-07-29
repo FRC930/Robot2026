@@ -97,12 +97,13 @@ public class Vision extends SubsystemBase {
       for (var observation : inputs[cameraIndex].poseObservations) {
         // Check whether to reject pose
         boolean rejectPose = false;
-        if (!isQuestPose) {
+        boolean usingQuest = false;
+        if (usingQuest ? isQuestPose : !isQuestPose) {
           rejectPose =
               rejectPose(observation)
-                  || observation.tagCount() == 0 // Must have at least one tag
-                  || (observation.tagCount() == 1)
-                  // && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
+                  || ((observation.tagCount() == 0) && !usingQuest) // Must have at least one tag
+                  || ((observation.tagCount() == 1) && !usingQuest)
+                  // && observation.ambiguity() > maxAmbiguity // Cannot be high ambiguity
                   || Math.abs(observation.pose().getZ())
                       > maxZError // Must have realistic Z coordinate
 

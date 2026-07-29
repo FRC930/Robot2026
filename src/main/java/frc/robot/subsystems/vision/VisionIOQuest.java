@@ -77,7 +77,7 @@ public class VisionIOQuest implements VisionIO {
       questNav.getAllUnreadPoseFrames();
 
       Pose2d currentPose = m_getPose.get();
-      questNav.setPose(new Pose3d(currentPose).transformBy(ROBOT_TO_QUEST));
+      // questNav.setPose(new Pose3d(currentPose).transformBy(ROBOT_TO_QUEST));
       m_initialPoseSet = true;
       Logger.recordOutput("currentPose", new Pose3d(currentPose).transformBy(ROBOT_TO_QUEST));
     }
