@@ -60,6 +60,14 @@ public class Vision extends SubsystemBase {
     return inputs[cameraIndex].latestTargetObservation.tx();
   }
 
+  public boolean getIsInPassthrough() {
+    boolean ret = false;
+    for (VisionIO x : io) {
+      ret = ret || x.getIsInPassthrough();
+    }
+    return ret;
+  }
+
   @Override
   public void periodic() {
     for (int i = 0; i < io.length; i++) {
@@ -97,7 +105,7 @@ public class Vision extends SubsystemBase {
       for (var observation : inputs[cameraIndex].poseObservations) {
         // Check whether to reject pose
         boolean rejectPose = false;
-        boolean usingQuest = false;
+        boolean usingQuest = true;
         if (usingQuest ? isQuestPose : !isQuestPose) {
           rejectPose =
               rejectPose(observation)

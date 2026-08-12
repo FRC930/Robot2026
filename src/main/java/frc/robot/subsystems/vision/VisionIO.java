@@ -32,6 +32,11 @@ public interface VisionIO {
             );
   }
 
+  public default boolean getIsInPassthrough() {
+    return false;
+  }
+  ;
+
   /** Represents the angle to a simple target, not used for pose estimation. */
   public static record TargetObservation(Rotation2d tx, Rotation2d ty) {}
 

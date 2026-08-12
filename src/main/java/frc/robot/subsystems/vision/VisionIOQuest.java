@@ -40,7 +40,9 @@ public class VisionIOQuest implements VisionIO {
           Units.inchesToMeters(0.0),
           Units.inchesToMeters(25.5),
           new Rotation3d(Rotation2d.fromDegrees(180.0)));
-  private int questDebug = 0;
+  private int lastFrameNum;
+  private int robotFramesSinceLastQuestFrame = 50;
+  private boolean isQuestNavActive = false;
 
   /**
    * Creates a new VisionIOLimelight.
@@ -53,18 +55,30 @@ public class VisionIOQuest implements VisionIO {
     m_getPose = getPose;
   }
 
+  public boolean getIsInPassthrough() {
+    return !isQuestNavActive;
+  }
+
   @Override
   public void updateInputs(VisionIOInputs inputs) {
     inputs.cameraName = this.cameraName;
 
     questNav.commandPeriodic(); // Process command responses
+    int newFrameCount = questNav.getFrameCount().getAsInt();
+    if (newFrameCount != lastFrameNum) {
+      lastFrameNum = newFrameCount;
+      robotFramesSinceLastQuestFrame = 0;
+    } else robotFramesSinceLastQuestFrame++;
+
+    isQuestNavActive = robotFramesSinceLastQuestFrame < 25;
+
+    Logger.recordOutput("QuestNavADB/QuestNavActive", isQuestNavActive);
+    Logger.recordOutput(
+        "QuestNavADB/QuestNavFramesSinceLastActive", robotFramesSinceLastQuestFrame);
+
     // Update connection status based on whether an update has been seen in the last 250ms
     inputs.connected = questNav.isConnected();
     inputs.isQuestPose = true;
-
-    if (questDebug++ > 50) {
-      questDebug = 0;
-    }
 
     if (!m_initialPoseSet
         && inputs.connected

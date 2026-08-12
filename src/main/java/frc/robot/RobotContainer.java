@@ -95,6 +95,7 @@ import frc.robot.util.AllEvents;
 import frc.robot.util.GoalBehavior;
 import frc.robot.util.HighFrequencyLoop;
 import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.QuestNavADBWatcher;
 import frc.robot.util.SubsystemBehavior;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -346,6 +347,9 @@ public class RobotContainer {
               })
           .start();
     }
+
+    QuestNavADBWatcher watcher = new QuestNavADBWatcher();
+    watcher.start(vision);
 
     autoCommandManager = new AutoCommandManager(drive, RobotGoals.getInstance());
 
